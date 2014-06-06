@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BrowerCheck.htm" />
+    <Content Include="BrowerCheckClose.htm" />
     <Content Include="CheckIE\BrowerCheckClose.htm" />
     <Content Include="CheckIE\ieadjust.jpg" />
     <Content Include="Scripts\jquery-1.7.1.intellisense.js" />
