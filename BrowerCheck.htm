@@ -19,6 +19,7 @@
         var IdxZone = 6;
         var IdxAllowFullsize = 7;
         var IdxDecidePopupByIE = 8;
+        var IdxSliverlight = 9;
 
         function showEachClientCheckResult() {
             //运行WScript.Shell提示
@@ -35,11 +36,11 @@
 
         function showOverallClientCheckResult(inMsg) {
             if (getBrowserStatus() < StatusOK
-            || getCookieStatus() < StatusOK
-            || getPopupStatus("CheckIE/close_windows.htm") < StatusOK
-            || getFlashStatus() < StatusOK
-            || getJreStatus() < StatusOK
-            ) {
+                || getCookieStatus() < StatusOK
+                    || getPopupStatus("CheckIE/close_windows.htm") < StatusOK
+                        || getFlashStatus() < StatusOK
+                            || getJreStatus() < StatusOK
+                ) {
                 client_check_link.innerHTML = inMsg;
                 client_check_td_above.height = 20;
                 client_check_td_below.height = 20;
@@ -55,6 +56,7 @@
             }
             return status;
         }
+        
         function checkBrowserName(name) {
             var verStr = navigator.appVersion;
             var verNo = 0;
@@ -68,6 +70,7 @@
             }
             return result;
         }
+        
         function getCookieStatus() {
             var status = StatusNG;
             var cookieStr = "wb_check=kcehc_bw";
@@ -80,6 +83,7 @@
             }
             return status;
         }
+        
         function getPopupStatus(winUrl) {
             var status = StatusNG;
             var str_feature = 'toolbar=no' + ',menubar=no' + ',scrollbars=no' + ',resizable=no' + ',status=no' + ',width=1' + ',height=1' + ',top=0' + ',left=0' + ',screenX=0' + ',screenY=0';
@@ -204,20 +208,24 @@
             return domain;
         } 
     </script>
-
+    
+    /*
+    IE8 使用兼容模式后在检测的时候就变成了IE7
+    */
     <script type="text/javascript">
         /**
         *区分各类浏览器
         */
-        var Sys = {};                       //区分各类浏览器
+        var Sys = {};  //区分各类浏览器
         function InitialInfo() {
             var ua = navigator.userAgent.toLowerCase();
             var s;
             (s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] :
-            (s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] :
-            (s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :
-            (s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] :
-            (s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
+                (s = ua.match(/trident 7.0/)) ? Sys.ie = 11.0 :
+                    (s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] :
+                        (s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :
+                            (s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] :
+                                (s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
 
             //IE下的检查
             if (Sys.ie) {
@@ -372,7 +380,7 @@
 
         //IE下的检测
         function IeCheck() {
-            alert("系统在检查可信任站点时要运行ActiveX控件,\n\r可能会弹出对话框是允许ActiveX控件与页面交互的确认对话框,\n\r请点击\"确定\"按钮,否则无法对其进行检查.");
+            alert("系统在检查可信任站点时要运行ActiveX控件,\n\r可能会弹出对话框是允许ActiveX控件与页面交互的确认对话框,\n\r请点击\"确定\"按钮,否则无法对浏览器进行检查.");
 
             $(".c6ui-brower-ie").show();
             //浏览器版本检测，如果低于IE 7.0 提示不支持，如果是IE 7.0 建议升级到IE 8.0 ，若果是IE 8.0则没有提示
@@ -416,6 +424,8 @@
             PopupCheck("ie", "7");
             //Flash播放器
             FlashCheck("ie", "8");
+            //Sliverlight银光
+            SliverlightCheck("ie", "9");
         }
 
         //Chrome下的检测
@@ -628,6 +638,7 @@
                     <li>6、允许 Cookies </li>
                     <li>7、允许弹出窗口</li>
                     <li>8、安装有 Macromedia Flash播放器 7.0 或以上版本</li>
+                    <li>9、安装有 Microsoft Sliverlight 银光插件 3.0 或以上版本</li>
                 </ul>
             </div>
         </div>
@@ -780,3 +791,80 @@
     </div>
 </body>
 </html>
+<script>
+    if (!window.Silverlight) {
+        window.Silverlight = {};
+    }
+
+    //////////////////////////////////////////////////////////////////
+    // isInstalled, checks to see if the correct version is installed
+    //////////////////////////////////////////////////////////////////
+    Silverlight.isInstalled = function (version) {
+        var isVersionSupported = false;
+        var container = null;
+
+        try {
+            var control = null;
+
+            try {
+                control = new ActiveXObject('AgControl.AgControl');
+                if (version == null) {
+                    isVersionSupported = true;
+                }
+                else if (control.IsVersionSupported(version)) {
+                    isVersionSupported = true;
+                }
+                control = null;
+            }
+            catch (e) {
+                var plugin = navigator.plugins["Silverlight Plug-In"];
+                if (plugin) {
+                    if (version === null) {
+                        isVersionSupported = true;
+                    }
+                    else {
+                        var actualVer = plugin.description;
+                        if (actualVer === "1.0.30226.2")
+                            actualVer = "2.0.30226.2";
+                        var actualVerArray = actualVer.split(".");
+                        while (actualVerArray.length > 3) {
+                            actualVerArray.pop();
+                        }
+                        while (actualVerArray.length < 4) {
+                            actualVerArray.push(0);
+                        }
+                        var reqVerArray = version.split(".");
+                        while (reqVerArray.length > 4) {
+                            reqVerArray.pop();
+                        }
+
+                        var requiredVersionPart;
+                        var actualVersionPart
+                        var index = 0;
+
+
+                        do {
+                            requiredVersionPart = parseInt(reqVerArray[index]);
+                            actualVersionPart = parseInt(actualVerArray[index]);
+                            index++;
+                        }
+                        while (index < reqVerArray.length && requiredVersionPart === actualVersionPart);
+
+                        if (requiredVersionPart <= actualVersionPart && !isNaN(requiredVersionPart)) {
+                            isVersionSupported = true;
+                        }
+                    }
+                }
+            }
+        }
+        catch (e) {
+            isVersionSupported = false;
+        }
+        if (container) {
+            document.body.removeChild(container);
+        }
+
+        return isVersionSupported;
+    }
+
+</script>
