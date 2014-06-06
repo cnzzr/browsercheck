@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>浏览器配置检测</title>  
+    <title>浏览器配置检测（主站点测试）</title>  
 
     <script src="Scripts/jquery-1.7.1.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -209,12 +209,11 @@
         } 
     </script>
     
-    /*
-    IE8 使用兼容模式后在检测的时候就变成了IE7
-    */
+
     <script type="text/javascript">
         /**
         *区分各类浏览器
+        *    IE8 使用兼容模式后在检测的时候就变成了IE7
         */
         var Sys = {};  //区分各类浏览器
         function InitialInfo() {
@@ -375,6 +374,22 @@
                 $("#" + brower + "BrowerSuggest" + index).html("点击下载最新Flash插件");
                 $("#" + brower + "BrowerSuggest" + index).attr("target", "_blank");
                 $("#" + brower + "BrowerSuggest" + index).attr("href", "http://get.adobe.com/cn/flashplayer/");
+            }
+        }
+
+        //Sliverlight检测
+        function SliverlightCheck(brower, index) {
+            if (Silverlight.isInstalled()) { // true/false
+                $("#" + brower + "BrowerRet" + index).html("成功");
+                $("#" + brower + "BrowerRet" + index).css("color", "#008000");
+            }
+            else {
+                $("#" + brower + "BrowerRet" + index).html("失败");
+                $("#" + brower + "BrowerRet" + index).css("color", "red");
+
+                $("#" + brower + "BrowerSuggest" + index).html("点击下载最新Sliverlight插件");
+                $("#" + brower + "BrowerSuggest" + index).attr("target", "_blank");
+                $("#" + brower + "BrowerSuggest" + index).attr("href", "http://www.microsoft.com/getsilverlight/Get-Started/Install/");
             }
         }
 
@@ -609,6 +624,9 @@
             color: #003299;
             font-weight: bold;
         }
+
+        .c6ui-f14 {}
+        .c6ui-f15 {font-size:18px;}
     </style>
 </head>
 <body onload="InitialInfo()">
@@ -617,35 +635,30 @@
         </div>
         <div class="c6ui-portal-area">
             <div class="c6ui-portal-area-title">
-                <div class="c6ui-f14">
-                    浏览器配置需求</div>
+                <div class="c6ui-f15">浏览器配置需求</div>
             </div>
             <div class="c6ui-portal-area-content">
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
                     <li>为了可以正常使用当前系统，您的浏览器需要：</li>
                     <li style="height:10px;"></li>
-                    <li>1、是 Microsoft Internet Explorer 7.0 或以上版本、<a target="_blank" href="http://www.apple.com.cn/safari/download/">Apple Safari</a>、<a
-                        target="_blank" href="http://www.google.com/chrome">Google Chrome</a>或<a
-                        target="_blank" href="http://firefox.com.cn/download/">Mozilla Firefox</a>
-                        
-                        </li>
+    <li>1、要求使用 Microsoft Internet Explorer 7.0 或以上版本，如果您使用<a target="_blank" href="http://www.google.com/chrome">Google Chrome</a>或<a target="_blank" href="http://firefox.com.cn/download/">Mozilla Firefox</a> 则大部分系统功能将无法使用。&nbsp;&nbsp; 如果你使用 360安全浏览器、360极速浏览器、QQ浏览器或搜狗浏览器等国产
+    </li>                    
                     <li>2、<span style="color:#008000;">推荐使用Microsoft Internet Explorer 8.0</span>
-                        <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-8">官方下载</a>
-                        <a href="../Resource/Tools/IE8-WindowsXP-x86-CHS.rar">本地下载(XP 32位)</a></li>
+                        <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-8">微软官方下载</a>
+                        <a href="http://mis.msdi.cn/portal/install/ie/IE8-WindowsXP-x86-CHS.exe">本地下载(适用于XP 32位)</a></li>
                     <li>3、允许Javascript</li>
-                    <li>4、如果是使用IE浏览器检查是否加入可信任站点,同时启用选项 "允许由脚本初始化的窗口，没有大小和位置限制"</li>
+                    <li>4、如果是使用IE浏览器，则请检查“mis.msdi.cn/zny.msdi.cn/pmis.msdi.cn”是否加入可信任站点,同时启用选项 "允许由脚本初始化的窗口，没有大小和位置限制"</li>
                     <li>5、IE7或者以上版本呢把弹出窗口选项设置为"由Internet Exporer决定如何开打弹出窗口"</li>
                     <li>6、允许 Cookies </li>
                     <li>7、允许弹出窗口</li>
                     <li>8、安装有 Macromedia Flash播放器 7.0 或以上版本</li>
-                    <li>9、安装有 Microsoft Sliverlight 银光插件 3.0 或以上版本</li>
+                    <li>9、安装有 Microsoft Sliverlight 银光插件 4.0 或以上版本</li>
                 </ul>
             </div>
         </div>
         <div id="browerInfo" class="c6ui-portal-area">
             <div class="c6ui-portal-area-title">
-                <div class="c6ui-f14">
-                    浏览器配置检测</div>
+                <div class="c6ui-f15">浏览器配置自动检测报告</div>
             </div>
             <div class="c6ui-portal-area-content">
                 <div class="c6ui-brower-ie">
@@ -676,8 +689,12 @@
                             class="browerRet"></span><a id="ieBrowerSuggest7" class="browerSuggest"></a></li>
                         <li>8、Flash播放器：<span id="ieBrowerInfo8" class="browerInfo"></span><span id="ieBrowerRet8"
                             class="browerRet"></span><a id="ieBrowerSuggest8" class="browerSuggest"></a></li>
-                            <li style="height:10px;"></li>
-                            <li><a href="../Resource/Tools/IE自动设置工具.rar">下载设置工具自动设置(注：目前只能在XP下使用)</a></li>
+                        
+                        <li>9、Silverlight插件：<span id="ieBrowerInfo9" class="browerInfo"></span><span id="ieBrowerRet9"
+                            class="browerRet"></span><a id="ieBrowerRet9" class="browerSuggest"></a></li>
+                        
+                        <li style="height:10px;"></li>
+                            <li><a href="http://mis.msdi.cn/sysmodule/FileSystem/Download.aspx?IsExec=true&Key=Goodway_BE-DownLoad&Id=FFL3MT1J_IETool.exe">下载常见问题修改工具(注：目前只能在XP、Win7下使用)</a></li>
                     </ul>
                 </div>
                 <div class="c6ui-brower-safari">
@@ -725,7 +742,7 @@
                             <span id="chromeBrowerRet5" class="browerRet"></span>
                             <a id="chromeBrowerSuggest5" class="browerSuggest"></a>
                         </li>
-                    </ul>
+                  </ul>
                 </div>
                 <div class="c6ui-brower-firefox">
                     <ul style="padding: 0px; margin: 0px; list-style: none;">
@@ -772,6 +789,7 @@
                     <li style="float:left; margin-left:10px;"><a onclick="CommonSet(this,'jsset','允许Cookies')" href="#">允许Cookies</a></li>
                     <li style="float:left; margin-left:10px;"><a onclick="CommonSet(this,'jsset','允许弹出窗口')" href="#">允许弹出窗口</a></li>
                     <li style="float:left; margin-left:10px;"><a href="http://get.adobe.com/cn/flashplayer/" target="_blank">安装Macromedia Flash播放器</a></li>
+                    <li style="float:left; margin-left:10px;"><a href="" target="_blank">安装 Sliverlight</a></li>
                 </ul>
             </div>
         </div>
@@ -779,12 +797,12 @@
            <div class="c6ui-portal-area-title">
                 <div class="c6ui-f14">
                     系统常用插件</div>
-            </div>
+          </div>
             <div class="c6ui-portal-area-content">
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
-                    <li style="float:left; margin-left:10px;"><a  href="../JHSoft.Web.Print/webprint/eprint.cab">用于系统打印时插件</a></li>
-                    <li style="float:left; margin-left:10px;"><a  href="../ocx/iSignatureV6.cab">OCX插件</a></li>                    
-                    <li style="float:left; margin-left:10px;"><a href="../Jhwebofficecontrol/officecontrol.cab" >OFFICE内嵌技术所需插件</a></li>
+                    <li style="float:left; margin-left:10px;"><a  href="">电子签章安全软件</a></li>
+                    <li style="float:left; margin-left:10px;"><a  href="">旧MIS系统插件</a></li>                    
+                    <li style="float:left; margin-left:10px;"><a href="" >OFFICE在线编辑工具</a></li>
                 </ul>
             </div>
         </div>
