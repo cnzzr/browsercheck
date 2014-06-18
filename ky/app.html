@@ -9,9 +9,11 @@
 </body>
 </html>
 <script type="text/javascript">
-    var FullUrl = window.location.protocol + "//" + window.location.host + "/ky/";
+    var ContextPath = window.location.protocol + "//" + window.location.host +
+        (window.location.pathname.lastIndexOf("/") > 0 ? (window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1)) : "/");
 
     function init(urlprex) {
+        //alert(ContextPath);
         var iframeProxy = getIframe();
         if(!iframeProxy)
             iframeProxy = document.createElement('iframe');
@@ -26,11 +28,11 @@
                 }
             } else if (state === 0) {
                 state = 1;
-                iframeProxy.contentWindow.location = FullUrl + "proxy.html"; // 设置的代理文件
+                iframeProxy.contentWindow.location = ContextPath + "proxy.html"; // 设置的代理文件
             }
         };
-        
-        iframeProxy.src = FullUrl + 'othersite/check.html';
+
+        iframeProxy.src = ContextPath + 'othersite/check.html';
         iframeProxy.style.display = "none";//隐藏窗口
 
         if (iframeProxy.attachEvent) {//判断是否为IE
