@@ -29,7 +29,7 @@
             spanAllowFullSize.innerHTML = Msg[IdxAllowFullsize][getAllowFullSizeWindowStatus()];
             spanDecidePopupByIE.innerHTML = Msg[IdxDecidePopupByIE][getDecidePopupByIEStatus()];
             cookie_check.innerHTML = Msg[IdxCookie][getCookieStatus()];
-            popup_check.innerHTML = Msg[IdxPopup][getPopupStatus("CheckIE/close_windows.html")];
+            popup_check.innerHTML = Msg[IdxPopup][getPopupStatus("BrowerCheckClose.html")];
             flash_check.innerHTML = Msg[IdxFlash][getFlashStatus()];
             //jre_check.innerHTML = Msg[IdxJre][getJreStatus()];
         }
@@ -37,7 +37,7 @@
         function showOverallClientCheckResult(inMsg) {
             if (getBrowserStatus() < StatusOK
                 || getCookieStatus() < StatusOK
-                    || getPopupStatus("CheckIE/close_windows.html") < StatusOK
+                    || getPopupStatus("BrowerCheckClose.html") < StatusOK
                         || getFlashStatus() < StatusOK
                             || getJreStatus() < StatusOK
                 ) {

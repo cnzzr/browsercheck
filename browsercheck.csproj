@@ -46,10 +46,15 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CheckIE\ieallowfullsizewin.jpg" />
+    <Content Include="CheckIE\iecookieset.jpg" />
+    <Content Include="CheckIE\iedecidepopupbyieset.jpg" />
+    <Content Include="CheckIE\iejsset.jpg" />
+    <Content Include="CheckIE\iepopupset.jpg" />
+    <Content Include="CheckIE\ietrustwebsiteset.jpg" />
     <Content Include="ky\app.html" />
     <Content Include="BrowerCheck.html" />
     <Content Include="BrowerCheckClose.html" />
-    <Content Include="CheckIE\BrowerCheckClose.html" />
     <Content Include="CheckIE\ieadjust.jpg" />
     <Content Include="ky\proxy.html" />
     <Content Include="Scripts\jquery-1.7.1.intellisense.js" />
@@ -73,8 +78,8 @@
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>35367</DevelopmentServerPort>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>35353</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:2289/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
