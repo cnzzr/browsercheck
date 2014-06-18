@@ -4,41 +4,55 @@
     <title>跨域测试</title>
 </head>
 <body>
-
     <p>
-        <input id="btnTest" type="button" value="浏览器跨域单元测试" onclick="init();"/></p>
-
+        <input id="btnTest" type="button" value="浏览器跨域单元测试" onclick="init();" /></p>
 </body>
 </html>
 <script type="text/javascript">
     var FullUrl = window.location.protocol + "//" + window.location.host + "/ky/";
-    
-    function init(urlprex) {
-        var state = 0,
-            iframe = document.createElement('iframe'),
-            loadfn = function() {
-                if (state === 1) {
-                    var data = iframe.contentWindow.name; // 读取数据
-                    alert(data); //弹出'I was there!'
-                } else if (state === 0) {
-                    state = 1;
-                    iframe.contentWindow.location = FullUrl + "proxy.html"; // 设置的代理文件
-                }
-            };
-        iframe.src = FullUrl + 'othersite/check.html';
 
-        if (iframe.attachEvent) {
-            iframe.attachEvent('onload', loadfn);
+    function init(urlprex) {
+        var iframeProxy = getIframe();
+        if(!iframeProxy)
+            iframeProxy = document.createElement('iframe');
+        
+        var state = 0;
+        var loadfn = function () {
+            if (state === 1) {
+                var data = iframeProxy.contentWindow.name; // 读取数据
+                alert(data); //弹出返回值
+                if (iframeProxy.detachEvent) {//判断是否是IE
+                    iframeProxy.detachEvent('onload', loadfn);
+                }
+            } else if (state === 0) {
+                state = 1;
+                iframeProxy.contentWindow.location = FullUrl + "proxy.html"; // 设置的代理文件
+            }
+        };
+        
+        iframeProxy.src = FullUrl + 'othersite/check.html';
+        iframeProxy.style.display = "none";//隐藏窗口
+
+        if (iframeProxy.attachEvent) {//判断是否为IE
+            iframeProxy.attachEvent('onload', loadfn);
         } else {
-            iframe.onload = loadfn;
+            iframeProxy.onload = loadfn;
         }
-        document.body.appendChild(iframe);
+        document.body.appendChild(iframeProxy);
     }
-</script>
-<script type="text/javascript">
-    function destory() {
-        iframe.contentWindow.document.write('');
-        iframe.contentWindow.close();
-        document.body.removeChild(iframe);
+
+    function getIframe(contentWindow) {
+        var iframes = document.getElementsByTagName("iframe"),
+        ileng = iframes.length;
+        if (ileng > 0)
+            return iframes[0];
+        //for (var i = 0; i < ileng; i++) if (iframes[i].contentWindow == contentWindow) return iframes[i];
     }
+//    function destory() {
+//        if (iframeProxy) {
+//            iframeProxy.contentWindow.document.write('');
+//            iframeProxy.contentWindow.close();
+//            document.body.removeChild(iframeProxy);
+//        }
+//    }
 </script>

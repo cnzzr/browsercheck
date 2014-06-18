@@ -14,16 +14,17 @@
         var StatusOK = 2;
         
         //检测项目
-        var IdxBrowser = 0;
-        var IdxJs = 1;
+        var IdxBrowser = 0; //浏览器
+        var IdxJs = 1;  //JavaScript是否启用
         var IdxCookie = 2;
         var IdxPopup = 3;
-        var IdxFlash = 4;
+        var IdxFlash = 4;   //COA附件上传
         var IdxJre = 5;
         var IdxZone = 6;
-        var IdxAllowFullsize = 7;
-        var IdxDecidePopupByIE = 8;
-        var IdxSliverlight = 9;
+        var IdxAllowFullsize = 7;   //全屏
+        var IdxDecidePopupByIE = 8;;
+        var IdxSliverlight = 9; //附件上传
+        var IdxOtherSystem = 10;    //其他域名的检测
 
         function getCookieStatus() {
             var status = StatusNG;
@@ -189,15 +190,15 @@
             if (Sys.ie) {
                 IeCheck();
             }
-            else if (Sys.chrome) {
-                ChromeCheck();
-            }
-            else if (Sys.safari) {
-                SafariCheck();
-            }
-            else if (Sys.firefox) {
-                FireFoxCheck();
-            }
+//            else if (Sys.chrome) {
+//                ChromeCheck();
+//            }
+//            else if (Sys.safari) {
+//                SafariCheck();
+//            }
+//            else if (Sys.firefox) {
+//                FireFoxCheck();
+//            }
             else {
                 $("#browerInfo").hide();
                 $("#browerSet").hide();
@@ -352,6 +353,23 @@
             }
         }
 
+        //其他业务系统检测
+        function OtherSystemCheck(brower, index) {
+            var checkResult = false;
+            var helpHtml = "";
+            
+            if (checkResult) { // true/false
+                $("#" + brower + "BrowerRet" + index).html("成功");
+                $("#" + brower + "BrowerRet" + index).css("color", "#008000");
+            }
+            else {
+                $("#" + brower + "BrowerRet" + index).html("失败");
+                $("#" + brower + "BrowerRet" + index).css("color", "red");
+
+                $("#" + brower + "BrowerSuggest" + index).html("<br/>" + helpHtml);
+            }
+        }
+
         //IE下的检测
         function IeCheck() {
             alert("系统在检查可信任站点时要运行ActiveX控件,\n\r可能会弹出对话框是允许ActiveX控件与页面交互的确认对话框,\n\r请点击\"确定\"按钮,否则无法对浏览器进行检查.");
@@ -400,6 +418,8 @@
             FlashCheck("ie", "8");
             //Sliverlight银光
             SliverlightCheck("ie", "9");
+            //其他业务系统配置要求
+            OtherSystemCheck("ie", "10");
         }
 
         //Chrome下的检测
@@ -598,14 +618,15 @@
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
                     <li>为了可以正常使用当前系统，您的浏览器需要：</li>
                     <li style="height:10px;"></li>
-                    <li>1、要求使用 Microsoft Internet Explorer 7.0 或以上版本，如果您使用<a target="_blank" href="http://www.google.com/chrome">Google Chrome</a>或<a target="_blank" href="http://firefox.com.cn/download/">Mozilla Firefox</a> 则大部分系统功能将无法使用。&nbsp;&nbsp; 如果你使用 360安全浏览器、360极速浏览器、QQ浏览器或搜狗浏览器等其他浏览器请在访问中南院业务系统时切换到“<b>兼容模式</b>”。
+                    <li>1、要求使用 Microsoft Internet Explorer 7.0 或以上版本，如果您使用<a target="_blank" href="http://www.google.com/chrome">Google Chrome</a>或<a target="_blank" href="http://firefox.com.cn/download/">Mozilla Firefox</a> 则大部分系统功能将无法使用。
+                        <br/>&nbsp;&nbsp; 如果你使用 360安全浏览器、360极速浏览器、QQ浏览器或搜狗浏览器等其他浏览器请在访问中南院业务系统时切换到“<b>兼容模式</b>”。
     </li>                    
                     <li>2、<span style="color:#008000;">推荐使用Microsoft Internet Explorer 8.0</span>
                         <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-8">微软官方下载</a>
                         <a href="http://mis.msdi.cn/portal/install/ie/IE8-WindowsXP-x86-CHS.exe">本地下载(适用于XP 32位)</a></li>
                     <li>3、允许Javascript</li>
-                    <li>4、如果是使用IE浏览器，则请检查“mis.msdi.cn/zny.msdi.cn/pmis.msdi.cn”是否加入可信任站点,同时启用选项 "允许由脚本初始化的窗口，没有大小和位置限制"</li>
-                    <li>5、IE7或者以上版本呢把弹出窗口选项设置为"由Internet Exporer决定如何开打弹出窗口"</li>
+                    <li>4、如果使用IE浏览器，则请将“mis.msdi.cn/zny.msdi.cn/pmis.msdi.cn”加入可信任站点，同时启用选项 "允许由脚本初始化的窗口，没有大小和位置限制"</li>
+                    <li>5、IE7或者以上版本把弹出窗口选项设置为"由Internet Exporer决定如何开打弹出窗口"</li>
                     <li>6、允许 Cookies </li>
                     <li>7、允许弹出窗口</li>
                     <li>8、安装有 Macromedia Flash播放器 7.0 或以上版本</li>
@@ -649,7 +670,9 @@
                         
                         <li>9、Silverlight插件：<span id="ieBrowerInfo9" class="browerInfo"></span><span id="ieBrowerRet9"
                             class="browerRet"></span><a id="ieBrowerRet9" class="browerSuggest"></a></li>
-                        
+                        <li>10、其他业务系统使用要求：<span id="ieBrowerInfo10" class="browerInfo"></span><span id="ieBrowerRet10"
+                            class="browerRet"></span><a id="ieBrowerRet10" class="browerSuggest"></li>
+
                         <li style="height:10px;"></li>
                             <li><a href="http://mis.msdi.cn/sysmodule/FileSystem/Download.aspx?IsExec=true&Key=Goodway_BE-DownLoad&Id=FFL3MT1J_IETool.exe">下载常见问题修复工具(注：目前只在XP、Win7下进行全面的测试验证)</a></li>
                     </ul>

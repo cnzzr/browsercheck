@@ -3,6 +3,25 @@
 
 
 //检测其他域名的配置情况
-var Domains = new Array();
-Domains[0] = "http://zny.msdi.cn/tools/bc/check.html";
-Domains[1] = "http://mis.msdi.cn/tools/bc/check.html";
+var Domains = [];
+Domains.push({
+    key: "ZZR",
+    name:"本机测试 172.22.67.20",//显示的业务系统名称
+    checkUrl: "http://172.22.67.20:8044/tools/bc/check.html", //业务系统中部署的代理检查页面
+    help:"" //设置帮助地址，一般为Discuz
+});
+
+//Domains.push({
+//    key: "Portal",
+//    name:"应用集成门户",
+//    checkUrl: "http://zny.msdi.cn/tools/bc/check.html",
+//    help: ""
+//});
+
+//Domains.push({
+//    key: "Mis",
+//    name:"综合管理信息系统",
+//    checkUrl: "http://172.22.67.20:8044/tools/bc/check.html",
+//    help: ""
+//});
+
