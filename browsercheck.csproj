@@ -46,13 +46,17 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BrowerCheck.htm" />
-    <Content Include="BrowerCheckClose.htm" />
-    <Content Include="CheckIE\BrowerCheckClose.htm" />
+    <Content Include="ky\app.html" />
+    <Content Include="BrowerCheck.html" />
+    <Content Include="BrowerCheckClose.html" />
+    <Content Include="CheckIE\BrowerCheckClose.html" />
     <Content Include="CheckIE\ieadjust.jpg" />
+    <Content Include="ky\proxy.html" />
     <Content Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="ky\othersite\BrowerCheckClose.html" />
+    <Content Include="ky\othersite\check.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

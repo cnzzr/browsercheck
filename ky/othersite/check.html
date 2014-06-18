@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Browser check.</title>
+</head>
+<body>
+    检测中南院子域名的配置情况：<br />
+    1、是否允许执行JavaScript；<br />
+    2、是否已经加入受信任站点；<br />
+    3、ActiveX控件检测；<br />
+    检测完成后返回JSON，如果全部通过则写入 Cookies：_browserCheckResult=1<br />
+    <script type="text/javascript">
+        var StatusNG = 0;
+        var StatusUP = 1;
+        var StatusOK = 2;
+        var CheckResult = "{";//检测结果
+        
+        //检查信任站点
+        var trustWebsiteStatus = StatusNG;
+        try {
+            var WshShell = new ActiveXObject("WScript.Shell");
+            trustWebsiteStatus = StatusOK;
+        }
+        catch (e) {
+            trustWebsiteStatus = StatusNG;
+        }
+        
+        //弹窗设置检测
+        var popupStatus = StatusNG;
+        var str_feature = 'toolbar=no' + ',menubar=no' + ',scrollbars=no' + ',resizable=no' + ',status=no' + ',width=1' + ',height=1' + ',top=0' + ',left=0' + ',screenX=0' + ',screenY=0';
+        var popup_win = window.open("BrowerCheckClose.html", "wb_check", str_feature);
+        if (popup_win) {
+            popupStatus = StatusOK;
+        }
+
+        //ActiveX控件检测
+        //针对MIS系统：MIS旧版附件上传插件、MIS旧版在线文件编辑、Sliverlight控件、Flash插件
+        //金格产品：金格签章插件、金格全文批注插件
+        //RTX：RTX SSO插件
+        //关于AD：AD自动登录调用
+
+        //组装检测的结果
+        if(trustWebsiteStatus) {
+            CheckResult += "TrustWebsite:1";
+        } else {
+            CheckResult += "TrustWebsite:0";
+        }
+        CheckResult += ",";
+
+        if (popupStatus) {
+            CheckResult += "Popup:1";
+        } else {
+            CheckResult += "Popup:0";
+        }
+        CheckResult += "}";
+        
+        window.name = CheckResult; // 这里是要传输的数据，大小一般为2M，IE和firefox下可以大至32M左右
+            // 数据格式可以自定义，如json、字符串
+    </script>
+</body>
+</html>
