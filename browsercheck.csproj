@@ -58,6 +58,7 @@
     <Content Include="BrowerCheckClose.html" />
     <Content Include="CheckIE\ieadjust.jpg" />
     <Content Include="ky\proxy.html" />
+    <Content Include="proxy.html" />
     <Content Include="readme.txt" />
     <Content Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />

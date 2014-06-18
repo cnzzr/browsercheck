@@ -7,21 +7,22 @@ var Domains = [];
 Domains.push({
     key: "ZZR",
     name:"本机测试 172.22.67.20",//显示的业务系统名称
-    checkUrl: "http://172.22.67.20:8044/tools/bc/check.html", //业务系统中部署的代理检查页面
-    help:"" //设置帮助地址，一般为Discuz
+    checkUrl: "http://172.22.67.20:8044/ASM/bc/check.html", //业务系统中部署的代理检查页面
+    helpMsg:"电话技术支持3214",
+    helpUrl:"http://xxsq.msdi.cn/" //设置帮助地址，一般为Discuz
 });
 
 //Domains.push({
 //    key: "Portal",
 //    name:"应用集成门户",
 //    checkUrl: "http://zny.msdi.cn/tools/bc/check.html",
-//    help: ""
+//    helpUrl: ""
 //});
 
 //Domains.push({
 //    key: "Mis",
 //    name:"综合管理信息系统",
 //    checkUrl: "http://172.22.67.20:8044/tools/bc/check.html",
-//    help: ""
+//    helpUrl: ""
 //});
 

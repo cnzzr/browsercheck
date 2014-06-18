@@ -12,6 +12,9 @@
         var StatusNG = 0;
         var StatusUP = 1;
         var StatusOK = 2;
+
+        var ContextPath = window.location.protocol + "//" + window.location.host +
+        (window.location.pathname.lastIndexOf("/") > 0 ? (window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1)) : "/");
         
         //检测项目
         var IdxBrowser = 0; //浏览器
@@ -353,28 +356,11 @@
             }
         }
 
-        //其他业务系统检测
-        function OtherSystemCheck(brower, index) {
-            var checkResult = false;
-            var helpHtml = "";
-            
-            if (checkResult) { // true/false
-                $("#" + brower + "BrowerRet" + index).html("成功");
-                $("#" + brower + "BrowerRet" + index).css("color", "#008000");
-            }
-            else {
-                $("#" + brower + "BrowerRet" + index).html("失败");
-                $("#" + brower + "BrowerRet" + index).css("color", "red");
-
-                $("#" + brower + "BrowerSuggest" + index).html("<br/>" + helpHtml);
-            }
-        }
-
         //IE下的检测
         function IeCheck() {
             alert("系统在检查可信任站点时要运行ActiveX控件,\n\r可能会弹出对话框是允许ActiveX控件与页面交互的确认对话框,\n\r请点击\"确定\"按钮,否则无法对浏览器进行检查.");
 
-            $(".c6ui-brower-ie").show();
+            $(".check-brower-ie").show();
             //浏览器版本检测，如果低于IE 7.0 提示不支持，如果是IE 7.0 建议升级到IE 8.0 ，若果是IE 8.0则没有提示
             $("#ieBrowerInfo1").html("Microsoft Internet Explorer " + Sys.ie);
             if (Math.round(Sys.ie) < 7) {
@@ -424,7 +410,7 @@
 
         //Chrome下的检测
         function ChromeCheck() {
-            $(".c6ui-brower-chrome").show();
+            $(".check-brower-chrome").show();
 
             //版本检测
             $("#chromeBrowerInfo1").html("Google Chrome " + Sys.chrome);
@@ -448,7 +434,7 @@
 
         //Safari下的检测
         function SafariCheck() {
-            $(".c6ui-brower-safari").show();
+            $(".check-brower-safari").show();
 
             //版本检测
             $("#safariBrowerInfo1").html("Apple Safari " + Sys.safari);
@@ -471,7 +457,7 @@
         }
 
         function FireFoxCheck() {
-            $(".c6ui-brower-firefox").show();
+            $(".check-brower-firefox").show();
 
             //版本检测
             $("#firefoxBrowerInfo1").html("Mozilla Firefox " + Sys.firefox);
@@ -500,9 +486,9 @@
         function TipShow(obj, id, title) {
             var imgStr = "<div id=\"";
             imgStr += id;
-            imgStr += "\" class=\"c6ui-portal-area\" style=\"width:764px; position:absolute;\"><div class=\"c6ui-portal-area-title\"><div onclick=\"TipClose(this)\" style=\"float:right; color:#003299; cursor:pointer;\">关闭</div> <div class=\"c6ui-f14\">";
+            imgStr += "\" class=\"checkinfo-area\" style=\"width:764px; position:absolute;\"><div class=\"checkinfo-area-title\"><div onclick=\"TipClose(this)\" style=\"float:right; color:#003299; cursor:pointer;\">关闭</div> <div class=\"zxlm-f14\">";
             imgStr += title;
-            imgStr += "</div></div><div class=\"c6ui-portal-area-content\" ><img id='setimg' src=\"CheckIE/";
+            imgStr += "</div></div><div class=\"checkinfo-area-content\" ><img id='setimg' src=\"CheckIE/";
             imgStr += id;
             imgStr += ".jpg\" /><span id='loadinginfo'></span></div></div>";
 
@@ -539,84 +525,20 @@
     </script>
 
     <style type="text/css">
-        .c6ui-portal-area
-        {
-            border: solid #aacbee 1px;
-            font-size: 14px;
-            background-color: #FFFFFF;
-            margin: 10px 4px;
-            width: 100%;
-        }
-        .c6ui-portal-area .c6ui-portal-area-title
-        {
-            overflow: hidden;
-            border-bottom: solid #aacbee 1px;
-            height: 29px;
-            line-height: 29px;
-            padding: 0 8px;
-            background-color: #f9fcff;
-            background-image: -moz-linear-gradient(top, #f9fcff, #e8f1f9); /* FF3.6 */
-            background-image: -ms-linear-gradient(top, #f9fcff, #e8f1f9); /* IE10 */
-            background-image: -o-linear-gradient(top, #f9fcff, #e8f1f9); /* Opera 11.10+ */
-            background-image: -webkit-gradient(linear, left top, left bottom, from(#f9fcff), to(#e8f1f9)); /* Saf4+, Chrome */
-            background-image: -webkit-linear-gradient(top, #f9fcff, #e8f1f9); /* Chrome 10+, Saf5.1+ */
-            background-image: linear-gradient(top, #f9fcff, #e8f1f9);
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f9fcff', EndColorStr='#e8f1f9'); /* IE6–IE9 */
-        }
-        .c6ui-portal-area .c6ui-portal-area-content
-        {
-            padding: 6px;
-            overflow: hidden;
-        }
-        .c6ui-brower-ie
-        {
-            display: none;
-        }
-        .c6ui-brower-safari
-        {
-            display: none;
-        }
-        .c6ui-brower-chrome
-        {
-            display: none;
-        }
-        .c6ui-brower-firefox
-        {
-            display:none;
-        }
-        .browerInfo
-        {
-        }
-        .browerRet
-        {
-            margin-left: 20px;
-            font-weight: bold;
-        }
-        .browerSuggest
-        {
-            margin-left: 20px;
-        }
-        a
-        {
-            color: #003299;
-            font-weight: bold;
-        }
-
-        .c6ui-f14 {}
-        .c6ui-f15 {font-size:18px;font-weight: bold;}
+        a{color:#003299;font-weight:bold;}.checkinfo-area{border:solid #aacbee 1px;font-size:14px;line-height:20px;background-color:#FFFFFF;margin:10px 4px;width:100%;}.checkinfo-area .checkinfo-area-title{overflow:hidden;border-bottom:solid #aacbee 1px;height:30px;line-height:30px;padding:0 8px;background-color:#f9fcff;background-image:-moz-linear-gradient(top,#f9fcff,#e8f1f9);background-image:-ms-linear-gradient(top,#f9fcff,#e8f1f9);background-image:-o-linear-gradient(top,#f9fcff,#e8f1f9);background-image:-webkit-gradient(linear,left top,left bottom,from(#f9fcff),to(#e8f1f9));background-image:-webkit-linear-gradient(top,#f9fcff,#e8f1f9);background-image:linear-gradient(top,#f9fcff,#e8f1f9);filter:progid:DXImageTransform.Microsoft.gradient(startColorStr='#f9fcff',EndColorStr='#e8f1f9');}.checkinfo-area .checkinfo-area-content{padding:6px;overflow:hidden;}.check-brower-ie{display:none;}.check-brower-safari{display:none;}.check-brower-chrome{display:none;}.check-brower-firefox{display:none;}.browerInfo{}.browerRet{margin-left:20px;font-weight:bold;}.browerSuggest{margin-left:20px;}.zxlm-f14{}.zxlm-f15{font-size:18px;font-weight:bold;}
     </style>
 </head>
 <body onload="InitialInfo()">
     <div style="width: 100%;">
         <div id="set" style="display: none; position: absolute;">
         </div>
-        <div class="c6ui-portal-area">
-            <div class="c6ui-portal-area-title">
-                <div class="c6ui-f15">浏览器配置需求</div>
+        <div class="checkinfo-area">
+            <div class="checkinfo-area-title">
+                <div class="zxlm-f15">浏览器配置需求</div>
             </div>
-            <div class="c6ui-portal-area-content">
+            <div class="checkinfo-area-content">
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
-                    <li>为了可以正常使用当前系统，您的浏览器需要：</li>
+                    <li>为了可以正常使用公司的业务系统，您的浏览器需要满足以下条件：</li>
                     <li style="height:10px;"></li>
                     <li>1、要求使用 Microsoft Internet Explorer 7.0 或以上版本，如果您使用<a target="_blank" href="http://www.google.com/chrome">Google Chrome</a>或<a target="_blank" href="http://firefox.com.cn/download/">Mozilla Firefox</a> 则大部分系统功能将无法使用。
                         <br/>&nbsp;&nbsp; 如果你使用 360安全浏览器、360极速浏览器、QQ浏览器或搜狗浏览器等其他浏览器请在访问中南院业务系统时切换到“<b>兼容模式</b>”。
@@ -634,12 +556,12 @@
                 </ul>
             </div>
         </div>
-        <div id="browerInfo" class="c6ui-portal-area">
-            <div class="c6ui-portal-area-title">
-                <div class="c6ui-f15">浏览器配置自动检测报告</div>
+        <div id="browerInfo" class="checkinfo-area">
+            <div class="checkinfo-area-title">
+                <div class="zxlm-f15">浏览器配置自动检测报告</div>
             </div>
-            <div class="c6ui-portal-area-content">
-                <div class="c6ui-brower-ie">
+            <div class="checkinfo-area-content">
+                <div class="check-brower-ie">
                     <ul style="padding: 0px; margin: 0px; list-style: none;">
                         <li>我们正在检查您的浏览器以确定是否满足以上的要求。如果看到任何一项失败！请按照提示操作。 
                             <a href="#" onclick="TipShow(this,'ieadjust','注意IE的兼容模式')">(注：由于IE兼容模式的开启可能造成浏览器版本检测不正确)</a>
@@ -669,15 +591,15 @@
                             class="browerRet"></span><a id="ieBrowerSuggest8" class="browerSuggest"></a></li>
                         
                         <li>9、Silverlight插件：<span id="ieBrowerInfo9" class="browerInfo"></span><span id="ieBrowerRet9"
-                            class="browerRet"></span><a id="ieBrowerRet9" class="browerSuggest"></a></li>
+                            class="browerRet"></span><a id="ieBrowerSuggest9" class="browerSuggest"></a></li>
                         <li>10、其他业务系统使用要求：<span id="ieBrowerInfo10" class="browerInfo"></span><span id="ieBrowerRet10"
-                            class="browerRet"></span><a id="ieBrowerRet10" class="browerSuggest"></li>
+                            class="browerRet"></span><span id="ieBrowerSuggest10" class="browerSuggest"></span></li>
 
                         <li style="height:10px;"></li>
                             <li><a href="http://mis.msdi.cn/sysmodule/FileSystem/Download.aspx?IsExec=true&Key=Goodway_BE-DownLoad&Id=FFL3MT1J_IETool.exe">下载常见问题修复工具(注：目前只在XP、Win7下进行全面的测试验证)</a></li>
                     </ul>
                 </div>
-                <div class="c6ui-brower-safari">
+                <div class="check-brower-safari">
                     <ul style="padding: 0px; margin: 0px; list-style: none;">
                         <li>我们正在检查您的浏览器以确定是否满足以上的要求。如果看到任何一项失败！，请按照提示操作。 </li>
                         <li style="height:10px;"></li>
@@ -693,7 +615,7 @@
                             id="safariBrowerSuggest5" class="browerSuggest"></a></li>
                     </ul>
                 </div>
-                <div class="c6ui-brower-chrome">
+                <div class="check-brower-chrome">
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
                         <li>我们正在检查您的浏览器以确定是否满足以上的要求。如果看到任何一项失败！，请按照提示操作。 </li>
                         <li style="height:10px;"></li>
@@ -724,7 +646,7 @@
                         </li>
                   </ul>
                 </div>
-                <div class="c6ui-brower-firefox">
+                <div class="check-brower-firefox">
                     <ul style="padding: 0px; margin: 0px; list-style: none;">
                         <li>我们正在检查您的浏览器以确定是否满足以上的要求。如果看到任何一项失败！，请按照提示操作。 </li>
                         <li style="height:10px;"></li>
@@ -758,12 +680,12 @@
             </div>
         </div>
         
-        <div id="browerSet" class="c6ui-portal-area">
-            <div class="c6ui-portal-area-title">
-                <div class="c6ui-f14">
+        <div id="browerSet" class="checkinfo-area">
+            <div class="checkinfo-area-title">
+                <div class="zxlm-f14">
                     基本配置说明</div>
             </div>
-            <div class="c6ui-portal-area-content">
+            <div class="checkinfo-area-content">
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
                     <li style="float:left; margin-left:10px;"><a onclick="CommonSet(this,'jsset','允许Javascript')" href="#">允许Javascript</a></li>
                     <li style="float:left; margin-left:10px;"><a onclick="CommonSet(this,'jsset','允许Cookies')" href="#">允许Cookies</a></li>
@@ -773,12 +695,12 @@
                 </ul>
             </div>
         </div>
-        <div id="browerOcx" class="c6ui-portal-area">
-           <div class="c6ui-portal-area-title">
-                <div class="c6ui-f14">
+        <div id="browerOcx" class="checkinfo-area">
+           <div class="checkinfo-area-title">
+                <div class="zxlm-f14">
                     系统常用插件</div>
           </div>
-            <div class="c6ui-portal-area-content">
+            <div class="checkinfo-area-content">
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
                     <li style="float:left; margin-left:10px;"><a href="">电子签章安全软件</a></li>
                     <li style="float:left; margin-left:10px;"><a href="">旧MIS系统插件</a></li>                    
@@ -864,4 +786,93 @@
 
         return isVersionSupported;
     };
+
+
+    //其他业务系统检测
+    function OtherSystemCheck(brower, index) {
+        var checkResult = true;
+        var checkStatusArr = new Array();
+        var helpHtml = "";
+
+        var showResult = function (ditem, data) {
+            if (!(ditem && data)) {
+                return;
+            }
+            if (checkStatusArr.length == 0)
+                helpHtml += "<br/><ul>";
+
+            if (data) {
+                eval("var json=" + data);
+                helpHtml += "<li><b>" + ditem.name + "</b> 存在的浏览器设置问题：";
+                helpHtml += data;
+                if (ditem.helpMsg || ditem.helpUrl) {
+                    helpHtml += "，如有疑问请 " + (ditem.helpMsg ? ditem.helpMsg : "") + 
+                        (ditem.helpUrl?" 访问<a href='"+ditem.helpUrl+"' target=_blank>帮助页面</a>":"");
+                }
+                helpHtml += "</li>";
+
+                checkResult = false;
+            }
+            checkStatusArr.push(item.key);
+
+
+            if (checkStatusArr.length == Domains.length) {
+                if (checkResult) { // true/false
+                    $("#" + brower + "BrowerRet" + index).html("成功");
+                    $("#" + brower + "BrowerRet" + index).css("color", "#008000");
+                }
+                else {
+                    $("#" + brower + "BrowerRet" + index).html("失败");
+                    $("#" + brower + "BrowerRet" + index).css("color", "red");
+
+                    $("#" + brower + "BrowerSuggest" + index).html(helpHtml);
+                }
+            }
+        };
+
+        for (var i = 0; i < Domains.length; i++) {
+            var item = Domains[i];
+            if (item.checkUrl) {
+                //并发处理
+                var func = function () { init(showResult, item); };
+                window.setTimeout(func, 16 * i);
+            }
+        }
+
+
+    }
+
+    function init(callback,item) {
+        var iframeProxy = document.createElement('iframe');
+        var state = 0;
+        var loadfn = function () {
+            if (state === 1) {
+                var data = iframeProxy.contentWindow.name; // 读取数据
+                callback(item,data); //弹出返回值
+                
+                if (iframeProxy) {
+                    if (iframeProxy.detachEvent) {//判断是否是IE
+                        iframeProxy.detachEvent('onload', loadfn);
+                    }
+                    iframeProxy.contentWindow.document.write('');
+                    iframeProxy.contentWindow.close();
+                    document.body.removeChild(iframeProxy);
+                }
+            } else if (state === 0) {
+                state = 1;
+                iframeProxy.contentWindow.location = ContextPath + "proxy.html"; // 设置的代理文件
+            }
+        };
+
+        iframeProxy.src = item.checkUrl;
+        iframeProxy.style.display = "none"; //隐藏窗口
+
+        if (iframeProxy.attachEvent) {//判断是否为IE
+            iframeProxy.attachEvent('onload', loadfn);
+        } else {
+            iframeProxy.onload = loadfn;
+        }
+        document.body.appendChild(iframeProxy);
+    }
+
 </script>
