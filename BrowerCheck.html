@@ -25,58 +25,6 @@
         var IdxDecidePopupByIE = 8;
         var IdxSliverlight = 9;
 
-        function showEachClientCheckResult() {
-            //运行WScript.Shell提示
-            browser_check.innerHTML = Msg[IdxBrowser][getBrowserStatus()];
-            js_check.innerHTML = Msg[IdxJs][StatusOK];
-            zonemap_check.innerHTML = Msg[IdxZone][getTrustWebsiteStatus()];
-            spanAllowFullSize.innerHTML = Msg[IdxAllowFullsize][getAllowFullSizeWindowStatus()];
-            spanDecidePopupByIE.innerHTML = Msg[IdxDecidePopupByIE][getDecidePopupByIEStatus()];
-            cookie_check.innerHTML = Msg[IdxCookie][getCookieStatus()];
-            popup_check.innerHTML = Msg[IdxPopup][getPopupStatus("BrowerCheckClose.html")];
-            flash_check.innerHTML = Msg[IdxFlash][getFlashStatus()];
-            //jre_check.innerHTML = Msg[IdxJre][getJreStatus()];
-        }
-
-        function showOverallClientCheckResult(inMsg) {
-            if (getBrowserStatus() < StatusOK
-                || getCookieStatus() < StatusOK
-                    || getPopupStatus("BrowerCheckClose.html") < StatusOK
-                        || getFlashStatus() < StatusOK
-                            || getJreStatus() < StatusOK
-                ) {
-                client_check_link.innerHTML = inMsg;
-                client_check_td_above.height = 20;
-                client_check_td_below.height = 20;
-            }
-        }
-        function getBrowserStatus() {
-            var status = StatusNG;
-            if (!checkBrowserName(" MSIE ") || !checkBrowserName("MSIE ") || !checkBrowserName("MSIE")) {
-                status = StatusNG;
-            } else {
-                status = StatusOK;
-            }
-            return status;
-        }
-        
-        function checkBrowserName(name) {
-            var verStr = navigator.appVersion;
-            var verNo = 0;
-            var result = false;
-            if (verStr.indexOf(name) != -1) {
-                tempStr = verStr.split(name);
-                verNo = parseFloat(tempStr[1]);
-                if (verNo >= 6) {
-                    result = true;
-                }
-            }
-            return result;
-        }
-
-
-
-        
         function getCookieStatus() {
             var status = StatusNG;
             var cookieStr = "wb_check=kcehc_bw";
