@@ -2,3 +2,14 @@
 http://demo.jh0101.com/c6/Jhsoft.Web.login/BrowerCheck.htm
 
 相关的图片重新制作
+
+功能说明：
+
+1、如何对其他域名的设置进行测试和提醒？
+	1.1 需要在待检测的域名下部署本示例中的 /ky/othersite/ 目录下的文件：check.html\BrowerCheckClose.html；
+	1.2 修改 config.js 文件，增加域名及部署1.1中对应的文件的完整路径；
+
+2、能够检测的项目有哪些？
+	本功能目前主要针对IE的设置进行检测，检测的项目有：
+
+

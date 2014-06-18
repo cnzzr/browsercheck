@@ -6,10 +6,14 @@
     <title>浏览器配置检测（主站点测试）</title>  
 
     <script src="Scripts/jquery-1.7.1.js" type="text/javascript"></script>
+    <script src="config.js" type="text/javascript"></script>
     <script type="text/javascript">
+        //常量
         var StatusNG = 0;
         var StatusUP = 1;
         var StatusOK = 2;
+        
+        //检测项目
         var IdxBrowser = 0;
         var IdxJs = 1;
         var IdxCookie = 2;
@@ -46,7 +50,6 @@
                 client_check_td_below.height = 20;
             }
         }
-
         function getBrowserStatus() {
             var status = StatusNG;
             if (!checkBrowserName(" MSIE ") || !checkBrowserName("MSIE ") || !checkBrowserName("MSIE")) {
@@ -70,6 +73,9 @@
             }
             return result;
         }
+
+
+
         
         function getCookieStatus() {
             var status = StatusNG;
@@ -206,18 +212,14 @@
                 }
             }
             return domain;
-        } 
+        }
     </script>
     
     
     <script type="text/javascript">
-        var Domains = new Array();
-        Domains[0] = "http://zny.msdi.cn/tools/bc/check.html";
-        Domains[1] = "http://mis.msdi.cn/tools/bc/check.html";
-
+    //var Domains = new Array();//config.js
     </script>
     
-
 
     <script type="text/javascript">
         /**
@@ -526,10 +528,8 @@
 
         function TipClose(obj) {
             $(obj).parent().parent().parent().hide();
-
         }
         function TipShow(obj, id, title) {
-
             var imgStr = "<div id=\"";
             imgStr += id;
             imgStr += "\" class=\"c6ui-portal-area\" style=\"width:764px; position:absolute;\"><div class=\"c6ui-portal-area-title\"><div onclick=\"TipClose(this)\" style=\"float:right; color:#003299; cursor:pointer;\">关闭</div> <div class=\"c6ui-f14\">";
