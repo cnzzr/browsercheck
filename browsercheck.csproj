@@ -46,12 +46,21 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CheckIE\chromecookieset.jpg" />
+    <Content Include="CheckIE\chromejsset.jpg" />
+    <Content Include="CheckIE\chromepopupset.jpg" />
+    <Content Include="CheckIE\firefoxcookieset.jpg" />
+    <Content Include="CheckIE\firefoxjsset.jpg" />
+    <Content Include="CheckIE\firefoxpopupset.jpg" />
+    <Content Include="CheckIE\msdi_ietools.gif" />
+    <Content Include="CheckIE\msdi_softdown.gif" />
     <Content Include="CheckIE\ieallowfullsizewin.jpg" />
     <Content Include="CheckIE\iecookieset.jpg" />
     <Content Include="CheckIE\iedecidepopupbyieset.jpg" />
     <Content Include="CheckIE\iejsset.jpg" />
     <Content Include="CheckIE\iepopupset.jpg" />
     <Content Include="CheckIE\ietrustwebsiteset.jpg" />
+    <Content Include="CheckIE\msdi_setting.gif" />
     <Content Include="config.js" />
     <Content Include="ky\app.html" />
     <Content Include="BrowerCheck.html" />
