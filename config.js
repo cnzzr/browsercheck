@@ -14,13 +14,13 @@ CheckItemLang["Sliverlight"] = "安装Silverlight插件";
 var ActiveX = [];
 //检测其他域名的配置情况
 var Domains = [];
-Domains.push({
-    key: "ZZR",
-    name:"本机测试 172.22.67.20",//显示的业务系统名称
-    checkUrl: "http://172.22.67.20:8044/ASM/bc/check.html", //业务系统中部署的代理检查页面
-    helpMsg:"电话技术支持3214",
-    helpUrl:"http://xxsq.msdi.cn/" //设置帮助地址，一般为Discuz
-});
+//Domains.push({
+//    key: "ZZR",
+//    name:"本机测试 172.22.67.20",//显示的业务系统名称
+//    checkUrl: "http://172.22.67.20:8044/ASM/bc/check.html", //业务系统中部署的代理检查页面
+//    helpMsg:"电话技术支持3214",
+//    helpUrl:"http://xxsq.msdi.cn/" //设置帮助地址，一般为Discuz
+//});
 
 Domains.push({
     key: "Portal",
