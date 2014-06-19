@@ -1,15 +1,19 @@
-����ԭ�Ͳɼ��ԡ����������
+﻿功能原型采集自“金和软件”
 http://demo.jh0101.com/c6/Jhsoft.Web.login/BrowerCheck.htm
+    http://demo.jh0101.com/c6/Jhsoft.Web.login/images/BrowerCheck/chromepopupset.jpg
+    http://demo.jh0101.com/c6/Jhsoft.Web.login/images/BrowerCheck/chromecookieset.jpg
+    http://demo.jh0101.com/c6/Jhsoft.Web.login/images/BrowerCheck/chromejsset.jpg
 
-��ص�ͼƬ��������
 
-����˵����
+相关的图片重新制作
 
-1����ζ��������������ý��в��Ժ����ѣ�
-	1.1 ��Ҫ�ڴ����������²���ʾ���е� /ky/othersite/ Ŀ¼�µ��ļ���check.html\BrowerCheckClose.html��
-	1.2 �޸� config.js �ļ�����������������1.1�ж�Ӧ���ļ�������·����
+功能说明：
 
-2���ܹ�������Ŀ����Щ��
-	������Ŀǰ��Ҫ���IE�����ý��м�⣬������Ŀ�У�
+1、如何对其他域名的设置进行测试和提醒？
+	1.1 需要在待检测的域名下部署本示例中的 /ky/othersite/ 目录下的文件：check.html\BrowerCheckClose.html；
+	1.2 修改 config.js 文件，增加域名及部署1.1中对应的文件的完整路径；
+
+2、能够检测的项目有哪些？
+	本功能目前主要针对IE的设置进行检测，检测的项目有：
 
 
