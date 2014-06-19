@@ -220,6 +220,7 @@
             else {
                 $("#" + brower + "BrowerRet" + index).html("失败");
                 $("#" + brower + "BrowerRet" + index).css("color", "red");
+                $("#" + brower + "BrowerRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
                 $("#" + brower + "BrowerSuggest" + index).html("点击设置");
                 $("#" + brower + "BrowerSuggest" + index).attr("href", "#");
@@ -238,6 +239,7 @@
             else {
                 $("#" + brower + "BrowerRet" + index).html("失败");
                 $("#" + brower + "BrowerRet" + index).css("color", "red");
+                $("#" + brower + "BrowerRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
                 $("#" + brower + "BrowerSuggest" + index).html("点击设置");
                 $("#" + brower + "BrowerSuggest" + index).attr("href", "#");
@@ -257,6 +259,7 @@
             else {
                 $("#" + brower + "BrowerRet" + index).html("失败");
                 $("#" + brower + "BrowerRet" + index).css("color", "red");
+                $("#" + brower + "BrowerRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
                 $("#" + brower + "BrowerSuggest" + index).html("点击设置");
                 $("#" + brower + "BrowerSuggest" + index).attr("href", "#");
@@ -275,6 +278,7 @@
             else {
                 $("#" + brower + "BrowerRet" + index).html("失败");
                 $("#" + brower + "BrowerRet" + index).css("color", "red");
+                $("#" + brower + "BrowerRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
                 $("#" + brower + "BrowerSuggest" + index).html("点击设置");
                 $("#" + brower + "BrowerSuggest" + index).attr("href", "#");
@@ -293,6 +297,7 @@
             else {
                 $("#" + brower + "BrowerRet" + index).html("失败");
                 $("#" + brower + "BrowerRet" + index).css("color", "red");
+                $("#" + brower + "BrowerRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
                 $("#" + brower + "BrowerSuggest" + index).html("点击设置");
                 $("#" + brower + "BrowerSuggest" + index).attr("href", "#");
@@ -311,6 +316,7 @@
             else {
                 $("#" + brower + "BrowerRet" + index).html("失败");
                 $("#" + brower + "BrowerRet" + index).css("color", "red");
+                $("#" + brower + "BrowerRet" + index).parent().css("background-color","rgb(248, 214, 214)");
 
                 $("#" + brower + "BrowerSuggest" + index).html("点击设置");
                 $("#" + brower + "BrowerSuggest" + index).attr("href", "#");
@@ -333,6 +339,7 @@
             else {
                 $("#" + brower + "BrowerRet" + index).html("失败");
                 $("#" + brower + "BrowerRet" + index).css("color", "red");
+                $("#" + brower + "BrowerRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
                 $("#" + brower + "BrowerSuggest" + index).html("点击下载最新Flash插件");
                 $("#" + brower + "BrowerSuggest" + index).attr("target", "_blank");
@@ -349,6 +356,7 @@
             else {
                 $("#" + brower + "BrowerRet" + index).html("失败");
                 $("#" + brower + "BrowerRet" + index).css("color", "red");
+                $("#" + brower + "BrowerRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
                 $("#" + brower + "BrowerSuggest" + index).html("点击下载最新Sliverlight插件");
                 $("#" + brower + "BrowerSuggest" + index).attr("target", "_blank");
@@ -526,8 +534,12 @@
 
     <style type="text/css">
         a{color:#003299;font-weight:bold;}.checkinfo-area{border:solid #aacbee 1px;font-size:14px;line-height:20px;background-color:#FFFFFF;margin:10px 4px;width:100%;}.checkinfo-area .checkinfo-area-title{overflow:hidden;border-bottom:solid #aacbee 1px;height:30px;line-height:30px;padding:0 8px;background-color:#f9fcff;background-image:-moz-linear-gradient(top,#f9fcff,#e8f1f9);background-image:-ms-linear-gradient(top,#f9fcff,#e8f1f9);background-image:-o-linear-gradient(top,#f9fcff,#e8f1f9);background-image:-webkit-gradient(linear,left top,left bottom,from(#f9fcff),to(#e8f1f9));background-image:-webkit-linear-gradient(top,#f9fcff,#e8f1f9);background-image:linear-gradient(top,#f9fcff,#e8f1f9);filter:progid:DXImageTransform.Microsoft.gradient(startColorStr='#f9fcff',EndColorStr='#e8f1f9');}.checkinfo-area .checkinfo-area-content{padding:6px;overflow:hidden;}.check-brower-ie{display:none;}.check-brower-safari{display:none;}.check-brower-chrome{display:none;}.check-brower-firefox{display:none;}.browerInfo{}.browerRet{margin-left:20px;font-weight:bold;}.browerSuggest{margin-left:20px;}.zxlm-f14{}.zxlm-f15{font-size:18px;font-weight:bold;}
+        .checkinfo-area li{ margin: 1px;}
         .result_no{color: red;font-weight:bold;}
         .result_error{ color: red;font-weight:bold;font-size:16px;}
+        .li_sp_down{float:left; margin-left:2px;background: url("CheckIE/msdi_softdown.gif") no-repeat scroll 0 0px;font-size: 14px;padding-left: 30px;line-height: 24px;}
+        .li_sp_setting{float:left; margin-left:8px;background: url("CheckIE/msdi_setting.gif") no-repeat scroll 0 0px;font-size: 14px;padding-left: 24px;line-height: 24px;}
+        .a_setting{margin-left:8px;background: url("CheckIE/msdi_setting.gif") no-repeat scroll 0 0px;padding-left: 24px;line-height: 24px;}
     </style>
 </head>
 <body onload="InitialInfo()">
@@ -548,9 +560,11 @@
                     <li>2、<span style="color:#008000;">推荐使用Microsoft Internet Explorer 8.0</span>
                         <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-8">微软官方下载</a>
                         <a href="http://mis.msdi.cn/portal/install/ie/IE8-WindowsXP-x86-CHS.exe">本地下载(适用于XP 32位)</a></li>
-                    <li>3、允许Javascript</li>
-                    <li>4、如果使用IE浏览器，则请将“mis.msdi.cn/zny.msdi.cn/pmis.msdi.cn”加入可信任站点，同时启用选项 "允许由脚本初始化的窗口，没有大小和位置限制"</li>
-                    <li>5、IE7或者以上版本把弹出窗口选项设置为"由Internet Exporer决定如何开打弹出窗口"</li>
+                    
+                    <li>3、如果使用IE浏览器，则请将“mis.msdi.cn/zny.msdi.cn/pmis.msdi.cn”加入可信任站点，同时启用选项 "允许由脚本初始化的窗口，没有大小和位置限制"</li>
+                    <li>4、IE7或者以上版本把弹出窗口选项设置为"由Internet Exporer决定如何开打弹出窗口"</li>
+                    
+                    <li>5、允许Javascript</li>
                     <li>6、允许 Cookies </li>
                     <li>7、允许弹出窗口</li>
                     <li>8、安装有 Macromedia Flash播放器 7.0 或以上版本</li>
@@ -566,7 +580,7 @@
                 <div class="check-brower-ie">
                     <ul style="padding: 0px; margin: 0px; list-style: none;">
                         <li>我们正在检查您的浏览器以确定是否满足以上的要求。如果看到任何一项失败！请按照提示操作。 
-                            <a href="#" onclick="TipShow(this,'ieadjust','注意IE的兼容模式')">(注：由于IE兼容模式的开启可能造成浏览器版本检测不正确)</a>
+                            <a href="#" class="a_setting" onclick="TipShow(this,'ieadjust','注意IE的兼容模式')">(注：由于IE兼容模式的开启可能造成浏览器版本检测不正确)</a>
                         </li>
                         <li style="height:10px;"></li>
                         <li>1、浏览器：
@@ -598,7 +612,8 @@
                             class="browerRet"></span><span id="ieBrowerSuggest10" class="browerSuggest">检测中...</span></li>
 
                         <li style="height:10px;"></li>
-                            <li><a href="http://mis.msdi.cn/Portal/install/MSDI_IETool.exe?v=1.0.1">下载常见问题修复工具(注：目前只在XP、Win7下进行全面的测试验证)</a></li>
+                            <li>
+                                <img src="CheckIE/msdi_ietools.gif" width="32px"/><a href="http://mis.msdi.cn/Portal/install/MSDI_IETool.exe?v=1.0.1">下载常见问题修复工具(注：目前只在XP、Win7下进行全面的测试验证)</a></li>
                     </ul>
                 </div>
                 <div class="check-brower-chrome">
@@ -689,11 +704,11 @@
             </div>
             <div class="checkinfo-area-content">
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
-                    <li style="float:left; margin-left:10px;"><a onclick="CommonSet(this,'jsset','允许Javascript')" href="#">允许Javascript</a></li>
-                    <li style="float:left; margin-left:10px;"><a href="http://get.adobe.com/cn/flashplayer/" target="_blank">安装Macromedia Flash播放器</a></li>
-                    <li style="float:left; margin-left:10px;"><a href="http://www.microsoft.com/getsilverlight/Get-Started/Install/" target="_blank">安装 Sliverlight</a></li>
-                    <li style="float:left; margin-left:10px;"><a onclick="CommonSet(this,'cookieset','允许Cookies')" href="#">允许Cookies</a></li>
-                    <li style="float:left; margin-left:10px;"><a onclick="CommonSet(this,'popupset','允许弹出窗口')" href="#">允许弹出窗口</a></li>
+                    <li class="li_sp_setting"><a onclick="CommonSet(this,'jsset','允许Javascript')" href="#">允许Javascript</a></li>
+                    <li class="li_sp_down"><a href="http://get.adobe.com/cn/flashplayer/" target="_blank">安装Macromedia Flash播放器</a></li>
+                    <li class="li_sp_down"><a href="http://www.microsoft.com/getsilverlight/Get-Started/Install/" target="_blank">安装 Sliverlight</a></li>
+                    <li class="li_sp_setting"><a onclick="CommonSet(this,'cookieset','允许Cookies')" href="#">允许Cookies</a></li>
+                    <li class="li_sp_setting"><a onclick="CommonSet(this,'popupset','允许弹出窗口')" href="#">允许弹出窗口</a></li>
                 </ul>
             </div>
         </div>
@@ -704,8 +719,8 @@
           </div>
             <div class="checkinfo-area-content">
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
-                    <li style="float:left; margin-left:10px;"><a href="http://mis.msdi.cn/Portal/install/Office/iSignatureASM.exe?v=1.1">电子签章安全软件</a></li>
-                    <li style="float:left; margin-left:10px;"><a href="http://mis.msdi.cn/Portal/install/
+                    <li class="li_sp_down"><a href="http://mis.msdi.cn/Portal/install/Office/iSignatureASM.exe?v=1.1">电子签章安全软件</a></li>
+                    <li class="li_sp_down"><a href="http://mis.msdi.cn/Portal/install/
 Baisc.EXE?v=1.0">旧MIS系统插件</a></li>
 
     <!--TODO 部署金格的示例代码于服务器-->
@@ -844,6 +859,7 @@ Baisc.EXE?v=1.0">旧MIS系统插件</a></li>
                 if (checkResult) { // true/false
                     $("#" + brower + "BrowerRet" + index).html("成功");
                     $("#" + brower + "BrowerRet" + index).css("color", "#008000");
+                    $("#" + brower + "BrowerSuggest" + index).html("");
                 }
                 else {
                     $("#" + brower + "BrowerRet" + index).html("失败");
