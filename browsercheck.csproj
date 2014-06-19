@@ -74,6 +74,7 @@
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <Content Include="ky\othersite\BrowerCheckClose.html" />
     <Content Include="ky\othersite\check.html" />
+    <Content Include="Scripts\jquery.cookie.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
