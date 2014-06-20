@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<publishData>
+  <publishProfile publishUrl="\\172.22.8.1\be20$\WebRoot\SSO\bc" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="正式服务器" publishMethod="FileSystem" replaceMatchingFiles="True" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+    <file relUrl="bin/browsercheck.dll" publishTime="06/20/2014 08:44:13" />
+    <file relUrl="CheckIE/chromepopupset.jpg" publishTime="06/19/2014 11:23:15" />
+    <file relUrl="CheckIE/msdi_ietools.gif" publishTime="06/19/2014 11:02:49" />
+    <file relUrl="Scripts/jquery.cookie.js" publishTime="06/19/2014 12:16:04" />
+    <file relUrl="CheckIE/firefoxjsset.jpg" publishTime="06/19/2014 11:25:35" />
+    <file relUrl="ky/othersite/check.html" publishTime="06/19/2014 10:04:44" />
+    <file relUrl="ky/othersite/BrowerCheckClose.html" publishTime="06/18/2014 11:04:25" />
+    <file relUrl="ky/app.html" publishTime="06/18/2014 17:30:54" />
+    <file relUrl="CheckIE/iedecidepopupbyieset.jpg" publishTime="06/09/2014 08:40:19" />
+    <file relUrl="CheckIE/msdi_setting.gif" publishTime="06/19/2014 11:15:26" />
+    <file relUrl="检测集成接口说明.txt" publishTime="06/19/2014 16:41:16" />
+    <file relUrl="BrowerCheck.html" publishTime="06/19/2014 12:16:29" />
+    <file relUrl="CheckIE/ietrustwebsiteset.jpg" publishTime="06/06/2014 15:05:48" />
+    <file relUrl="BrowerCheckClose.html" publishTime="06/18/2014 11:49:04" />
+    <file relUrl="readme.txt" publishTime="06/19/2014 11:40:50" />
+    <file relUrl="Scripts/jquery-1.7.1.min.js" publishTime="06/06/2014 11:09:13" />
+    <file relUrl="Scripts/jquery-1.7.1.intellisense.js" publishTime="06/06/2014 11:09:13" />
+    <file relUrl="CheckIE/iejsset.jpg" publishTime="06/06/2014 16:54:11" />
+    <file relUrl="CheckIE/ieadjust.jpg" publishTime="06/06/2014 11:09:13" />
+    <file relUrl="CheckIE/iepopupset.jpg" publishTime="06/06/2014 16:55:30" />
+    <file relUrl="CheckIE/chromejsset.jpg" publishTime="06/19/2014 11:23:48" />
+    <file relUrl="CheckIE/ieallowfullsizewin.jpg" publishTime="06/06/2014 15:05:41" />
+    <file relUrl="CheckIE/firefoxcookieset.jpg" publishTime="06/19/2014 11:25:47" />
+    <file relUrl="config.js" publishTime="06/19/2014 10:45:35" />
+    <file relUrl="CheckIE/iecookieset.jpg" publishTime="06/06/2014 16:55:16" />
+    <file relUrl="ky/proxy.html" publishTime="06/18/2014 10:37:52" />
+    <file relUrl="proxy.html" publishTime="06/18/2014 15:12:55" />
+    <file relUrl="CheckIE/chromecookieset.jpg" publishTime="06/19/2014 11:24:03" />
+    <file relUrl="bin/browsercheck.pdb" publishTime="06/20/2014 08:44:13" />
+    <file relUrl="CheckIE/firefoxpopupset.jpg" publishTime="06/19/2014 11:25:58" />
+    <file relUrl="Scripts/jquery-1.7.1.js" publishTime="06/06/2014 11:09:13" />
+    <file relUrl="CheckIE/msdi_softdown.gif" publishTime="06/19/2014 11:01:32" />
+  </publishProfile>
+</publishData>
