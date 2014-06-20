@@ -75,6 +75,9 @@
     <Content Include="ky\othersite\BrowerCheckClose.html" />
     <Content Include="ky\othersite\check.html" />
     <Content Include="Scripts\jquery.cookie.js" />
+    <Content Include="Scripts\jquery.ua.js" />
+    <Content Include="Scripts\jquery.ua.min.js" />
+    <Content Include="检测集成接口说明.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
