@@ -3,12 +3,12 @@
 
 //检查欺项的中文名称
 var CheckItemLang = {};
-CheckItemLang["TrustWebsite"] = "是否可信站点";
-CheckItemLang["Popup"] = "允许弹出窗口";
-CheckItemLang["Cookies"] = "允许Cookies";
-CheckItemLang["Javascript"] = "允许JS脚本";
-CheckItemLang["Flash"] = "安装Flash播放器";
-CheckItemLang["Sliverlight"] = "安装Silverlight插件";
+CheckItemLang["TrustWebsite"] = "可信站点";
+CheckItemLang["Popup"] = "弹出窗口";
+CheckItemLang["Cookies"] = "Cookies";
+CheckItemLang["Javascript"] = "JS脚本";
+CheckItemLang["Flash"] = "Flash播放器";
+CheckItemLang["Sliverlight"] = "Silverlight插件";
 
 //ActiveX信息
 var ActiveX = [];
@@ -28,13 +28,20 @@ Domains.push({
     name:"应用集成门户",
     checkUrl: "http://zny.msdi.cn/tools/bc/check.html",
     helpMsg: "电话技术支持3214",
-    helpUrl: ""
+    helpUrl: "http://xxsq.msdi.cn/showtopic-784.aspx"
 });
 
 Domains.push({
     key: "coa",
     name:"新公文处理系统",
     checkUrl: "http://mis.msdi.cn:8080/coa/axis2-admin/bc/check.html",
-    helpUrl: ""
+    helpUrl: "http://xxsq.msdi.cn/showforum-20.aspx"
 });
 
+//Domains.push({
+//    key: "PMIS",
+//    name: "生产管理信息系统",
+//    checkUrl: "http://pmis.msdi.cn:8088/CommonWebResource/bc/check.html",
+//    helpMsg: "电话技术支持3214",
+//    helpUrl: "http://xxsq.msdi.cn/showforum-18.aspx"
+//});
