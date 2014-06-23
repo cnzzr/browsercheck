@@ -1,0 +1,181 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0060)http://edu.ynby.cn/ilearn/alert_client_check/zh-cn/index.htm -->
+<HTML><HEAD><TITLE>浏览器配置检查</TITLE>
+<META content="text/html; charset=UTF-8" http-equiv=Content-Type>
+<SCRIPT language=JavaScript src="files/utils.js"></SCRIPT>
+
+<SCRIPT language=Javascript type=text/javascript>
+var MsgOK = '<font color="green"><b>成功！</b></font>';
+var MsgNG = '<font color="red"><b>失败！</b></font>';
+
+var Msg = new Array(
+    new Array(
+        MsgNG + '您正在使用的浏览器不被支持。<a href="#browser">点击这里</a>'
+        ,''
+        ,MsgOK + '您正在使用正确的浏览器。'
+    )
+    ,
+    new Array(
+        ''
+        ,''
+        ,MsgOK + '您的浏览器允许Javascript。'
+    )
+    ,
+    new Array(
+        MsgNG + '您的浏览器不允许Cookies。<a href="#cookies">点击这里</a>'
+        ,''
+        ,MsgOK + '您的浏览器允许Cookies。'
+    )
+    ,
+    new Array(
+        MsgNG + '您的浏览器不允许弹出窗口。<a href="#popup">点击这里</a>'
+        ,''
+        ,MsgOK + '您的浏览器允许弹出窗口。'
+    )
+    ,
+    new Array(
+        MsgNG + '您需要安装Flash播放器。<a href="#flash">点击这里</a>'
+        ,MsgNG + '您需要更新您的Flash播放器。<a href="#flash">点击这里</a>'
+        ,MsgOK + '您的浏览器正在使用正确的Flash播放器。'
+    )
+    ,
+    new Array(
+        MsgNG + '您需要安装Java插件。<a href="#javaplugin_install">点击这里</a>'
+        ,MsgNG + '您需要更新您的Java插件。<a href="#javaplugin_update">点击这里</a>'
+        ,MsgOK + '您的浏览器正在使用正确的Java插件。'
+    )
+)
+</SCRIPT>
+
+<META name=GENERATOR content="MSHTML 8.00.6001.23598"></HEAD>
+<BODY onload=showEachClientCheckResult()>
+<TABLE width="100%">
+  <TBODY>
+  <TR>
+    <TD>
+      <H3>浏览器配置检查</H3></TD>
+    <TD align=right>&nbsp; <FONT size=-1>&nbsp;</FONT> <A 
+      href="http://edu.ynby.cn/ilearn/alert_client_check/zh-hk/index.htm"></A></TD></TR></TBODY></TABLE>
+<P>为了可以正常使用这个学习系统，您的浏览器需要： 
+<OL>
+  <LI>是 Microsoft Internet Explorer 6.0 或以上版本 
+  <LI>允许 Javascript 
+  <LI>允许 Cookies 
+  <LI>允许弹出窗口 
+  <LI>安装有 Macromedia Flash播放器 7.0 或以上版本 
+  <LI>安装有 Sun Java 1.4 或以上版本的Java插件<FONT color=red>(可选)</FONT> </LI></OL>
+<P></P>
+<TABLE border=1 cellPadding=5>
+  <TBODY>
+  <TR>
+    <TD>我们正在检查您的浏览器以确定是否满足以上的要求。如果看到任何一项<FONT 
+      color=red><B>失败！</B></FONT>，请按照提示操作。如果每一项都是<FONT 
+      color=green><B>成功！</B></FONT>，您可以直接开始使用此学习系统。 <BR><BR>
+      <TABLE>
+        <TBODY>
+        <TR>
+          <TD width=20></TD>
+          <TD>浏览器：</TD>
+          <TD><SPAN id=browser_check>检查中...</SPAN></TD></TR>
+        <TR>
+          <TD width=20></TD>
+          <TD>Javascript：</TD>
+          <TD><SPAN id=js_check>检查中...</SPAN><NOSCRIPT><FONT 
+            color=red><B>失败！</B></FONT>您的浏览器不允许 Javascript。<A 
+            href="http://edu.ynby.cn/ilearn/alert_client_check/zh-cn/index.htm#javascript">点击这里</A></NOSCRIPT></TD></TR>
+        <TR>
+          <TD width=20></TD>
+          <TD>Cookies：</TD>
+          <TD><SPAN id=cookie_check>检查中...</SPAN></TD></TR>
+        <TR>
+          <TD width=20></TD>
+          <TD>弹出窗口：</TD>
+          <TD><SPAN id=popup_check>检查中...</SPAN></TD></TR>
+        <TR>
+          <TD width=20></TD>
+          <TD>Flash播放器：</TD>
+          <TD><SPAN id=flash_check>检查中...</SPAN></TD></TR>
+        <TR>
+          <TD width=20></TD>
+          <TD>Java插件<FONT color=red>(可选)</FONT>：</TD>
+          <TD><SPAN 
+  id=jre_check>检查中...</SPAN></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<P>如果上面有任何一项<FONT color=red><B>失败！</B></FONT>，请看以下部分。 </P>
+<OL>
+  <LI><A name=browser>浏览器<BR>请通过Internet 
+  Explorer去使用此学习系统。<BR>如果您使用的是旧版本的Internet Explorer，请到<A 
+  href="http://windowsupdate.microsoft.com/" target=_blank>Windows Update</A>更新。 
+  <BR><BR><A 
+  href="http://edu.ynby.cn/ilearn/alert_client_check/zh-cn/index.htm">再次检查</A>
+  <HR>
+  <BR>
+  <LI><A name=javascript>Javascript<BR>如果被禁用了，请根据以下步骤启用： 
+  <OL type=a>
+    <LI>打开浏览器的 工具 &gt; Internet 选项 &gt; 安全 &gt; Internet &gt; 自定义级别 
+    <LI>找到“脚本”部分，如下图<BR><IMG src="files/01.gif"> 
+    <LI>确定“活动脚本”是“启用”状态 </LI></OL><BR><A 
+  href="http://edu.ynby.cn/ilearn/alert_client_check/zh-cn/index.htm">再次检查</A>
+  <HR>
+  <BR>
+  <LI><A name=cookies>Cookies<BR>如果被禁用了，请根据以下步骤启用： 
+  <OL type=a>
+    <LI>打开浏览器的 工具 &gt; Internet 选项 &gt; 隐私 &gt; 高级 
+    <LI>确定“覆盖自动 cookie 处理”是没有选上，如下图<BR><IMG src="files/02.gif"> 
+  </LI></OL><BR><A 
+  href="http://edu.ynby.cn/ilearn/alert_client_check/zh-cn/index.htm">再次检查</A>
+  <HR>
+  <BR>
+  <LI><A 
+  name=popup>弹出窗口<BR>如果您的浏览器禁止任何弹出窗口，请把它取消。或者您安装了任何可以拦截弹出窗口的工具，请把该功能也取消。比如，您使用的是Google工具栏，请点击以下按钮<BR><IMG 
+  src="files/03.gif"><BR>如果是以下情况，代表当前是允许弹出窗口<BR><IMG 
+  src="files/04.gif"> <BR><BR><A 
+  href="http://edu.ynby.cn/ilearn/alert_client_check/zh-cn/index.htm">再次检查</A>
+  <HR>
+  <BR>
+  <LI><A name=flash>Flash播放器<BR>如果您使用的是旧版本的Flash播放器，或者是没有Flash播放器，请到<A 
+  href="http://www.macromedia.com/go/getflashplayer" target=_blank>Macromedia 
+  Download Site</A>下载并安装。 <BR><BR><A 
+  href="http://edu.ynby.cn/ilearn/alert_client_check/zh-cn/index.htm">再次检查</A>
+  <HR>
+  <BR>
+  <LI><A name=javaplugin_install>安装Java插件 
+  <OL type=a>
+    <LI>首先，检查是否已经安装Java插件： 
+    <OL type=i>
+      <LI>打开浏览器的 工具 &gt; Internet 选项 &gt; 高级 
+      <LI>检查 "java(Sun)" 部分是否存在，如下图<BR><IMG src="files/05.jpg"> 
+      <LI>如果 "java(Sun)" 部分如果存在，请使其选项被选上。如不存在，请根据下面步骤 <B><I>b.</I></B> 安装Java插件 
+      <LI>如果 "java(Sun)" 部分下面的选项被选上，请取消该选项并重新启动浏览器。再次进入学习系统，检查是否需要安装Java插件 
+    </LI></OL>
+    <LI>如果没有Java插件，请根据以下步骤安装：<BR><I>（请注意，您必须拥有操作系统的管理员权限才能进行安装）</I> 
+    <OL type=i>
+      <LI>如果您的操作系统是32位的请下载<A 
+      href="http://edu.ynby.cn/ilearn/alert_client_check/jre-6u20-windows-i586-s.exe">下载Java插件(jre1.6 
+      32位, 15.7 MB)</A> ; 如果您的操作系统是64位的请下载<A 
+      href="http://edu.ynby.cn/ilearn/alert_client_check/jre-6u20-windows-x64.exe">下载Java插件(jre1.6 
+      64位, 15.6 MB)</A> 
+      <LI>安装Java插件 
+      <LI>重新启动浏览器并进入学习系统 </LI></OL></LI></OL><BR><A 
+  href="http://edu.ynby.cn/ilearn/alert_client_check/zh-cn/index.htm">再次检查</A>
+  <HR>
+  <BR>
+  <LI><A 
+  name=javaplugin_update>更新Java插件<BR>如果使用的是旧版本的Java插件，请根据以下步骤更新：<BR><I>（请注意，您必须拥有操作系统的管理员权限才能进行安装）</I> 
+
+  <OL type=a>
+    <LI>如果您的操作系统是32位的请下载<A 
+    href="http://edu.ynby.cn/ilearn/alert_client_check/jre-6u20-windows-i586-s.exe">下载Java插件(jre1.6 
+    32位, 15.7 MB)</A> ; 如果您的操作系统是64位的请下载<A 
+    href="http://edu.ynby.cn/ilearn/alert_client_check/jre-6u20-windows-x64.exe">下载Java插件(jre1.6 
+    64位, 15.6 MB)</A> 
+    <LI>安装新的Java插件 
+    <LI>重新启动浏览器并进入学习系统 </LI></OL><BR><A 
+  href="http://edu.ynby.cn/ilearn/alert_client_check/zh-cn/index.htm">再次检查</A>
+  <HR>
+  <BR></LI></OL>
+<TABLE border=0>
+  <TBODY>
+  <TR height=300>
+    <TD></TD></TR></TBODY></TABLE><APPLET id=JREDetect name=JREDetect 
+codeBase="../applet" code=JREDetect.class width=0 height=0>
+</body></html></APPLET></BODY></HTML>
