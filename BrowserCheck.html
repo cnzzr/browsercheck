@@ -27,6 +27,9 @@
         var StatusUP = 1;
         var StatusOK = 2;
 
+        var WIN32 = "Win32";
+        var WIN64 = "Win64";
+
         var ContextPath = window.location.protocol + "//" + window.location.host +
         (window.location.pathname.lastIndexOf("/") > 0 ? (window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1)) : "/");
         
@@ -268,7 +271,7 @@
             Sys.ua = ua;
             if ($.ua().isIe) {//准确地处理IE兼容模式
                 Sys.ie = $.ua().ie;
-                Sys.win32 = window.navigator.platform == "Win32" ? true : false;//64位操作系统中执行32位IE返回值为 Win32，否则为 Win64
+                Sys.win32 = window.navigator.platform == WIN32 ? true : false;//64位操作系统中执行32位IE返回值为 Win32，否则为 Win64
             } else if ($.ua().isFirefox) {
                 Sys.firefox = $.ua().engine.version;
             //} else if ($.ua().isChrome || $.ua().is360ee || $.ua().is360se || $.ua().isLiebao || $.ua().isSougou) {
@@ -481,6 +484,7 @@
                 $("#ieBrowserRet1").css("color", "#008000");
                 $("#ieBrowserRet1").html("成功");
             }
+
             if (Math.round(Sys.ie) < 8) {
                 $("#ieBrowserSuggest1_0").html("建议升级到IE8");
                 
@@ -491,7 +495,18 @@
                 $("#ieBrowserSuggest1_2").html("本地下载(XP 32位)");
                 $("#ieBrowserSuggest1_2").attr("href", "http://mis.msdi.cn/Portal/install/ie/IE8-WindowsXP-x86-CHS.exe");
                 $("#ieBrowserSuggest1_2").attr("target", "_blank");
-                
+
+            } else if (!Sys.win32) { //如果是64位IE，至少是IE8以上的版本
+                $("#ieBrowserRet1").css("color", "lime");
+                $("#ieBrowserRet1").html("存在问题");
+                $("#ieBrowserRet1").parent().css("background-color", "rgb(248, 214, 214)");
+
+                $("#ieBrowserSuggest1_0").html("请使用32位IE 否则无法使用在线编辑功能");
+                $("#ieBrowserSuggest1_3").html("打开32位IE的方法");
+                $("#ieBrowserSuggest1_3").attr("href", "#");
+                $("#ieBrowserSuggest1_3").click(function () {
+                    TipShow(this, 'ie32bit', "32位IE浏览器访问方法");
+                });
             }
 
             //Javascript脚本支持，该检测有点多余
@@ -509,13 +524,6 @@
 
             //弹框检测
             PopupCheck("ie", "7");
-            //针对使用外壳浏览器的用户的情况进行特殊处理
-            if (Sys.ie) {
-                //如果浏览器不允许弹窗，但是IE设置为允许弹窗则说明用户使用的是外壳浏览器
-                if (!Sys.popup && Sys.popupIE) {
-                    alert("您正在使用 360浏览器。");
-                }
-            }
 
             //Flash播放器
             FlashCheck("ie", "8");
@@ -523,6 +531,15 @@
             SliverlightCheck("ie", "9");
             //其他业务系统配置要求
             OtherSystemCheck("ie", "10");
+
+
+            //针对使用外壳浏览器的用户的情况进行特殊处理
+            if (Sys.ie) {
+                //如果浏览器不允许弹窗，但是IE设置为允许弹窗则说明用户使用的是外壳浏览器
+                if (!Sys.popup && Sys.popupIE) {
+                    alert("您正在使用的第三方浏览器 或 插件 阻止了业务系统弹出新窗口，请设置为“允许*.msdi.cn”弹窗。");
+                }
+            }
         }
 
         //Chrome下的检测
@@ -673,18 +690,17 @@
                     <li>为了可以正常使用公司的业务系统，您的浏览器需要满足以下条件：</li>
                     <li style="height:10px;"></li>
                     <li>1、要求使用 Microsoft Internet Explorer 7.0 或以上版本，如果您使用<a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>或<a target="_blank" href="http://firefox.com.cn/download/" target="_blank">Mozilla Firefox</a> 则大部分系统功能将无法使用。
-                        <br/>&nbsp;&nbsp;&nbsp;&nbsp;如果您使用 <b><i>360安全</i></b>浏览器、<i><b>360极速</b></i>浏览器、<i><b>QQ</b></i>浏览器或<i><b>搜狗</b></i>浏览器等其他浏览器请在访问中南院业务系统时切换到“<b>兼容模式</b>”。
+                        <br/>&nbsp;&nbsp;&nbsp;&nbsp;如果您使用 <!--<b><i>360安全</i></b>浏览器、<i><b>360极速</b></i>浏览器--><b><i>360</i></b>浏览器、<i><b>QQ</b></i>浏览器或<i><b>搜狗</b></i>浏览器等其他浏览器请在访问中南院业务系统时切换到“<b>兼容模式</b>”。
     </li>                    
-                    <li>2、<span style="color:#008000;">推荐使用Microsoft Internet Explorer 8.0</span>
+                    <li>2、<span style="color:#008000;"><b>推荐使用Microsoft Internet Explorer 8.0</b></span>
                         <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-8" target="_blank">微软官方下载</a>
                         <a href="http://mis.msdi.cn/portal/install/ie/IE8-WindowsXP-x86-CHS.exe" target="_blank">本地下载(适用于XP 32位)</a></li>
                     
                     <li>3、如果使用IE浏览器，请将“<b>mis.msdi.cn</b> / <b>zny.msdi.cn</b> / <b>pmis.msdi.cn</b>”加入可信任站点，同时启用选项 "允许由脚本初始化的窗口，没有大小和位置限制"</li>
-                    <li>4、IE7或者以上版本把弹出窗口选项设置为"由Internet Exporer决定如何开打弹出窗口"</li>
+                    <li>4、IE7及以上版本把弹出窗口选项设置为"由Internet Exporer决定如何开打弹出窗口"</li>
                     
-                    <li>5、允许Javascript</li>
-                    <li>6、允许 Cookies </li>
-                    <li>7、允许弹出窗口</li>
+                    <li>5、允许Javascript、允许 Cookies </li>
+                    <li>7、IE7及以上版本、或其他浏览器 请设置 允许弹出窗口</li>
                     <li>8、安装有 Macromedia Flash播放器 7.0 或以上版本</li>
                     <li>9、安装有 Microsoft Sliverlight 银光插件 4.0 或以上版本</li>
                 </ul>
@@ -731,7 +747,7 @@
 
                         <li style="height:10px;"></li>
                             <li>
-                                <img src="CheckIE/msdi_ietools.gif" width="32px"/><a id="ietools" href="#" title="v2.1.0">下载常见问题修复工具(注：目前只在XP、Win7下进行全面的测试验证)</a></li>
+                                <img src="CheckIE/msdi_ietools.gif" width="32px"/><a id="ietools" href="#" title="v2.1.0">下载常见问题修复工具(注：目前只支持XP、Win7操作系统中的IE浏览器进行修复)</a></li>
                     </ul>
                 </div>
                 <div class="check-browser-chrome">
@@ -953,7 +969,7 @@ Baisc.EXE?v=1.0" target="_blank">旧MIS系统插件</a></li>
                         var jsonItem = rJson[ii];
                         if (!jsonItem.value) {
                             isPassed = false; itemsPassed = false;
-                            itemHelpHtml += "&nbsp;" + CheckItemLang[jsonItem.key] + "<span class=\"result_no\">未通过</span>&nbsp;";
+                            itemHelpHtml += "&nbsp;" + CheckItemLang[jsonItem.key] + "检测 <span class=\"result_no\">未通过</span>&nbsp;";
                         }
                     }
                     if (itemsPassed) {
@@ -1041,6 +1057,86 @@ Baisc.EXE?v=1.0" target="_blank">旧MIS系统插件</a></li>
         }
         document.body.appendChild(iframeProxy);
     }
+
+    var client = function () {
+        // 平台、设备和操作系统
+        var system = {
+            win: false,
+            mac: false,
+            xll: false,
+
+            // 移动设备
+            iPhone: false,
+            iPod: false,
+            iPad: false,
+            android: false,
+            nokiaN: false,
+            winMobile: false,
+            macMobile: false,
+
+            // 游戏设备
+            wii: false,
+            ps: false
+        };
+        // 检测呈现引擎和浏览器
+        var ua = navigator.userAgent;
+
+        // 检测平台
+        var p = navigator.platform;
+
+        system.win = p.indexOf("Win") == 0;
+        system.mac = p.indexOf("Mac") == 0;
+        system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+
+        // 检测Windows操作系统
+        if (system.win) {
+            //if (/Win(?:doms)?([^do]{2})\s?(\d+\.\d+)?/.test(ua)) {
+            //if (/Win(?:doms)? ([^do]{2})\s?(\d+\.\d+)?/.test(ua)) {
+            if (/Win(?:dows)? ([^do]{2})\s?(\d+\.\d+)?/.test(ua)) {
+                if (RegExp["$1"] == "NT") {
+                    switch (RegExp["$2"]) {
+                        case "5.0":
+                            system.win = "2000";
+                            break;
+                        case "5.1":
+                            system.win = "XP";
+                            break;
+                        case "5.2":
+                            system.win = "Server 2003";
+                            break;
+                        case "6.0":
+                            system.win = "Vista";
+                            break;
+                        case "6.1":
+                            system.win = "Win7";
+                            break;
+                        default:
+                            system.win = "NT";
+                            break;
+                    }
+                } else if (RegExp["$1"]) {
+                    system.win = "ME";
+                } else {
+                    system.win = RegExp["$1"];
+                }
+            }
+        }
+        // 移动设备
+        system.iPhone = ua.indexOf("iPhone") > -1;
+        system.iPod = ua.indexOf("iPod") > -1;
+        system.iPad = ua.indexOf("iPad") > -1;
+        system.android = ua.indexOf("Android") > -1;
+        system.nokiaN = ua.indexOf("NokiaN") > -1;
+        system.winMobile = (system.win == "CE");
+        system.macMobile = (system.iPhone || system.iPod || system.iPad);
+        // 游戏系统
+        system.wii = ua.indexOf("Wii") > -1;
+        system.ps = /playstation/i.test(ua);
+        // 返回这些对象
+        return {
+            system: system
+        };
+    } ();
 
     $(document).ready(function () {
         //自动修复工具的运行 .net运行时环境的支持
