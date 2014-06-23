@@ -1,7 +1,8 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="renderer" content="ie-stand"><!-- 浏览器内核控制Meta标签说明文档 http://se.360.cn/v6/help/meta.html //-->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>浏览器配置检测（主站点测试）</title>  
@@ -61,9 +62,43 @@
             var popup_win = window.open(winUrl, "wb_check", str_feature);
             if (popup_win) {
                 status = StatusOK;
+                Sys.popup = true; //浏览器允许弹窗
+                Sys.popupIE = Sys.ie ? true : undefined;
+            } else{
+                if (Sys.trusted && getIePopup(window.location.hostname) == 2) {
+                    Sys.popupIE = true;
+                }
             }
             return status;
         }
+
+        function getIePopup(hostname) {
+            var status = StatusNG;
+            try {
+                var WshShell = new ActiveXObject("WScript.Shell");
+                Sys.trusted = true; //记录“信任站点”检测结果
+
+                var userPopup = WshShell.RegRead("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Internet Explorer\\New Windows\\PopupMgr");
+                if (userPopup == "1") { // 0关闭阻止、1打开
+                    if (hostname) {
+                        try {
+                            var hostPopup = WshShell.RegRead("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Internet Explorer\\New Windows\\Allow\\" + hostname);
+                            Sys.popupIE = true;//允许指定域名弹出窗口
+                            status = StatusOK;
+                        } catch (eAllow) {
+                        }
+                    }
+                } else {
+                    Sys.popupIE = true;//允许弹出
+                    status = StatusOK;   
+                }
+            }
+            catch (e) {
+                status = StatusNG;
+            }
+            return status;
+        }
+
         function getFlashStatus() {
             var MinVer = 7;
             var status = StatusNG;
@@ -99,6 +134,7 @@
             }
             return status;
         }
+        //需要在网页放置Applet（<applet codebase="../applet" name="JREDetect" id="JREDetect" width="0" height="0" code="JREDetect.class">）
         function getJreStatus() {
             var status = StatusNG;
             try {
@@ -214,8 +250,9 @@
             safari: 0,
             win32: true,
             trusted: false, //是否为受信站点
-            javascript: false, //是否允许执行JS
-            popup: false, //弹出窗口
+            javascript: true, //是否允许执行JS（多余的检测项）
+            popup: false, //浏览器弹出窗口状态
+            popupIE:false, //注册表中IE的设置
             ua: ""
         };   //区分各类浏览器
         
@@ -422,6 +459,11 @@
 
         //IE下的检测
         function IeCheck() {
+            //初始化全局变量
+            Sys.popup = false;
+            Sys.popupIE = false;
+            Sys.trusted = false;
+
             //alert("系统在检查可信任站点时要运行ActiveX控件,\n\r可能会弹出对话框是允许ActiveX控件与页面交互的确认对话框,\n\r请点击\"确定\"按钮,否则无法对浏览器进行检查.");
 
             $(".check-browser-ie").show();
@@ -464,8 +506,17 @@
 
             //Cookies检测
             CookieCheck("ie", "6");
+
             //弹框检测
             PopupCheck("ie", "7");
+            //针对使用外壳浏览器的用户的情况进行特殊处理
+            if (Sys.ie) {
+                //如果浏览器不允许弹窗，但是IE设置为允许弹窗则说明用户使用的是外壳浏览器
+                if (!Sys.popup && Sys.popupIE) {
+                    alert("您正在使用 360浏览器。");
+                }
+            }
+
             //Flash播放器
             FlashCheck("ie", "8");
             //Sliverlight银光
@@ -476,6 +527,8 @@
 
         //Chrome下的检测
         function ChromeCheck() {
+            Sys.popup = false;
+
             $(".check-browser-chrome").show();
 
             //版本检测
@@ -500,6 +553,8 @@
 
         //Safari下的检测
         function SafariCheck() {
+            Sys.popup = false;
+
             $(".check-browser-safari").show();
 
             //版本检测
@@ -523,6 +578,8 @@
         }
 
         function FireFoxCheck() {
+            Sys.popup = false;
+
             $(".check-browser-firefox").show();
 
             //版本检测
@@ -591,7 +648,7 @@
     </script>
 
     <style type="text/css">
-        body{}
+        body{} #main{width: 98%;padding:0px 1% 0px}
         a{color:#003299;font-weight:bold;}.checkinfo-area{border:solid #aacbee 1px;font-size:14px;line-height:20px;background-color:#FFFFFF;margin:10px 4px;width:100%;}.checkinfo-area .checkinfo-area-title{overflow:hidden;border-bottom:solid #aacbee 1px;height:30px;line-height:30px;padding:0 8px;background-color:#f9fcff;background-image:linear-gradient(top,#f9fcff,#e8f1f9);
                                                                                                                                                                          }.checkinfo-area .checkinfo-area-content{padding:6px;overflow:hidden;}.check-browser-ie{display:none;}.check-browser-safari{display:none;}.check-browser-chrome{display:none;}.check-browser-firefox{display:none;}.browserInfo{}.browserRet{margin-left:20px;font-weight:bold;}.browserSuggest{margin-left:20px;}.zxlm-f14{}.zxlm-f15{font-size:18px;font-weight:bold;}
         .checkinfo-area li{ margin: 1px;}
@@ -604,7 +661,7 @@
     </style>
 </head>
 <body>
-    <div style="width: 100%;">
+    <div id="main">
         <div id="set" style="display: none; position: absolute;">
         </div>
         <div class="checkinfo-area">
@@ -996,6 +1053,12 @@ Baisc.EXE?v=1.0" target="_blank">旧MIS系统插件</a></li>
             window.open("http://mis.msdi.cn/Portal/install/Download.aspx?Id=MSDI_IETool.exe", "MSDI_IETool", "width=320,height=160");
             return false;
         });
+
+//        if ($.ua().isIe && document.mimeType !== undefined
+//            && document.mimeType.indexOf("Chrome") == 0 //设置Chrome为默认浏览器后的现象
+//        ) {
+//            alert("您正在使用 360浏览器。");
+//        }
 
         $.blockUI({ css: {
             border: 'none',
