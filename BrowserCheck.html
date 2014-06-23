@@ -6,18 +6,18 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>浏览器配置检测（主站点测试）</title>  
     
-    <!-- 开发//-->
+    <!-- 开发
     <script src="Scripts/jquery-1.7.1.js" type="text/javascript"></script>
     <script src="Scripts/jquery.cookie.js" type="text/javascript"></script>
     <script src="Scripts/jquery.blockUI.js" type="text/javascript"></script>
     <script src="Scripts/jquery.ua.js" type="text/javascript"></script>
-    
-    <!-- 正式部署
+    //-->
+    <!-- 正式部署  //-->
         <script type="text/javascript" src="http://mis.msdi.cn/share/js/jQuery/jquery.min.js?v=1.7.2"></script>
         <script type="text/javascript" src="http://mis.msdi.cn/share/js/jQuery/jquery.cookie.js?v=1.3.1"></script>
         <script type="text/javascript" src="http://mis.msdi.cn/share/js/jQuery/jquery.blockUI.js?v=2.66"></script>
         <script type="text/javascript" src="http://mis.msdi.cn/share/js/jQuery/plugins/jquery.ua.min.js?v=1.2"></script>
-    //-->
+    
     
     <script src="config.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -108,12 +108,14 @@
             }
             return status;
         }
+
         //检查信任站点
         function getTrustWebsiteStatus() {
             var status = StatusNG;
             try {
                 var WshShell = new ActiveXObject("WScript.Shell");
                 status = StatusOK;
+                Sys.trusted = true;//记录“信任站点”检测结果
             }
             catch (e) {
                 status = StatusNG;
@@ -122,6 +124,14 @@
         }
         //检查选项 "允许由脚本初始化的窗口，没有大小和位置限制"
         function getAllowFullSizeWindowStatus() {
+            try {
+                if (Sys.trusted) {
+                    var WSHSHELL = new ActiveXObject("WScript.Shell");
+                    WSHSHELL.RegWrite("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\2\\2102", 0, "REG_DWORD"); // reg_dword时出现错误 无效的过程调用或参数
+                }
+            } catch (re) {
+            }
+
             var status = StatusNG;
             try {
                 var WshShell = new ActiveXObject("WScript.Shell");
@@ -142,6 +152,11 @@
             var WshShell = null;
             try {
                 WshShell = new ActiveXObject("WScript.Shell");
+                try {
+                    WshShell.RegWrite("HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\TabbedBrowsing\\PopupsUseNewWindow", "0", "REG_DWORD");
+                } catch (re) {
+                    alert(re);
+                }
             } catch (e) {
                 status = StatusNG;
                 return status;
@@ -191,7 +206,19 @@
         *区分各类浏览器
         *    IE8 使用兼容模式后在检测的时候就变成了IE7
         */
-        var Sys = {};  //区分各类浏览器
+        var Sys = {
+            ie: 0,
+            firefox: 0,
+            chrome: 0,
+            opera: 0,
+            safari: 0,
+            win32: true,
+            trusted: false, //是否为受信站点
+            javascript: false, //是否允许执行JS
+            popup: false, //弹出窗口
+            ua: ""
+        };   //区分各类浏览器
+        
         function InitialInfo() {
             var ua = navigator.userAgent.toLowerCase();
             var s;
@@ -201,6 +228,7 @@
 //                        (s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :
 //                            (s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] :
 //                                (s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
+            Sys.ua = ua;
             if ($.ua().isIe) {//准确地处理IE兼容模式
                 Sys.ie = $.ua().ie;
                 Sys.win32 = window.navigator.platform == "Win32" ? true : false;//64位操作系统中执行32位IE返回值为 Win32，否则为 Win64
@@ -230,164 +258,165 @@
                 FireFoxCheck();
             }
             else {
-                $("#browerInfo").hide();
-                $("#browerSet").hide();
+                $("#browserInfo").hide();
+                $("#browserSet").hide();
                 alert("系统暂不支持您当前使用的浏览器！请选择系统推荐使用的“微软IE”浏览器");
             }
         }
 
         //Javascript脚本支持，该检测有点多余
-        function JsCheck(brower, index) {
+        function JsCheck(browser, index) {
             
             var jsStatus = true;
             if (jsStatus) {
-                $("#" + brower + "BrowerRet" + index).html("成功");
-                $("#" + brower + "BrowerRet" + index).css("color", "#008000");
+                $("#" + browser + "BrowserRet" + index).html("成功");
+                $("#" + browser + "BrowserRet" + index).css("color", "#008000");
             }
             else {
-                $("#" + brower + "BrowerRet" + index).html("失败");
-                $("#" + brower + "BrowerRet" + index).css("color", "red");
-                $("#" + brower + "BrowerRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
+                $("#" + browser + "BrowserRet" + index).html("失败");
+                $("#" + browser + "BrowserRet" + index).css("color", "red");
+                $("#" + browser + "BrowserRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
-                $("#" + brower + "BrowerSuggest" + index).html("点击设置");
-                $("#" + brower + "BrowerSuggest" + index).attr("href", "#");
-                $("#" + brower + "BrowerSuggest" + index).click(function() {
-                    TipShow(this, brower + 'jsset', "允许Javascript");
+                $("#" + browser + "BrowserSuggest" + index).html("点击设置");
+                $("#" + browser + "BrowserSuggest" + index).attr("href", "#");
+                $("#" + browser + "BrowserSuggest" + index).click(function() {
+                    TipShow(this, browser + 'jsset', "允许Javascript");
                 });
             }
         }
 
         //可信站点检测
-        function TrustWebSiteCheck(brower, index) {
+        function TrustWebSiteCheck(browser, index) {
             if (getTrustWebsiteStatus() == 2) {
-                $("#" + brower + "BrowerRet" + index).html("成功");
-                $("#" + brower + "BrowerRet" + index).css("color", "#008000");
+                $("#" + browser + "BrowserRet" + index).html("成功");
+                $("#" + browser + "BrowserRet" + index).css("color", "#008000");
             }
             else {
-                $("#" + brower + "BrowerRet" + index).html("失败");
-                $("#" + brower + "BrowerRet" + index).css("color", "red");
-                $("#" + brower + "BrowerRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
+                $("#" + browser + "BrowserRet" + index).html("失败");
+                $("#" + browser + "BrowserRet" + index).css("color", "red");
+                $("#" + browser + "BrowserRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
-                $("#" + brower + "BrowerSuggest" + index).html("点击设置");
-                $("#" + brower + "BrowerSuggest" + index).attr("href", "#");
-                $("#" + brower + "BrowerSuggest" + index).click(function() {
-                    TipShow(this, brower + 'trustwebsiteset', "添加可信站点");
+                $("#" + browser + "BrowserSuggest" + index).html("点击设置");
+                $("#" + browser + "BrowserSuggest" + index).attr("href", "#");
+                $("#" + browser + "BrowserSuggest" + index).click(function() {
+                    TipShow(this, browser + 'trustwebsiteset', "添加可信站点");
                 });
             }
         }
 
         //允许由脚本初始化的窗口，没有大小和位置限制
-        function AllowFullSizeWindowCheck(brower, index) {
-
+        function AllowFullSizeWindowCheck(browser, index) {
             if (getAllowFullSizeWindowStatus() == 2) {
-                $("#" + brower + "BrowerRet" + index).html("成功");
-                $("#" + brower + "BrowerRet" + index).css("color", "#008000");
+                $("#" + browser + "BrowserRet" + index).html("成功");
+                $("#" + browser + "BrowserRet" + index).css("color", "#008000");
             }
             else {
-                $("#" + brower + "BrowerRet" + index).html("失败");
-                $("#" + brower + "BrowerRet" + index).css("color", "red");
-                $("#" + brower + "BrowerRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
+                $("#" + browser + "BrowserRet" + index).html("失败");
+                $("#" + browser + "BrowserRet" + index).css("color", "red");
+                $("#" + browser + "BrowserRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
-                $("#" + brower + "BrowerSuggest" + index).html("点击设置");
-                $("#" + brower + "BrowerSuggest" + index).attr("href", "#");
-                $("#" + brower + "BrowerSuggest" + index).click(function() {
-                    TipShow(this, brower + 'allowfullsizewin', "允许由脚本操作窗口");
+                $("#" + browser + "BrowserSuggest" + index).html("点击设置");
+                $("#" + browser + "BrowserSuggest" + index).attr("href", "#");
+                $("#" + browser + "BrowserSuggest" + index).click(function() {
+                    TipShow(this, browser + 'allowfullsizewin', "允许由脚本操作窗口");
                 });
             }           
         }
 
         //由Internet Exporer决定如何开打弹出窗口
-        function DecidePopupByIECheck(brower, index) {
+        function DecidePopupByIECheck(browser, index) {
             if (getDecidePopupByIEStatus() == 2) {
-                $("#" + brower + "BrowerRet" + index).html("成功");
-                $("#" + brower + "BrowerRet" + index).css("color", "#008000");
+                $("#" + browser + "BrowserRet" + index).html("成功");
+                $("#" + browser + "BrowserRet" + index).css("color", "#008000");
             }
             else {
-                $("#" + brower + "BrowerRet" + index).html("失败");
-                $("#" + brower + "BrowerRet" + index).css("color", "red");
-                $("#" + brower + "BrowerRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
+                $("#" + browser + "BrowserRet" + index).html("失败");
+                $("#" + browser + "BrowserRet" + index).css("color", "red");
+                $("#" + browser + "BrowserRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
-                $("#" + brower + "BrowerSuggest" + index).html("点击设置");
-                $("#" + brower + "BrowerSuggest" + index).attr("href", "#");
-                $("#" + brower + "BrowerSuggest" + index).click(function() {
-                    TipShow(this, brower + 'decidepopupbyieset', "设置弹框模式");
+                $("#" + browser + "BrowserSuggest" + index).html("点击设置");
+                $("#" + browser + "BrowserSuggest" + index).attr("href", "#");
+                $("#" + browser + "BrowserSuggest" + index).click(function() {
+                    TipShow(this, browser + 'decidepopupbyieset', "设置弹框模式");
                 });
             }
         }
 
         //Cookies检测
-        function CookieCheck(brower, index) {
+        function CookieCheck(browser, index) {
             if (getCookieStatus() == 2) {
-                $("#" + brower + "BrowerRet" + index).html("成功");
-                $("#" + brower + "BrowerRet" + index).css("color", "#008000");
+                $("#" + browser + "BrowserRet" + index).html("成功");
+                $("#" + browser + "BrowserRet" + index).css("color", "#008000");
             }
             else {
-                $("#" + brower + "BrowerRet" + index).html("失败");
-                $("#" + brower + "BrowerRet" + index).css("color", "red");
-                $("#" + brower + "BrowerRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
+                $("#" + browser + "BrowserRet" + index).html("失败");
+                $("#" + browser + "BrowserRet" + index).css("color", "red");
+                $("#" + browser + "BrowserRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
-                $("#" + brower + "BrowerSuggest" + index).html("点击设置");
-                $("#" + brower + "BrowerSuggest" + index).attr("href", "#");
-                $("#" + brower + "BrowerSuggest" + index).click(function() {
-                    TipShow(this, brower + 'cookieset', "设置弹框模式");
+                $("#" + browser + "BrowserSuggest" + index).html("点击设置");
+                $("#" + browser + "BrowserSuggest" + index).attr("href", "#");
+                $("#" + browser + "BrowserSuggest" + index).click(function() {
+                    TipShow(this, browser + 'cookieset', "设置弹框模式");
                 });
             }
         }
 
         //弹框检测
-        function PopupCheck(brower, index) {
-            if (getPopupStatus("BrowerCheckClose.html") == 2) {
-                $("#" + brower + "BrowerRet" + index).html("成功");
-                $("#" + brower + "BrowerRet" + index).css("color", "#008000");
+        function PopupCheck(browser, index) {
+            if (getPopupStatus("BrowserCheckClose.html") == 2) {
+                $("#" + browser + "BrowserRet" + index).html("成功");
+                $("#" + browser + "BrowserRet" + index).css("color", "#008000");
             }
             else {
-                $("#" + brower + "BrowerRet" + index).html("失败");
-                $("#" + brower + "BrowerRet" + index).css("color", "red");
-                $("#" + brower + "BrowerRet" + index).parent().css("background-color","rgb(248, 214, 214)");
+                $("#" + browser + "BrowserRet" + index).html("失败");
+                $("#" + browser + "BrowserRet" + index).css("color", "red");
+                $("#" + browser + "BrowserRet" + index).parent().css("background-color","rgb(248, 214, 214)");
 
-                $("#" + brower + "BrowerSuggest" + index).html("点击设置");
-                $("#" + brower + "BrowerSuggest" + index).attr("href", "#");
-                $("#" + brower + "BrowerSuggest" + index).click(function() {
-                    TipShow(this, brower + 'popupset', "禁用弹框阻止程序");
+                $("#" + browser + "BrowserSuggest" + index).html("点击设置");
+                $("#" + browser + "BrowserSuggest" + index).attr("href", "#");
+                $("#" + browser + "BrowserSuggest" + index).click(function() {
+                    TipShow(this, browser + 'popupset', "禁用弹框阻止程序");
                 });
             }
         }
 
         //Flash播放器
-        function FlashCheck(brower, index) {
+        function FlashCheck(browser, index) {
             if (getFlashStatus() == 2) {
-                $("#" + brower + "BrowerRet" + index).html("成功");
-                $("#" + brower + "BrowerRet" + index).css("color", "#008000");
+                $("#" + browser + "BrowserRet" + index).html("成功");
+                $("#" + browser + "BrowserRet" + index).css("color", "#008000");
 
-                $("#" + brower + "BrowerSuggest" + index).html("点击下载最新Flash插件");
-                $("#" + brower + "BrowerSuggest" + index).attr("target", "_blank");
-                $("#" + brower + "BrowerSuggest" + index).attr("href", "http://get.adobe.com/cn/flashplayer/");
+                if (!Sys.chrome) {//Chrome已经内置Flash
+                    $("#" + browser + "BrowserSuggest" + index).html("点击下载最新Flash插件");
+                    $("#" + browser + "BrowserSuggest" + index).attr("target", "_blank");
+                    $("#" + browser + "BrowserSuggest" + index).attr("href", "http://get.adobe.com/cn/flashplayer/");
+                }
             }
             else {
-                $("#" + brower + "BrowerRet" + index).html("失败");
-                $("#" + brower + "BrowerRet" + index).css("color", "red");
-                $("#" + brower + "BrowerRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
+                $("#" + browser + "BrowserRet" + index).html("失败");
+                $("#" + browser + "BrowserRet" + index).css("color", "red");
+                $("#" + browser + "BrowserRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
-                $("#" + brower + "BrowerSuggest" + index).html("点击下载最新Flash插件");
-                $("#" + brower + "BrowerSuggest" + index).attr("target", "_blank");
-                $("#" + brower + "BrowerSuggest" + index).attr("href", "http://get.adobe.com/cn/flashplayer/");
+                $("#" + browser + "BrowserSuggest" + index).html("点击下载最新Flash插件");
+                $("#" + browser + "BrowserSuggest" + index).attr("target", "_blank");
+                $("#" + browser + "BrowserSuggest" + index).attr("href", "http://get.adobe.com/cn/flashplayer/");
             }
         }
 
         //Sliverlight检测
-        function SliverlightCheck(brower, index) {
+        function SliverlightCheck(browser, index) {
             if (Silverlight.isInstalled()) { // true/false
-                $("#" + brower + "BrowerRet" + index).html("成功");
-                $("#" + brower + "BrowerRet" + index).css("color", "#008000");
+                $("#" + browser + "BrowserRet" + index).html("成功");
+                $("#" + browser + "BrowserRet" + index).css("color", "#008000");
             }
             else {
-                $("#" + brower + "BrowerRet" + index).html("失败");
-                $("#" + brower + "BrowerRet" + index).css("color", "red");
-                $("#" + brower + "BrowerRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
+                $("#" + browser + "BrowserRet" + index).html("失败");
+                $("#" + browser + "BrowserRet" + index).css("color", "red");
+                $("#" + browser + "BrowserRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
-                $("#" + brower + "BrowerSuggest" + index).html("点击下载最新Sliverlight插件");
-                $("#" + brower + "BrowerSuggest" + index).attr("target", "_blank");
-                $("#" + brower + "BrowerSuggest" + index).attr("href", "http://www.microsoft.com/getsilverlight/Get-Started/Install/");
+                $("#" + browser + "BrowserSuggest" + index).html("点击下载最新Sliverlight插件");
+                $("#" + browser + "BrowserSuggest" + index).attr("target", "_blank");
+                $("#" + browser + "BrowserSuggest" + index).attr("href", "http://www.microsoft.com/getsilverlight/Get-Started/Install/");
             }
         }
 
@@ -395,42 +424,44 @@
         function IeCheck() {
             //alert("系统在检查可信任站点时要运行ActiveX控件,\n\r可能会弹出对话框是允许ActiveX控件与页面交互的确认对话框,\n\r请点击\"确定\"按钮,否则无法对浏览器进行检查.");
 
-            $(".check-brower-ie").show();
+            $(".check-browser-ie").show();
             //浏览器版本检测，如果低于IE 7.0 提示不支持，如果是IE 7.0 建议升级到IE 8.0 ，若果是IE 8.0则没有提示
-            $("#ieBrowerInfo1").html("Microsoft Internet Explorer " + Sys.ie);
+            $("#ieBrowserInfo1").html("Microsoft Internet Explorer " + Sys.ie);
             if (Math.round(Sys.ie) < 7) {
-                $("#ieBrowerRet1").css("color", "red");
-                $("#ieBrowerRet1").html("失败");
+                $("#ieBrowserRet1").css("color", "red");
+                $("#ieBrowserRet1").html("失败");
 
-                $("#ieBrowerSuggest1").html("您正在使用的浏览器不被支持建议升级到IE8");
-                $("#ieBrowerSuggest1").attr("href", "http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-8");
-                $("#ieBrowerSuggest1").attr("target", "_blank");
+                $("#ieBrowserSuggest1").html("您正在使用的浏览器不被支持建议升级到IE8");
+                $("#ieBrowserSuggest1").attr("href", "http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-8");
+                $("#ieBrowserSuggest1").attr("target", "_blank");
             }
             else {
-                $("#ieBrowerRet1").css("color", "#008000");
-                $("#ieBrowerRet1").html("成功");
+                $("#ieBrowserRet1").css("color", "#008000");
+                $("#ieBrowserRet1").html("成功");
             }
             if (Math.round(Sys.ie) < 8) {
-                $("#ieBrowerSuggest1_0").html("建议升级到IE8");
+                $("#ieBrowserSuggest1_0").html("建议升级到IE8");
                 
-                $("#ieBrowerSuggest1_1").html("官方下载地址");                
-                $("#ieBrowerSuggest1_1").attr("href", "http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-8");
-                $("#ieBrowerSuggest1_1").attr("target", "_blank");
+                $("#ieBrowserSuggest1_1").html("官方下载地址");                
+                $("#ieBrowserSuggest1_1").attr("href", "http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-8");
+                $("#ieBrowserSuggest1_1").attr("target", "_blank");
 
-                $("#ieBrowerSuggest1_2").html("本地下载(XP 32位)");
-                $("#ieBrowerSuggest1_2").attr("href", "http://mis.msdi.cn/Portal/install/ie/IE8-WindowsXP-x86-CHS.exe");
-                $("#ieBrowerSuggest1_2").attr("target", "_blank");
+                $("#ieBrowserSuggest1_2").html("本地下载(XP 32位)");
+                $("#ieBrowserSuggest1_2").attr("href", "http://mis.msdi.cn/Portal/install/ie/IE8-WindowsXP-x86-CHS.exe");
+                $("#ieBrowserSuggest1_2").attr("target", "_blank");
                 
             }
 
             //Javascript脚本支持，该检测有点多余
             JsCheck("ie", "2");
+
             //可信站点检测
             TrustWebSiteCheck("ie", "3");
             //允许由脚本初始化的窗口，没有大小和位置限制
             AllowFullSizeWindowCheck("ie", "4");
             //由Internet Exporer决定如何开打弹出窗口
             DecidePopupByIECheck("ie", "5");
+
             //Cookies检测
             CookieCheck("ie", "6");
             //弹框检测
@@ -445,17 +476,17 @@
 
         //Chrome下的检测
         function ChromeCheck() {
-            $(".check-brower-chrome").show();
+            $(".check-browser-chrome").show();
 
             //版本检测
-            $("#chromeBrowerInfo1").html("Google Chrome " + Sys.chrome);
-            $("#chromeBrowerRet1").css("color", "#008000");
-            $("#chromeBrowerRet1").html("成功");
+            $("#chromeBrowserInfo1").html("Google Chrome " + Sys.chrome);
+            $("#chromeBrowserRet1").css("color", "#008000");
+            $("#chromeBrowserRet1").html("成功");
 
             if (Math.round(Sys.chrome.split('.')[0]) < 11) {
-                $("#chromeBrowerSuggest1").attr("href", "http://www.google.com/chrome");
-                $("#chromeBrowerSuggest1").html("检测到有新版本，点击更新");
-                $("#chromeBrowerSuggest1").attr("target", "_blank");
+                $("#chromeBrowserSuggest1").attr("href", "http://www.google.com/chrome");
+                $("#chromeBrowserSuggest1").html("检测到有新版本，点击更新");
+                $("#chromeBrowserSuggest1").attr("target", "_blank");
             }
             //Javascript检测
             JsCheck("chrome", "2");
@@ -469,17 +500,17 @@
 
         //Safari下的检测
         function SafariCheck() {
-            $(".check-brower-safari").show();
+            $(".check-browser-safari").show();
 
             //版本检测
-            $("#safariBrowerInfo1").html("Apple Safari " + Sys.safari);
-            $("#safariBrowerRet1").css("color", "#008000");
-            $("#safariBrowerRet1").html("成功");
+            $("#safariBrowserInfo1").html("Apple Safari " + Sys.safari);
+            $("#safariBrowserRet1").css("color", "#008000");
+            $("#safariBrowserRet1").html("成功");
 
             if (Math.round(Sys.safari.split('.')[0]) < 5) {
-                $("#safariBrowerSuggest1").attr("href", "http://www.apple.com.cn/safari/download/");
-                $("#safariBrowerSuggest1").html("检测到有新版本，点击更新");
-                $("#safariBrowerSuggest1").attr("target", "_blank");
+                $("#safariBrowserSuggest1").attr("href", "http://www.apple.com.cn/safari/download/");
+                $("#safariBrowserSuggest1").html("检测到有新版本，点击更新");
+                $("#safariBrowserSuggest1").attr("target", "_blank");
             }
             //Javascript检测
             JsCheck("safari", "2");
@@ -492,17 +523,17 @@
         }
 
         function FireFoxCheck() {
-            $(".check-brower-firefox").show();
+            $(".check-browser-firefox").show();
 
             //版本检测
-            $("#firefoxBrowerInfo1").html("Mozilla Firefox " + Sys.firefox);
-            $("#firefoxBrowerRet1").css("color", "#008000");
-            $("#firefoxBrowerRet1").html("成功");
+            $("#firefoxBrowserInfo1").html("Mozilla Firefox " + Sys.firefox);
+            $("#firefoxBrowserRet1").css("color", "#008000");
+            $("#firefoxBrowserRet1").html("成功");
 
             if (Math.round(Sys.firefox.split('.')[0]) < 5) {
-                $("#firefoxBrowerSuggest1").attr("href", "http://firefox.com.cn/download");
-                $("#firefoxBrowerSuggest1").html("检测到有新版本，点击更新");
-                $("#firefoxBrowerSuggest1").attr("target", "_blank");
+                $("#firefoxBrowserSuggest1").attr("href", "http://firefox.com.cn/download");
+                $("#firefoxBrowserSuggest1").html("检测到有新版本，点击更新");
+                $("#firefoxBrowserSuggest1").attr("target", "_blank");
             }
             //Javascript检测
             JsCheck("firefox", "2");
@@ -560,14 +591,15 @@
     </script>
 
     <style type="text/css">
+        body{}
         a{color:#003299;font-weight:bold;}.checkinfo-area{border:solid #aacbee 1px;font-size:14px;line-height:20px;background-color:#FFFFFF;margin:10px 4px;width:100%;}.checkinfo-area .checkinfo-area-title{overflow:hidden;border-bottom:solid #aacbee 1px;height:30px;line-height:30px;padding:0 8px;background-color:#f9fcff;background-image:linear-gradient(top,#f9fcff,#e8f1f9);
-        }.checkinfo-area .checkinfo-area-content{padding:6px;overflow:hidden;}.check-brower-ie{display:none;}.check-brower-safari{display:none;}.check-brower-chrome{display:none;}.check-brower-firefox{display:none;}.browerInfo{}.browerRet{margin-left:20px;font-weight:bold;}.browerSuggest{margin-left:20px;}.zxlm-f14{}.zxlm-f15{font-size:18px;font-weight:bold;}
+                                                                                                                                                                         }.checkinfo-area .checkinfo-area-content{padding:6px;overflow:hidden;}.check-browser-ie{display:none;}.check-browser-safari{display:none;}.check-browser-chrome{display:none;}.check-browser-firefox{display:none;}.browserInfo{}.browserRet{margin-left:20px;font-weight:bold;}.browserSuggest{margin-left:20px;}.zxlm-f14{}.zxlm-f15{font-size:18px;font-weight:bold;}
         .checkinfo-area li{ margin: 1px;}
         .result_no{color: red;font-weight:bold;}
         .result_ok{color: Green;font-weight:bold;}
         .result_error{ color: red;font-weight:bold;font-size:16px;}
-        .li_sp_down{float:left; margin-left:2px;background: url("CheckIE/msdi_softdown.gif") no-repeat scroll 0 0px;font-size: 14px;padding-left: 30px;line-height: 24px;}
-        .li_sp_setting{float:left; margin-left:8px;background: url("CheckIE/msdi_setting.gif") no-repeat scroll 0 0px;font-size: 14px;padding-left: 24px;line-height: 24px;}
+        .li_sp_down{float:left; margin-left:2px;background: url("CheckIE/msdi_softdown.gif") no-repeat scroll 0 0px;font-size: 14px;padding-left: 30px;padding-right: 8px;line-height: 24px;}
+        .li_sp_setting{float:left; margin-left:12px;background: url("CheckIE/msdi_setting.gif") no-repeat scroll 0 0px;font-size: 14px;padding-left: 28px;padding-right: 8px;line-height: 24px;}
         .a_setting{margin-left:8px;background: url("CheckIE/msdi_setting.gif") no-repeat scroll 0 0px;padding-left: 24px;line-height: 24px;}
     </style>
 </head>
@@ -583,12 +615,12 @@
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
                     <li>为了可以正常使用公司的业务系统，您的浏览器需要满足以下条件：</li>
                     <li style="height:10px;"></li>
-                    <li>1、要求使用 Microsoft Internet Explorer 7.0 或以上版本，如果您使用<a target="_blank" href="http://www.google.com/chrome">Google Chrome</a>或<a target="_blank" href="http://firefox.com.cn/download/">Mozilla Firefox</a> 则大部分系统功能将无法使用。
+                    <li>1、要求使用 Microsoft Internet Explorer 7.0 或以上版本，如果您使用<a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>或<a target="_blank" href="http://firefox.com.cn/download/" target="_blank">Mozilla Firefox</a> 则大部分系统功能将无法使用。
                         <br/>&nbsp;&nbsp;&nbsp;&nbsp;如果您使用 <b><i>360安全</i></b>浏览器、<i><b>360极速</b></i>浏览器、<i><b>QQ</b></i>浏览器或<i><b>搜狗</b></i>浏览器等其他浏览器请在访问中南院业务系统时切换到“<b>兼容模式</b>”。
     </li>                    
                     <li>2、<span style="color:#008000;">推荐使用Microsoft Internet Explorer 8.0</span>
-                        <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-8">微软官方下载</a>
-                        <a href="http://mis.msdi.cn/portal/install/ie/IE8-WindowsXP-x86-CHS.exe">本地下载(适用于XP 32位)</a></li>
+                        <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-8" target="_blank">微软官方下载</a>
+                        <a href="http://mis.msdi.cn/portal/install/ie/IE8-WindowsXP-x86-CHS.exe" target="_blank">本地下载(适用于XP 32位)</a></li>
                     
                     <li>3、如果使用IE浏览器，请将“<b>mis.msdi.cn</b> / <b>zny.msdi.cn</b> / <b>pmis.msdi.cn</b>”加入可信任站点，同时启用选项 "允许由脚本初始化的窗口，没有大小和位置限制"</li>
                     <li>4、IE7或者以上版本把弹出窗口选项设置为"由Internet Exporer决定如何开打弹出窗口"</li>
@@ -601,132 +633,132 @@
                 </ul>
             </div>
         </div>
-        <div id="browerInfo" class="checkinfo-area">
+        <div id="browserInfo" class="checkinfo-area">
             <div class="checkinfo-area-title">
                 <div class="zxlm-f15">浏览器配置自动检测报告</div>
             </div>
             <div class="checkinfo-area-content">
-                <div class="check-brower-ie">
+                <div class="check-browser-ie">
                     <ul style="padding: 0px; margin: 0px; list-style: none;">
                         <li>我们正在检查您的浏览器以确定是否满足以上的要求。如果看到任何一项失败！请按照提示操作。 
                             <a href="#" class="a_setting" onclick="TipShow(this,'ieadjust','注意IE的兼容模式')">(注：由于IE兼容模式的开启可能造成浏览器版本检测不正确)</a>
                         </li>
                         <li style="height:10px;"></li>
                         <li>1、浏览器：
-                            <span id="ieBrowerInfo1" class="browerInfo"></span>
-                            <span id="ieBrowerRet1" class="browerRet"></span>
-                            <span id="ieBrowerSuggest1_0" class="browerRet"></span>
-                            <a id="ieBrowerSuggest1_1" class="browerSuggest"></a>
-                            <a id="ieBrowerSuggest1_2" class="browerSuggest"></a>
-                            <a id="ieBrowerSuggest1_3" class="browerSuggest"></a>
+                            <span id="ieBrowserInfo1" class="browserInfo"></span>
+                            <span id="ieBrowserRet1" class="browserRet"></span>
+                            <span id="ieBrowserSuggest1_0" class="browserRet"></span>
+                            <a id="ieBrowserSuggest1_1" class="browserSuggest"></a>
+                            <a id="ieBrowserSuggest1_2" class="browserSuggest"></a>
+                            <a id="ieBrowserSuggest1_3" class="browserSuggest"></a>
                         </li>
-                        <li>2、Javascript：<span id="ieBrowerInfo2" class="browerInfo"></span><span id="ieBrowerRet2"
-                            class="browerRet"></span><a id="ieBrowerSuggest2" class="browerSuggest"></a></li>
-                        <li>3、可信任站点：<span id="ieBrowerInfo3" class="browerInfo"></span><span id="ieBrowerRet3"
-                            class="browerRet"></span><a id="ieBrowerSuggest3" class="browerSuggest"></a></li>
-                        <li>4、允许由脚本初始化的窗口，没有大小和位置限制：<span id="ieBrowerInfo4" class="browerInfo"></span><span
-                            id="ieBrowerRet4" class="browerRet"></span><a id="ieBrowerSuggest4" class="browerSuggest"></a></li>
-                        <li>5、由Internet Exporer决定如何开打弹出窗口：<span id="ieBrowerInfo5" class="browerInfo"></span><span
-                            id="ieBrowerRet5" class="browerRet"></span><a id="ieBrowerSuggest5" class="browerSuggest"></a></li>
-                        <li>6、Cookies：<span id="ieBrowerInfo6" class="browerInfo"></span><span id="ieBrowerRet6"
-                            class="browerRet"></span><a id="ieBrowerSuggest6" class="browerSuggest"></a></li>
-                        <li>7、弹出窗口：<span id="ieBrowerInfo7" class="browerInfo"></span><span id="ieBrowerRet7"
-                            class="browerRet"></span><a id="ieBrowerSuggest7" class="browerSuggest"></a></li>
-                        <li>8、Flash播放器：<span id="ieBrowerInfo8" class="browerInfo"></span><span id="ieBrowerRet8"
-                            class="browerRet"></span><a id="ieBrowerSuggest8" class="browerSuggest"></a></li>
+                        <li>2、Javascript：<span id="ieBrowserInfo2" class="browserInfo"></span><span id="ieBrowserRet2"
+                            class="browserRet"></span><a id="ieBrowserSuggest2" class="browserSuggest"></a></li>
+                        <li>3、可信任站点：<span id="ieBrowserInfo3" class="browserInfo"></span><span id="ieBrowserRet3"
+                            class="browserRet"></span><a id="ieBrowserSuggest3" class="browserSuggest"></a></li>
+                        <li>4、允许由脚本初始化的窗口，没有大小和位置限制：<span id="ieBrowserInfo4" class="browserInfo"></span><span
+                            id="ieBrowserRet4" class="browserRet"></span><a id="ieBrowserSuggest4" class="browserSuggest"></a></li>
+                        <li>5、由Internet Exporer决定如何开打弹出窗口：<span id="ieBrowserInfo5" class="browserInfo"></span><span
+                            id="ieBrowserRet5" class="browserRet"></span><a id="ieBrowserSuggest5" class="browserSuggest"></a></li>
+                        <li>6、Cookies：<span id="ieBrowserInfo6" class="browserInfo"></span><span id="ieBrowserRet6"
+                            class="browserRet"></span><a id="ieBrowserSuggest6" class="browserSuggest"></a></li>
+                        <li>7、弹出窗口：<span id="ieBrowserInfo7" class="browserInfo"></span><span id="ieBrowserRet7"
+                            class="browserRet"></span><a id="ieBrowserSuggest7" class="browserSuggest"></a></li>
+                        <li>8、Flash播放器：<span id="ieBrowserInfo8" class="browserInfo"></span><span id="ieBrowserRet8"
+                            class="browserRet"></span><a id="ieBrowserSuggest8" class="browserSuggest"></a></li>
                         
-                        <li>9、Silverlight插件：<span id="ieBrowerInfo9" class="browerInfo"></span><span id="ieBrowerRet9"
-                            class="browerRet"></span><a id="ieBrowerSuggest9" class="browerSuggest"></a></li>
-                        <li>10、其他业务系统要求：<span id="ieBrowerInfo10" class="browerInfo"></span><span id="ieBrowerRet10"
-                            class="browerRet"></span><span id="ieBrowerSuggest10" class="browerSuggest">检测中...</span></li>
+                        <li>9、Silverlight插件：<span id="ieBrowserInfo9" class="browserInfo"></span><span id="ieBrowserRet9"
+                            class="browserRet"></span><a id="ieBrowserSuggest9" class="browserSuggest"></a></li>
+                        <li>10、其他业务系统要求：<span id="ieBrowserInfo10" class="browserInfo"></span><span id="ieBrowserRet10"
+                            class="browserRet"></span><span id="ieBrowserSuggest10" class="browserSuggest">检测中...</span></li>
 
                         <li style="height:10px;"></li>
                             <li>
                                 <img src="CheckIE/msdi_ietools.gif" width="32px"/><a id="ietools" href="#" title="v2.1.0">下载常见问题修复工具(注：目前只在XP、Win7下进行全面的测试验证)</a></li>
                     </ul>
                 </div>
-                <div class="check-brower-chrome">
+                <div class="check-browser-chrome">
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
                         <li>我们正在检查您的浏览器以确定是否满足以上的要求。如果看到任何一项失败！，请按照提示操作。 </li>
                         <li style="height:10px;"></li>
                         <li>1、浏览器：
-                            <span id="chromeBrowerInfo1" class="browerInfo"></span>
-                            <span id="chromeBrowerRet1" class="browerRet"></span>
-                            <a id="chromeBrowerSuggest1" class="browerSuggest"></a>
+                            <span id="chromeBrowserInfo1" class="browserInfo"></span>
+                            <span id="chromeBrowserRet1" class="browserRet"></span>
+                            <a id="chromeBrowserSuggest1" class="browserSuggest"></a>
                         </li>
                         <li>2、Javascript：
-                            <span id="chromeBrowerInfo2" class="browerInfo"></span>
-                            <span id="chromeBrowerRet2" class="browerRet"></span>
-                            <a id="chromeBrowerSuggest2" class="browerSuggest"></a>
+                            <span id="chromeBrowserInfo2" class="browserInfo"></span>
+                            <span id="chromeBrowserRet2" class="browserRet"></span>
+                            <a id="chromeBrowserSuggest2" class="browserSuggest"></a>
                         </li>
                         <li>3、Cookies：
-                            <span id="chromeBrowerInfo3" class="browerInfo"></span>
-                            <span id="chromeBrowerRet3" class="browerRet"></span>
-                            <a id="chromeBrowerSuggest3" class="browerSuggest"></a>
+                            <span id="chromeBrowserInfo3" class="browserInfo"></span>
+                            <span id="chromeBrowserRet3" class="browserRet"></span>
+                            <a id="chromeBrowserSuggest3" class="browserSuggest"></a>
                         </li>
                         <li>4、弹出窗口：
-                            <span id="chromeBrowerInfo4" class="browerInfo"></span>
-                            <span id="chromeBrowerRet4" class="browerRet"></span>
-                            <a id="chromeBrowerSuggest4" class="browerSuggest"></a>
+                            <span id="chromeBrowserInfo4" class="browserInfo"></span>
+                            <span id="chromeBrowserRet4" class="browserRet"></span>
+                            <a id="chromeBrowserSuggest4" class="browserSuggest"></a>
                         </li>
                         <li>5、Flash播放器：
-                            <span id="chromeBrowerInfo5" class="browerInfo"></span>
-                            <span id="chromeBrowerRet5" class="browerRet"></span>
-                            <a id="chromeBrowerSuggest5" class="browerSuggest"></a>
+                            <span id="chromeBrowserInfo5" class="browserInfo"></span>
+                            <span id="chromeBrowserRet5" class="browserRet"></span>
+                            <a id="chromeBrowserSuggest5" class="browserSuggest"></a>
                         </li>
                   </ul>
                 </div>
-                <div class="check-brower-firefox">
+                <div class="check-browser-firefox">
                     <ul style="padding: 0px; margin: 0px; list-style: none;">
                         <li>我们正在检查您的浏览器以确定是否满足以上的要求。如果看到任何一项失败！，请按照提示操作。 </li>
                         <li style="height:10px;"></li>
                         <li>1、浏览器：
-                            <span id="firefoxBrowerInfo1" class="browerInfo"></span>
-                            <span id="firefoxBrowerRet1" class="browerRet"></span>
-                            <a id="fireBrowerSuggest1" class="browerSuggest"></a>
+                            <span id="firefoxBrowserInfo1" class="browserInfo"></span>
+                            <span id="firefoxBrowserRet1" class="browserRet"></span>
+                            <a id="fireBrowserSuggest1" class="browserSuggest"></a>
                         </li>
                         <li>2、Javascript：
-                            <span id="firefoxBrowerInfo2" class="browerInfo"></span>
-                            <span id="firefoxBrowerRet2" class="browerRet"></span>
-                            <a id="fireBrowerSuggest2" class="browerSuggest"></a>
+                            <span id="firefoxBrowserInfo2" class="browserInfo"></span>
+                            <span id="firefoxBrowserRet2" class="browserRet"></span>
+                            <a id="fireBrowserSuggest2" class="browserSuggest"></a>
                         </li>
                         <li>3、Cookies：
-                            <span id="firefoxBrowerInfo3" class="browerInfo"></span>
-                            <span id="firefoxBrowerRet3" class="browerRet"></span>
-                            <a id="fireBrowerSuggest3" class="browerSuggest"></a>
+                            <span id="firefoxBrowserInfo3" class="browserInfo"></span>
+                            <span id="firefoxBrowserRet3" class="browserRet"></span>
+                            <a id="fireBrowserSuggest3" class="browserSuggest"></a>
                         </li>
                         <li>4、弹出窗口：
-                            <span id="firefoxBrowerInfo4" class="browerInfo"></span>
-                            <span id="firefoxBrowerRet4" class="browerRet"></span>
-                            <a id="fireBrowerSuggest4" class="browerSuggest"></a>
+                            <span id="firefoxBrowserInfo4" class="browserInfo"></span>
+                            <span id="firefoxBrowserRet4" class="browserRet"></span>
+                            <a id="fireBrowserSuggest4" class="browserSuggest"></a>
                         </li>
                         <li>5、Flash播放器：
-                            <span id="firefoxBrowerInfo5" class="browerInfo"></span>
-                            <span id="firefoxBrowerRet5" class="browerRet"></span>
-                            <a id="fireBrowerSuggest5" class="browerSuggest"></a>
+                            <span id="firefoxBrowserInfo5" class="browserInfo"></span>
+                            <span id="firefoxBrowserRet5" class="browserRet"></span>
+                            <a id="fireBrowserSuggest5" class="browserSuggest"></a>
                         </li>
                     </ul>
                 </div>
-                <div class="check-brower-safari">
+                <div class="check-browser-safari">
                     <ul style="padding: 0px; margin: 0px; list-style: none;">
                         <li>我们正在检查您的浏览器以确定是否满足以上的要求。如果看到任何一项失败！，请按照提示操作。 </li>
                         <li style="height:10px;"></li>
-                        <li>1、浏览器：<span id="safariBrowerInfo1" class="browerInfo"></span><span id="safariBrowerRet1" class="browerRet"></span><a
-                            id="safariBrowerSuggest1" class="browerSuggest"></a></li>
-                        <li>2、Javascript：<span id="safariBrowerInfo2" class="browerInfo"></span><span id="safariBrowerRet2" class="browerRet"></span><a
-                            id="safariBrowerSuggest2" class="browerSuggest"></a></li>
-                        <li>3、Cookies：<span id="safariBrowerInfo3" class="browerInfo"></span><span id="safariBrowerRet3" class="browerRet"></span><a
-                            id="safariBrowerSuggest3" class="browerSuggest"></a></li>
-                        <li>4、弹出窗口：<span id="safariBrowerInfo4" class="browerInfo"></span><span id="safariBrowerRet4" class="browerRet"></span><a
-                            id="safariBrowerSuggest4" class="browerSuggest"></a></li>
-                        <li>5、Flash播放器：<span id="safariBrowerInfo5" class="browerInfo"></span><span id="safariBrowerRet5" class="browerRet"></span><a
-                            id="safariBrowerSuggest5" class="browerSuggest"></a></li>
+                        <li>1、浏览器：<span id="safariBrowserInfo1" class="browserInfo"></span><span id="safariBrowserRet1" class="browserRet"></span><a
+                            id="safariBrowserSuggest1" class="browserSuggest"></a></li>
+                        <li>2、Javascript：<span id="safariBrowserInfo2" class="browserInfo"></span><span id="safariBrowserRet2" class="browserRet"></span><a
+                            id="safariBrowserSuggest2" class="browserSuggest"></a></li>
+                        <li>3、Cookies：<span id="safariBrowserInfo3" class="browserInfo"></span><span id="safariBrowserRet3" class="browserRet"></span><a
+                            id="safariBrowserSuggest3" class="browserSuggest"></a></li>
+                        <li>4、弹出窗口：<span id="safariBrowserInfo4" class="browserInfo"></span><span id="safariBrowserRet4" class="browserRet"></span><a
+                            id="safariBrowserSuggest4" class="browserSuggest"></a></li>
+                        <li>5、Flash播放器：<span id="safariBrowserInfo5" class="browserInfo"></span><span id="safariBrowserRet5" class="browserRet"></span><a
+                            id="safariBrowserSuggest5" class="browserSuggest"></a></li>
                     </ul>
                 </div>
             </div>
         </div>
         
-        <div id="browerSet" class="checkinfo-area">
+        <div id="browserSet" class="checkinfo-area">
             <div class="checkinfo-area-title">
                 <div class="zxlm-f14">
                     基本配置说明</div>
@@ -741,19 +773,19 @@
                 </ul>
             </div>
         </div>
-        <div id="browerOcx" class="checkinfo-area">
+        <div id="browserOcx" class="checkinfo-area">
            <div class="checkinfo-area-title">
                 <div class="zxlm-f14">
                     系统常用插件</div>
           </div>
             <div class="checkinfo-area-content">
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
-                    <li class="li_sp_down"><a href="http://mis.msdi.cn/Portal/install/Office/iSignatureASM.exe?v=1.1">电子签章安全软件</a></li>
+                    <li class="li_sp_down"><a href="http://mis.msdi.cn/Portal/install/Office/iSignatureASM.exe?v=1.1" target="_blank">电子签章安全软件</a></li>
                     <li class="li_sp_down"><a href="http://mis.msdi.cn/Portal/install/
-Baisc.EXE?v=1.0">旧MIS系统插件</a></li>
+Baisc.EXE?v=1.0" target="_blank">旧MIS系统插件</a></li>
 
     <!--TODO 部署金格的示例代码于服务器-->
-    <!--<li style="float:left; margin-left:10px;"><a href="http://mis.msdi.cn:8080/coa/axis2-admin/office.jsp" >OFFICE在线编辑工具</a></li>-->
+    <!--<li style="float:left; margin-left:10px;"><a href="http://mis.msdi.cn:8080/coa/axis2-admin/office.jsp" target="_blank">OFFICE在线编辑工具</a></li>-->
 
                 </ul>
             </div>
@@ -839,7 +871,7 @@ Baisc.EXE?v=1.0">旧MIS系统插件</a></li>
 
 
     //其他业务系统检测
-    function OtherSystemCheck(brower, index) {
+    function OtherSystemCheck(browser, index) {
         var checkResult = true;
         var checkStatusArr = new Array();
         var helpHtml = "";
@@ -892,15 +924,15 @@ Baisc.EXE?v=1.0">旧MIS系统插件</a></li>
 
             if (checkStatusArr.length == Domains.length) {
                 if (checkResult) { // true/false
-                    $("#" + brower + "BrowerRet" + index).html("成功");
-                    $("#" + brower + "BrowerRet" + index).css("color", "#008000");
-                    $("#" + brower + "BrowerSuggest" + index).html(helpHtml);
+                    $("#" + browser + "BrowserRet" + index).html("成功");
+                    $("#" + browser + "BrowserRet" + index).css("color", "#008000");
+                    $("#" + browser + "BrowserSuggest" + index).html(helpHtml);
                 }
                 else {
-                    $("#" + brower + "BrowerRet" + index).html("失败");
-                    $("#" + brower + "BrowerRet" + index).css("color", "red");
+                    $("#" + browser + "BrowserRet" + index).html("失败");
+                    $("#" + browser + "BrowserRet" + index).css("color", "red");
 
-                    $("#" + brower + "BrowerSuggest" + index).html(helpHtml);
+                    $("#" + browser + "BrowserSuggest" + index).html(helpHtml);
                 }
             }
         };
@@ -959,7 +991,9 @@ Baisc.EXE?v=1.0">旧MIS系统插件</a></li>
             if ($.ua().isIe && $.ua().ua.indexOf(".net clr") > 0) {
                 alert("已经安装.net运行时");
             }
-            window.open(ContextPath + "/Portal/install/MSDI_IETool.exe", "MSDI_IETool", "width=320,height=160");
+            //window.open(ContextPath + "/Portal/install/MSDI_IETool.exe", "MSDI_IETool", "width=320,height=160");
+            //window.open("http://mis.msdi.cn/Portal/install/MSDI_IETool.exe", "MSDI_IETool", "width=320,height=160");
+            window.open("http://mis.msdi.cn/Portal/install/Download.aspx?Id=MSDI_IETool.exe", "MSDI_IETool", "width=320,height=160");
             return false;
         });
 

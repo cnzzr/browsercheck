@@ -12,6 +12,7 @@ CheckItemLang["Sliverlight"] = "安装Silverlight插件";
 
 //ActiveX信息
 var ActiveX = [];
+
 //检测其他域名的配置情况
 var Domains = [];
 //Domains.push({
