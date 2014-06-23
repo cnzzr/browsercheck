@@ -1,7 +1,8 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="renderer" content="ie-stand"><!-- 浏览器内核控制Meta标签说明文档 http://se.360.cn/v6/help/meta.html //-->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>浏览器外壳检测</title>
     <!-- 开发
@@ -17,34 +18,7 @@
 </html>
 <script type="text/javascript">
     $(document).ready(function () {
-        var bv = "";
-        if ($.ua().isWebkit && !$.ua().isChrome) {//Webkit 并且不是 Chrome
-            if ($.ua().is360ee)
-                bv = "360ee";
-            else if ($.ua().is360se)
-                bv = "360se";
-            else if ($.ua().isLiebao)
-                bv = "liebao";
-            else if ($.ua().isSougou)
-                bv = "sougou";
-            else {
-                var UA = navigator.userAgent.toLowerCase();
-                bv = (UA.indexOf('360ee') > -1) ? '360ee' : //'360极速浏览器' :
-                    (UA.indexOf('360se') > -1) ? '360se' : //'360安全浏览器' :
-                    (UA.indexOf('se') > -1) ? 'sougou' : //'搜狗浏览器' :
-                    (UA.indexOf('aoyou') > -1) ? 'aoyou' : //'遨游浏览器' :
-                    (UA.indexOf('theworld') > -1) ? 'theworld' : //'世界之窗浏览器' :
-                    (UA.indexOf('worldchrome') > -1) ? 'worldchrome' : //'世界之窗极速浏览器' :
-                    (UA.indexOf('greenbrowser') > -1) ? 'greenbrowser' : //'绿色浏览器' :
-                    (UA.indexOf('qqbrowser') > -1) ? 'qqbrowser' : //'QQ浏览器' :
-                    (UA.indexOf('baidu') > -1) ? 'baidu' : //'百度浏览器' :
-                    'other';//'未知或无壳';
-            }
-        }
         var bcUrl = "BrowserCheck.html";
-        if (bv)
-            bcUrl += "?bv=" + bv;
-        //alert(bcUrl);
         window.location.href = bcUrl;
     });
 </script>
