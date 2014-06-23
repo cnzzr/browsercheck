@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>浏览器外壳检测</title>
+    <!-- 开发
+            <script src="Scripts/jquery-1.7.1.js" type="text/javascript"></script>
+            <script src="Scripts/jquery.ua.js" type="text/javascript"></script>
+            //-->
+    <!-- 正式部署  //-->
+    <script type="text/javascript" src="http://mis.msdi.cn/share/js/jQuery/jquery.min.js?v=1.7.2"></script>
+    <script type="text/javascript" src="http://mis.msdi.cn/share/js/jQuery/plugins/jquery.ua.min.js?v=1.2"></script>
+</head>
+<body>
+</body>
+</html>
+<script type="text/javascript">
+    var client = function () {
+       // 平台、设备和操作系统
+        var system = {
+            win: false,
+            mac: false,
+            xll: false,
+
+            // 移动设备
+            iPhone: false,
+            iPod: false,
+            iPad: false,
+            android: false,
+            nokiaN: false,
+            winMobile: false,
+            macMobile: false,
+
+            // 游戏设备
+            wii: false,
+            ps: false
+        };
+        // 检测呈现引擎和浏览器
+        var ua = navigator.userAgent;
+        
+        // 检测平台
+        var p = navigator.platform;
+
+        system.win = p.indexOf("Win") == 0;
+        system.mac = p.indexOf("Mac") == 0;
+        system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+       
+        // 检测Windows操作系统
+        if (system.win) {
+            //if (/Win(?:doms)?([^do]{2})\s?(\d+\.\d+)?/.test(ua)) {
+            //if (/Win(?:doms)? ([^do]{2})\s?(\d+\.\d+)?/.test(ua)) {
+            if(/Win(?:dows)? ([^do]{2})\s?(\d+\.\d+)?/.test(ua)){
+                if (RegExp["$1"] == "NT") {
+                    switch (RegExp["$2"]) {
+                        case "5.0":
+                            system.win = "2000";
+                            break;
+                        case "5.1":
+                            system.win = "XP";
+                            break;
+                        case "5.2":
+                            system.win = "Server 2003";
+                            break;
+                        case "6.0":
+                            system.win = "Vista";
+                            break;
+                        case "6.1":
+                            system.win = "Win7";
+                            break;
+                        default:
+                            system.win = "NT";
+                            break;
+                    }
+                } else if (RegExp["$1"]) {
+                    system.win = "ME";
+                } else {
+                    system.win = RegExp["$1"];
+                }
+            }
+        }
+        // 移动设备
+        system.iPhone = ua.indexOf("iPhone") > -1;
+        system.iPod = ua.indexOf("iPod") > -1;
+        system.iPad = ua.indexOf("iPad") > -1;
+        system.android = ua.indexOf("Android") > -1;
+        system.nokiaN = ua.indexOf("NokiaN") > -1;
+        system.winMobile = (system.win == "CE");
+        system.macMobile = (system.iPhone || system.iPod || system.iPad);
+        // 游戏系统
+        system.wii = ua.indexOf("Wii") > -1;
+        system.ps = /playstation/i.test(ua);
+        // 返回这些对象
+        return {
+            system: system
+        };
+    } ();
+
+    $(document).ready(function () {
+        alert(client.system.win);
+
+        //无法自动切换回兼容模式
+//        var bv = "";
+//        if ($.ua().isWebkit && !$.ua().isChrome) {//Webkit 并且不是 Chrome
+//            if ($.ua().is360ee)
+//                bv = "360ee";
+//            else if ($.ua().is360se)
+//                bv = "360se";
+//            else if ($.ua().isLiebao)
+//                bv = "liebao";
+//            else if ($.ua().isSougou)
+//                bv = "sougou";
+//            else {
+//                var UA = navigator.userAgent.toLowerCase();
+//                bv = (UA.indexOf('360ee') > -1) ? '360ee' : //'360极速浏览器' :
+//                    (UA.indexOf('360se') > -1) ? '360se' : //'360安全浏览器' :
+//                    (UA.indexOf('se') > -1) ? 'sougou' : //'搜狗浏览器' :
+//                    (UA.indexOf('aoyou') > -1) ? 'aoyou' : //'遨游浏览器' :
+//                    (UA.indexOf('theworld') > -1) ? 'theworld' : //'世界之窗浏览器' :
+//                    (UA.indexOf('worldchrome') > -1) ? 'worldchrome' : //'世界之窗极速浏览器' :
+//                    (UA.indexOf('greenbrowser') > -1) ? 'greenbrowser' : //'绿色浏览器' :
+//                    (UA.indexOf('qqbrowser') > -1) ? 'qqbrowser' : //'QQ浏览器' :
+//                    (UA.indexOf('baidu') > -1) ? 'baidu' : //'百度浏览器' :
+//                    'other';//'未知或无壳';
+//            }
+//        }
+//        var bcUrl = "BrowserCheck.html";
+//        if (bv)
+//            bcUrl += "?bv=" + bv;
+//        //alert(bcUrl);
+//        window.location.href = bcUrl;
+    });
+</script>
