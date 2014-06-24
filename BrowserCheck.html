@@ -104,37 +104,80 @@
         }
 
         function getFlashStatus() {
-            var MinVer = 7;
+            var MinVer = 11;
             var status = StatusNG;
-            if (navigator.plugins && navigator.plugins.length && navigator.plugins.length > 0) {
-                var flashObj = navigator.plugins["Shockwave Flash"];
-                if (flashObj && flashObj.length && flashObj.length > 0) {
-                    var flashMimeObj = flashObj["application/x-shockwave-flash"];
-                    if (flashMimeObj) {
-                        var tempStr = flashObj.description.split(" Flash ");
-                        var verNo = parseFloat(tempStr[1]);
-                        if (verNo >= MinVer) {
-                            status = StatusOK;
-                        } else {
-                            status = StatusUP;
-                        }
-                    }
+//            var verNo=0;
+//            if (navigator.plugins && navigator.plugins.length && navigator.plugins.length > 0) {
+//                var flashObj = navigator.plugins["Shockwave Flash"];
+//                if (flashObj && flashObj.length && flashObj.length > 0) {
+//                    var flashMimeObj = flashObj["application/x-shockwave-flash"];
+//                    if (flashMimeObj) {
+//                        var tempStr = flashObj.description.split(" Flash ");
+//                        verNo = parseFloat(tempStr[1]);
+//                        if (verNo >= MinVer) {
+//                            status = StatusOK;
+//                        } else {
+//                            status = StatusUP;
+//                        }
+//                    }
+//                }
+//            }
+//            if (status == StatusNG) {
+//                for (var i = MinVer; i > 0; i--) {
+//                    try {
+//                        var flashObj = new ActiveXObject("ShockwaveFlash.ShockwaveFlash." + i);
+//                        if (i == MinVer) {
+//                            status = StatusOK;
+//                        } else {
+//                            status = StatusUP;
+//                        }
+//                        break;
+//                    } catch (e) {
+//                        status = StatusNG;
+//                    }
+//                }
+//            }
+//            alert(status + " " + verNo);
+            var UNDEF = "undefined",
+                OBJECT = "object",
+                SHOCKWAVE_FLASH = "Shockwave Flash",
+                SHOCKWAVE_FLASH_AX = "ShockwaveFlash.ShockwaveFlash",
+                FLASH_MIME_TYPE = "application/x-shockwave-flash",
+                EXPRESS_INSTALL_ID = "SWFObjectExprInst",
+                ON_READY_STATE_CHANGE = "onreadystatechange", 
+                win = window,doc = document,nav = navigator, plugin = false, playerVersion = [0, 0, 0],d = null,
+                ie = !+"\v1" // feature detection based on Andrea Giammarchi's solution: http://webreflection.blogspot.com/2009/01/32-bytes-to-know-if-your-browser-is-ie.html
+            ;
+
+            if (typeof nav.plugins != UNDEF && typeof nav.plugins[SHOCKWAVE_FLASH] == OBJECT) {
+                d = nav.plugins[SHOCKWAVE_FLASH].description;
+                if (d && !(typeof nav.mimeTypes != UNDEF && nav.mimeTypes[FLASH_MIME_TYPE] && !nav.mimeTypes[FLASH_MIME_TYPE].enabledPlugin)) { // navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin indicates whether plug-ins are enabled or disabled in Safari 3+
+                    plugin = true;
+                    ie = false; // cascaded feature detection for Internet Explorer
+                    d = d.replace(/^.*\s+(\S+\s+\S+$)/, "$1");
+                    playerVersion[0] = parseInt(d.replace(/^(.*)\..*$/, "$1"), 10);
+                    playerVersion[1] = parseInt(d.replace(/^.*\.(.*)\s.*$/, "$1"), 10);
+                    playerVersion[2] = /[a-zA-Z]/.test(d) ? parseInt(d.replace(/^.*[a-zA-Z]+(.*)$/, "$1"), 10) : 0;
                 }
             }
-            if (status == StatusNG) {
-                for (var i = MinVer; i > 0; i--) {
-                    try {
-                        var flashObj = new ActiveXObject("ShockwaveFlash.ShockwaveFlash." + i);
-                        if (i == MinVer) {
-                            status = StatusOK;
-                        } else {
-                            status = StatusUP;
+            else if (typeof win.ActiveXObject != UNDEF) {
+                try {
+                    var a = new ActiveXObject(SHOCKWAVE_FLASH_AX);
+                    if (a) { // a will return null when ActiveX is disabled
+                        d = a.GetVariable("$version");
+                        if (d) {
+                            ie = true; // cascaded feature detection for Internet Explorer
+                            d = d.split(" ")[1].split(",");
+                            playerVersion = [parseInt(d[0], 10), parseInt(d[1], 10), parseInt(d[2], 10)];
                         }
-                        break;
-                    } catch (e) {
-                        status = StatusNG;
                     }
                 }
+                catch (e) { }
+            }
+            if (playerVersion[0] > 0 && playerVersion[0]<MinVer) {
+                status = StatusNG;
+            }else if (playerVersion[0] > 0 && playerVersion[0]>=MinVer) {
+                status = StatusOK;
             }
             return status;
         }
@@ -440,15 +483,16 @@
         //Flash播放器
         function FlashCheck(browser, index) {
             var flash = flash;
-            if (getFlashStatus() == 2) {
+            var check = getFlashStatus();
+            if (check == StatusOK || check == StatusUP) {
                 $("#" + browser + "BrowserRet" + index).html("成功");
                 $("#" + browser + "BrowserRet" + index).css("color", "#008000");
 
-                if (!Sys.chrome) {//Chrome已经内置Flash
+                if (check==StatusUP){if(!Sys.chrome) {//Chrome已经内置Flash
                     $("#" + browser + "BrowserSuggest" + index).html("点击下载最新Flash插件");
                     $("#" + browser + "BrowserSuggest" + index).attr("target", "_blank");
                     $("#" + browser + "BrowserSuggest" + index).attr("href", "http://get.adobe.com/cn/flashplayer/");
-                }
+                }}
                 flash = true;
             }
             else {
