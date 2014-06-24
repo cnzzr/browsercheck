@@ -30,6 +30,8 @@
 
         var WIN32 = "Win32";
         var WIN64 = "Win64";
+        var FLASHMINVER = "11.0"; // Flash的最低版本要求
+        var SLIVERLIGHTMINVER = "4.0"; // Sliverlight
 
         var ContextPath = window.location.protocol + "//" + window.location.host +
         (window.location.pathname.lastIndexOf("/") > 0 ? (window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1)) : "/");
@@ -104,48 +106,18 @@
         }
 
         function getFlashStatus() {
-            var MinVer = 11;
+            var MinVer = parseInt(FLASHMINVER);
             var status = StatusNG;
-//            var verNo=0;
-//            if (navigator.plugins && navigator.plugins.length && navigator.plugins.length > 0) {
-//                var flashObj = navigator.plugins["Shockwave Flash"];
-//                if (flashObj && flashObj.length && flashObj.length > 0) {
-//                    var flashMimeObj = flashObj["application/x-shockwave-flash"];
-//                    if (flashMimeObj) {
-//                        var tempStr = flashObj.description.split(" Flash ");
-//                        verNo = parseFloat(tempStr[1]);
-//                        if (verNo >= MinVer) {
-//                            status = StatusOK;
-//                        } else {
-//                            status = StatusUP;
-//                        }
-//                    }
-//                }
-//            }
-//            if (status == StatusNG) {
-//                for (var i = MinVer; i > 0; i--) {
-//                    try {
-//                        var flashObj = new ActiveXObject("ShockwaveFlash.ShockwaveFlash." + i);
-//                        if (i == MinVer) {
-//                            status = StatusOK;
-//                        } else {
-//                            status = StatusUP;
-//                        }
-//                        break;
-//                    } catch (e) {
-//                        status = StatusNG;
-//                    }
-//                }
-//            }
-//            alert(status + " " + verNo);
+
             var UNDEF = "undefined",
                 OBJECT = "object",
                 SHOCKWAVE_FLASH = "Shockwave Flash",
                 SHOCKWAVE_FLASH_AX = "ShockwaveFlash.ShockwaveFlash",
                 FLASH_MIME_TYPE = "application/x-shockwave-flash",
-                EXPRESS_INSTALL_ID = "SWFObjectExprInst",
-                ON_READY_STATE_CHANGE = "onreadystatechange", 
-                win = window,doc = document,nav = navigator, plugin = false, playerVersion = [0, 0, 0],d = null,
+//                EXPRESS_INSTALL_ID = "SWFObjectExprInst",
+//                ON_READY_STATE_CHANGE = "onreadystatechange",doc = document,
+                win = window, nav = navigator, 
+                plugin = false, playerVersion = [0, 0, 0],d = null,
                 ie = !+"\v1" // feature detection based on Andrea Giammarchi's solution: http://webreflection.blogspot.com/2009/01/32-bytes-to-know-if-your-browser-is-ie.html
             ;
 
@@ -510,7 +482,7 @@
         //Sliverlight检测
         function SliverlightCheck(browser, index) {
             var sl = false;
-            if (Silverlight.isInstalled("4.0")) { // true/false
+            if (Silverlight.isInstalled(SLIVERLIGHTMINVER)) { // true/false
                 $("#" + browser + "BrowserRet" + index).html("成功");
                 $("#" + browser + "BrowserRet" + index).css("color", "#008000");
                 sl = true;
@@ -786,8 +758,8 @@
                     
                     <li>5、允许Javascript、允许 Cookies </li>
                     <li>7、IE7及以上版本、或其他浏览器 请设置 允许弹出窗口</li>
-                    <li>8、安装有 Macromedia Flash播放器 11.0 或以上版本</li>
-                    <li>9、安装有 Microsoft Sliverlight 银光插件 4.0 或以上版本</li>
+                    <li>8、安装有 Macromedia Flash播放器 <script> document.write(FLASHMINVER);</script> 或以上版本</li>
+                    <li>9、安装有 Microsoft Sliverlight 银光插件 <script> document.write(SLIVERLIGHTMINVER);</script> 或以上版本</li>
                 </ul>
             </div>
         </div>
