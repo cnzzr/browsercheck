@@ -72,12 +72,8 @@
     <Content Include="ky\proxy.html" />
     <Content Include="proxy.html" />
     <Content Include="readme.txt" />
-    <Content Include="Scripts\jquery-1.7.1.intellisense.js" />
-    <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="ky\othersite\BrowserCheckClose.html" />
     <Content Include="ky\othersite\check.html" />
-    <Content Include="Scripts\jquery.cookie.js" />
-    <Content Include="Scripts\jquery.ua.js" />
     <Content Include="检测集成接口说明.txt" />
   </ItemGroup>
   <ItemGroup>
