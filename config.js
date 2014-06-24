@@ -1,7 +1,7 @@
 ﻿//检测过程中需要使用到的资源下载地址，如果IE8、自动修复工具等
 
 
-//检查欺项的中文名称
+//检查项的中文名称
 var CheckItemLang = {};
 CheckItemLang["TrustWebsite"] = "可信站点";
 CheckItemLang["Popup"] = "弹出窗口";

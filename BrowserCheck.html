@@ -305,19 +305,48 @@
             if (Sys.ie) {
                 IeCheck();
             }
-            else if (Sys.chrome) {
-                ChromeCheck();
-            }
+
+            //中南院的业务系统暂不支持非IE浏览器
+//            else if (Sys.chrome) {
+//                ChromeCheck();
+//            }
 //            else if (Sys.safari) {
 //                SafariCheck();
 //            }
-            else if (Sys.firefox) {
-                FireFoxCheck();
-            }
+//            else if (Sys.firefox) {
+//                FireFoxCheck();
+//            }
             else {
                 $("#browserInfo").hide();
                 $("#browserSet").hide();
-                alert("系统暂不支持您当前使用的浏览器！请选择系统推荐使用的“微软IE”浏览器");
+
+                //如果是识别为Chrome则有可能是国产的双核浏览器，需要另外提示
+                if ($.ua().isWebkit && !Sys.safari) {
+                    var UA = navigator.userAgent.toLowerCase();
+                    var majorVer = $.ua().browser && $.ua().browser.version && $.ua().browser.version.split('.').length ?
+                        $.ua().browser.version.split('.')[0] : 0;
+                    var browserName = 
+                            $.ua().isSougou ? "搜狗浏览器" :
+                            $.ua().isLiebao ? "猎豹浏览器" :
+                            (UA.indexOf('aoyou') > -1) ? '遨游浏览器' : //'遨游浏览器' :
+                            (UA.indexOf('theworld') > -1) ? '世界之窗浏览器' : //'世界之窗浏览器' :
+                            (UA.indexOf('worldchrome') > -1) ? '世界之窗极速浏览器' : //'世界之窗极速浏览器' :
+                            (UA.indexOf('greenbrowser') > -1) ? '绿色浏览器' : //'绿色浏览器' :
+                            (UA.indexOf('qqbrowser') > -1) ? 'QQ浏览器' : //'QQ浏览器' :
+                            (UA.indexOf('baidu') > -1) ? '百度浏览器' : //'百度浏览器' :
+                    //(UA.indexOf('se') > -1) ? '搜狗浏览器' : //'搜狗浏览器' :
+                            ($.ua().is360ee && majorVer<32) ? "360极速浏览器" :
+                            ($.ua().is360se && majorVer<32) ? "360安全浏览器" :
+                            null //剩余的情况为“谷歌浏览器”;
+                        ;
+                    if(browserName)
+                        alert("检测到你正在使用 “" + browserName + "”，请切换至兼容模式再进行检测。");
+                    else {
+                        alert("系统暂不支持您当前使用的浏览器！请选择推荐的“微软IE浏览器”");    
+                    }
+                } else {
+                    alert("系统暂不支持您当前使用的浏览器！请选择推荐的“微软IE浏览器”");
+                }
             }
         }
 
@@ -582,14 +611,17 @@
             showIeTool += FlashCheck("ie", "8") ? 0 : 1;
             //Sliverlight银光
             showIeTool += SliverlightCheck("ie", "9") ? 0 : 1;
-            
-            if(showIeTool) {
-                $("#ietools").parent().effect('shake', { times: 30 }, 500);
-            }
+
 
             //其他业务系统配置要求
             OtherSystemCheck("ie", "10");
-
+            
+            if (showIeTool) {
+                $("#ietools").parent().effect('shake', { times: 30 }, 500);
+                $.cookie("_BCCheck", 0, { expires: 32, path: "/SSO" });
+            } else {
+                $.cookie("_BCCheck", 1, { expires: 32, path: "/SSO" });
+            }
             //针对使用外壳浏览器的用户的情况进行特殊处理
             if (Sys.ie) {
                 //如果浏览器不允许弹窗，但是IE设置为允许弹窗则说明用户使用的是外壳浏览器
@@ -636,7 +668,7 @@
             $("#safariBrowserRet1").css("color", "#008000");
             $("#safariBrowserRet1").html("成功");
 
-            if (Math.round(Sys.safari.split('.')[0]) < 5) {
+            if (Math.round(Sys.safari.split('.')[0]) < 5) { //20140624
                 $("#safariBrowserSuggest1").attr("href", "http://www.apple.com.cn/safari/download/");
                 $("#safariBrowserSuggest1").html("检测到有新版本，点击更新");
                 $("#safariBrowserSuggest1").attr("target", "_blank");
@@ -661,7 +693,7 @@
             $("#firefoxBrowserRet1").css("color", "#008000");
             $("#firefoxBrowserRet1").html("成功");
 
-            if (Math.round(Sys.firefox.split('.')[0]) < 5) {
+            if (Math.round(Sys.firefox.split('.')[0]) < 20) { //20140624
                 $("#firefoxBrowserSuggest1").attr("href", "http://firefox.com.cn/download");
                 $("#firefoxBrowserSuggest1").html("检测到有新版本，点击更新");
                 $("#firefoxBrowserSuggest1").attr("target", "_blank");
