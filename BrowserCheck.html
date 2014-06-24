@@ -257,7 +257,7 @@
             javascript: true, //是否允许执行JS（多余的检测项）
             popup: false, //浏览器弹出窗口状态
             popupIE: false, //注册表中IE的设置
-            showTool:false,//突出显示 修复工具
+            //showTool:false,//突出显示 修复工具
             ua: ""
         };   //区分各类浏览器
         
@@ -466,7 +466,7 @@
         //Sliverlight检测
         function SliverlightCheck(browser, index) {
             var sl = false;
-            if (Silverlight.isInstalled()) { // true/false
+            if (Silverlight.isInstalled("4.0")) { // true/false
                 $("#" + browser + "BrowserRet" + index).html("成功");
                 $("#" + browser + "BrowserRet" + index).css("color", "#008000");
                 sl = true;
@@ -553,20 +553,21 @@
             //Cookies检测
             CookieCheck("ie", "6");
 
-            if (!(
-                //可信站点检测
-                TrustWebSiteCheck("ie", "3") &&
-                //允许由脚本初始化的窗口，没有大小和位置限制
-                AllowFullSizeWindowCheck("ie", "4") &&
-                //由Internet Exporer决定如何开打弹出窗口
-                DecidePopupByIECheck("ie", "5") &&
-                //弹框检测
-                PopupCheck("ie", "7") &&
-                //Flash播放器
-                FlashCheck("ie", "8") &&
-                //Sliverlight银光
-                SliverlightCheck("ie", "9")
-            )) {
+            var showIeTool = 0;//错误次数
+            //可信站点检测
+            showIeTool += TrustWebSiteCheck("ie", "3") ? 0 : 1;
+            //允许由脚本初始化的窗口，没有大小和位置限制
+            showIeTool += AllowFullSizeWindowCheck("ie", "4") ? 0 : 1;
+            //由Internet Exporer决定如何开打弹出窗口
+            showIeTool += DecidePopupByIECheck("ie", "5") ? 0 : 1;
+            //弹框检测
+            showIeTool += PopupCheck("ie", "7") ? 0 : 1;
+            //Flash播放器
+            showIeTool += FlashCheck("ie", "8") ? 0 : 1;
+            //Sliverlight银光
+            showIeTool += SliverlightCheck("ie", "9") ? 0 : 1;
+            
+            if(showIeTool) {
                 $("#ietools").parent().effect('shake', { times: 30 }, 500);
             }
 
@@ -741,7 +742,7 @@
                     
                     <li>5、允许Javascript、允许 Cookies </li>
                     <li>7、IE7及以上版本、或其他浏览器 请设置 允许弹出窗口</li>
-                    <li>8、安装有 Macromedia Flash播放器 7.0 或以上版本</li>
+                    <li>8、安装有 Macromedia Flash播放器 11.0 或以上版本</li>
                     <li>9、安装有 Microsoft Sliverlight 银光插件 4.0 或以上版本</li>
                 </ul>
             </div>
