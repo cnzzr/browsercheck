@@ -13,6 +13,21 @@ CheckItemLang["Sliverlight"] = "Silverlight插件";
 //ActiveX信息
 var ActiveX = [];
 
+//受信站点的设置
+var ZonesConfig = [];
+ZonesConfig.push({ key: "Zones\\2", item: "1001", value: "0" }); //启用
+ZonesConfig.push({ key: "Zones\\2", item: "1004", value: "0" });
+ZonesConfig.push({ key: "Zones\\2", item: "1200", value: "0" });
+ZonesConfig.push({ key: "Zones\\2", item: "1201", value: "0" });
+ZonesConfig.push({ key: "Zones\\2", item: "1405", value: "0" });
+ZonesConfig.push({ key: "Zones\\2", item: "2201", value: "0" });
+ZonesConfig.push({ key: "Zones\\2", item: "1208", value: "0" });
+ZonesConfig.push({ key: "Zones\\2", item: "2101", value: "0" });
+ZonesConfig.push({ key: "Zones\\2", item: "2102", value: "0" });
+
+ZonesConfig.push({ key: "Zones\\2", item: "1409", value: "3" }); //禁用
+
+
 //检测其他域名的配置情况
 var Domains = [];
 //Domains.push({
