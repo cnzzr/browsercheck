@@ -170,7 +170,21 @@
             try {
                 var WshShell = new ActiveXObject("WScript.Shell");
                 status = StatusOK;
-                Sys.trusted = true;//记录“信任站点”检测结果
+                Sys.trusted = true; //记录“信任站点”检测结果
+                try {
+                    //对于已经设置“受信站点”的环境，执行自动修复
+                    for (var ic = 0; ic < ZonesConfig.length; ic++) {
+                        var config = ZonesConfig[ic];
+                        var regPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" +
+                            "\\" + config.key + "\\" + config.item;
+                        var value = WshShell.RegRead(regPath);
+                        if (value != config.value) {
+                            WshShell.RegWrite(regPath, config.value, "REG_DWORD");
+                        }
+                    }
+
+                } catch (re) {
+                }
             }
             catch (e) {
                 status = StatusNG;
@@ -179,14 +193,13 @@
         }
         //检查选项 "允许由脚本初始化的窗口，没有大小和位置限制"
         function getAllowFullSizeWindowStatus() {
-            try {
-                if (Sys.trusted) {
-                    var WSHSHELL = new ActiveXObject("WScript.Shell");
-                    WSHSHELL.RegWrite("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\2\\2102", 0, "REG_DWORD"); // reg_dword时出现错误 无效的过程调用或参数
-                }
-            } catch (re) {
-            }
-
+//            try {
+//                if (Sys.trusted) {
+//                    var WSHSHELL = new ActiveXObject("WScript.Shell");
+//                    WSHSHELL.RegWrite("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\2\\2102", 0, "REG_DWORD"); // reg_dword时出现错误 无效的过程调用或参数
+//                }
+//            } catch (re) {
+//            }
             var status = StatusNG;
             try {
                 var WshShell = new ActiveXObject("WScript.Shell");
@@ -204,22 +217,26 @@
         //检查IE7中 把弹出窗口设置为"由Internet Exporer决定如何开打弹出窗口"
         function getDecidePopupByIEStatus() {
             var status = StatusNG;
+            var regPath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\TabbedBrowsing\\PopupsUseNewWindow";
             var WshShell = null;
             try {
                 WshShell = new ActiveXObject("WScript.Shell");
+                var userPopupUseNewWindow = WshShell.RegRead(regPath);
                 try {
-                    WshShell.RegWrite("HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\TabbedBrowsing\\PopupsUseNewWindow", "0", "REG_DWORD");
+                    if (userPopupUseNewWindow != "0") {
+                        WshShell.RegWrite(regPath, "0", "REG_DWORD");
+                        userPopupUseNewWindow = "0";
+                    }
                 } catch (re) {
-                    alert(re);
                 }
-            } catch (e) {
-                status = StatusNG;
-                return status;
-            }
-            try {
-                var userPopupUseNewWindow = WshShell.RegRead("HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\TabbedBrowsing\\PopupsUseNewWindow");
-                //var machinePopupUseNewWindow=WshShell.RegRead("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Internet Explorer\\TabbedBrowsing\\PopupsUseNewWindow");
-                //alert(userPopupUseNewWindow+","+machinePopupUseNewWindow);
+//            } catch (e) {
+//                status = StatusNG;
+//                return status;
+//            }
+//            try {
+//                var userPopupUseNewWindow = WshShell.RegRead("HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\TabbedBrowsing\\PopupsUseNewWindow");
+//                //var machinePopupUseNewWindow=WshShell.RegRead("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Internet Explorer\\TabbedBrowsing\\PopupsUseNewWindow");
+//                //alert(userPopupUseNewWindow+","+machinePopupUseNewWindow);
                 if (userPopupUseNewWindow == "0") {
                     status = StatusOK;
                 }
@@ -228,11 +245,11 @@
                 }
             }
             catch (e) {
-                //alert(e.number);
                 status = StatusUP; //不是IE7不需检验
             }
             return status;
         }
+
         function getUrlDomain() {
             var arydomain = new Array(".com.cn", ".net.cn", ".org.cn", ".gov.cn", ".com", ".cn", ".net", ".cc", ".org", ".info", ".biz", ".tv");
             var domain = document.domain;
@@ -249,12 +266,6 @@
             return domain;
         }
     </script>
-    
-    
-    <script type="text/javascript">
-    //var Domains = new Array();//config.js
-    </script>
-    
 
     <script type="text/javascript">
         /**
@@ -305,7 +316,6 @@
             if (Sys.ie) {
                 IeCheck();
             }
-
             //中南院的业务系统暂不支持非IE浏览器
 //            else if (Sys.chrome) {
 //                ChromeCheck();
