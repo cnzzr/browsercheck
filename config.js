@@ -53,10 +53,10 @@ Domains.push({
     helpUrl: "http://xxsq.msdi.cn/showforum-20.aspx"
 });
 
-//Domains.push({
-//    key: "PMIS",
-//    name: "生产管理信息系统",
-//    checkUrl: "http://pmis.msdi.cn:8088/CommonWebResource/bc/check.html",
-//    helpMsg: "电话技术支持3214",
-//    helpUrl: "http://xxsq.msdi.cn/showforum-18.aspx"
-//});
+Domains.push({
+    key: "PMIS",
+    name: "生产管理信息系统",
+    checkUrl: "http://pmis.msdi.cn:8088/CommonWebResource/bc/check.html",
+    helpMsg: "电话技术支持3214",
+    helpUrl: "http://xxsq.msdi.cn/showforum-18.aspx"
+});
