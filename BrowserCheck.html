@@ -355,7 +355,8 @@
                         alert("系统暂不支持您当前使用的浏览器！请选择推荐的“微软IE浏览器”");    
                     }
                 } else {
-                    alert("系统暂不支持您当前使用的浏览器！请选择推荐的“微软IE浏览器”");
+                    SetResultCookies(-1);
+                    alert("系统暂不支持您当前使用的浏览器！请选择推荐的“微软IE浏览器”。");
                 }
             }
         }
@@ -628,9 +629,9 @@
             
             if (showIeTool) {
                 $("#ietools").parent().effect('shake', { times: 30 }, 500);
-                $.cookie("_BCCheck", 0, { expires: 32, path: "/SSO" });
+                SetResultCookies(0);
             } else {
-                $.cookie("_BCCheck", 1, { expires: 32, path: "/SSO" });
+                SetResultCookies(1);
             }
             //针对使用外壳浏览器的用户的情况进行特殊处理
             if (Sys.ie) {
@@ -845,7 +846,7 @@
                             class="browserRet"></span><span id="ieBrowserSuggest10" class="browserSuggest">检测中...</span></li>
 
                         <li style="height:10px;"></li>
-                        <li><img src="CheckIE/msdi_ietools.gif" width="32px"/><a id="ietools" href="#" title="v2.1.0">下载常见问题修复工具(注：目前只支持XP、Win7操作系统中的IE浏览器进行修复)</a></li>
+                        <li><img src="CheckIE/msdi_ietools.gif" width="32px"/><a id="ietools" href="#" title="v2.1.0">下载常见问题修复工具(注：目前只支持对XP、Win7操作系统中的IE浏览器进行修复)</a></li>
                     </ul>
                 </div>
                 <div class="check-browser-chrome">
@@ -1159,13 +1160,17 @@
         document.body.appendChild(iframeProxy);
     }
 
+    function SetResultCookies(value) {
+        $.cookie("_BCCheck", value, { expires: 32 });
+    }
+
     $(document).ready(function () {
         //自动修复工具的运行 .net运行时环境的支持
         $("#ietools").click(function () {
             if ($.ua().isIe && $.ua().ua.indexOf(".net clr") > 0) {
                 //alert("已经安装.net运行时");
             } else {
-                if (!confirm("您的电脑可能尚未安装.NET运行框架将使工具无法运行。选择确定继续下载“自动修复工具”？\n 选择“确定”下载工具，选择“取消”下载运行框架。")) {
+                if (!confirm("您的电脑可能尚未安装.NET运行框架，将造成修复工具无法运行。您确定继续下载“自动修复工具”吗？\n 选择“确定”下载工具，选择“取消”下载.NET运行框架。")) {
                     //弹出下载 .NET框架的界面
                     //window.open("http://www.microsoft.com/zh-cn/download/details.aspx?id=1639", "dotnet2");
                     window.open("http://download.microsoft.com/download/c/6/e/c6e88215-0178-4c6c-b5f3-158ff77b1f38/NetFx20SP2_x86.exe", "dotnet2"); //23.8 MB
