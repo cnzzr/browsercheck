@@ -1162,7 +1162,7 @@
     }
 
     function SetResultCookies(value) {
-        $.cookie("_BCCheck", value, { expires: 32 });
+        $.cookie("_BCCheck", value, { expires: 32 , path: '/'});
     }
 
     $(document).ready(function () {
