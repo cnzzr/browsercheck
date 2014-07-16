@@ -315,7 +315,7 @@
 //            }
             else {
                 $("#browserInfo").hide();
-                $("#browserSet").hide();
+                //$("#browserSet").hide();
 
                 //如果是识别为Chrome则有可能是国产的双核浏览器，需要另外提示
                 if ($.ua().isWebkit && !Sys.safari) {
@@ -361,9 +361,9 @@
                 $("#" + browser + "BrowserRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
                 $("#" + browser + "BrowserSuggest" + index).html("点击设置");
-                $("#" + browser + "BrowserSuggest" + index).attr("href", "#");
+                $("#" + browser + "BrowserSuggest" + index).attr("href", "");
                 $("#" + browser + "BrowserSuggest" + index).click(function() {
-                    TipShow(this, browser + 'jsset', "允许Javascript");
+                    TipShow(this, browser + 'jsset', "允许Javascript"); return false;
                 });
             }
             return true;
@@ -383,9 +383,9 @@
                 $("#" + browser + "BrowserRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
                 $("#" + browser + "BrowserSuggest" + index).html("点击设置");
-                $("#" + browser + "BrowserSuggest" + index).attr("href", "#");
+                $("#" + browser + "BrowserSuggest" + index).attr("href", "");
                 $("#" + browser + "BrowserSuggest" + index).click(function() {
-                    TipShow(this, browser + 'trustwebsiteset', "添加可信站点");
+                    TipShow(this, browser + 'trustwebsiteset', "添加可信站点"); return false;
                 });
             }
             return trust;
@@ -405,9 +405,9 @@
                 $("#" + browser + "BrowserRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
                 $("#" + browser + "BrowserSuggest" + index).html("点击设置");
-                $("#" + browser + "BrowserSuggest" + index).attr("href", "#");
+                $("#" + browser + "BrowserSuggest" + index).attr("href", "");
                 $("#" + browser + "BrowserSuggest" + index).click(function() {
-                    TipShow(this, browser + 'allowfullsizewin', "允许由脚本操作窗口");
+                    TipShow(this, browser + 'allowfullsizewin', "允许由脚本操作窗口"); return false;
                 });
             }
             return allowFull;
@@ -427,9 +427,9 @@
                 $("#" + browser + "BrowserRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
                 $("#" + browser + "BrowserSuggest" + index).html("点击设置");
-                $("#" + browser + "BrowserSuggest" + index).attr("href", "#");
+                $("#" + browser + "BrowserSuggest" + index).attr("href", "");
                 $("#" + browser + "BrowserSuggest" + index).click(function() {
-                    TipShow(this, browser + 'decidepopupbyieset', "设置弹框模式");
+                    TipShow(this, browser + 'decidepopupbyieset', "设置IE弹出窗口选项"); return false;
                 });
             }
             return popup;
@@ -449,9 +449,9 @@
                 $("#" + browser + "BrowserRet" + index).parent().css("background-color", "rgb(248, 214, 214)");
 
                 $("#" + browser + "BrowserSuggest" + index).html("点击设置");
-                $("#" + browser + "BrowserSuggest" + index).attr("href", "#");
+                $("#" + browser + "BrowserSuggest" + index).attr("href", "");
                 $("#" + browser + "BrowserSuggest" + index).click(function() {
-                    TipShow(this, browser + 'cookieset', "设置弹框模式");
+                    TipShow(this, browser + 'cookieset', "设置Cookies"); return false;
                 });
             }
             return cookie;
@@ -471,9 +471,9 @@
                 $("#" + browser + "BrowserRet" + index).parent().css("background-color","rgb(248, 214, 214)");
 
                 $("#" + browser + "BrowserSuggest" + index).html("点击设置");
-                $("#" + browser + "BrowserSuggest" + index).attr("href", "#");
+                $("#" + browser + "BrowserSuggest" + index).attr("href", "");
                 $("#" + browser + "BrowserSuggest" + index).click(function() {
-                    TipShow(this, browser + 'popupset', "禁用弹框阻止程序");
+                    TipShow(this, browser + 'popupset', "禁用弹框阻止程序"); return false;
                 });
             }
             return popup;
@@ -569,9 +569,9 @@
 
                 $("#ieBrowserSuggest1_0").html("请使用32位IE 否则无法使用在线编辑功能");
                 $("#ieBrowserSuggest1_3").html("打开32位IE的方法");
-                $("#ieBrowserSuggest1_3").attr("href", "#");
+                $("#ieBrowserSuggest1_3").attr("href", "");
                 $("#ieBrowserSuggest1_3").click(function () {
-                    TipShow(this, 'ie32bit', "32位IE浏览器访问方法");
+                    TipShow(this, 'ie32bit', "32位IE浏览器访问方法");return false;
                 });
             }
 
@@ -615,7 +615,7 @@
             showIeTool += SliverlightCheck("ie", "9") ? 0 : 1;
 
             //其他业务系统配置要求
-            OtherSystemCheck("ie", "10");
+            //OtherSystemCheck("ie", "10");
             
             if (showIeTool) {
                 $("#ietools").parent().effect('shake', { times: 30 }, 500);
@@ -805,7 +805,7 @@
                 <div class="check-browser-ie">
                     <ul style="padding: 0px; margin: 0px; list-style: none;">
                         <li>我们正在检查您的浏览器以确定是否满足以上的要求。如果看到任何一项失败！请按照提示操作。 
-                            <a href="#" class="a_setting" onclick="TipShow(this,'ieadjust','注意IE的兼容模式')">(注：由于IE兼容模式的开启可能造成浏览器版本检测不正确)</a>
+                            <a href="" class="a_setting" onclick="TipShow(this,'ieadjust','注意IE的兼容模式');event.returnValue=false;">(注：由于IE兼容模式的开启可能造成浏览器版本检测不正确)</a>
                         </li>
                         <li style="height:10px;"></li>
                         <li>1、浏览器：
@@ -837,7 +837,7 @@
                             class="browserRet"></span><span id="ieBrowserSuggest10" class="browserSuggest">检测中...</span></li>
 
                         <li style="height:10px;"></li>
-                        <li><img src="CheckIE/msdi_ietools.gif" width="32px"/><a id="ietools" href="#" title="v2.1.0">下载常见问题修复工具(注：目前只支持对XP、Win7操作系统中的IE浏览器进行修复)</a></li>
+                        <li><img src="CheckIE/msdi_ietools.gif" width="32px"/><a id="ietools" href="" title="v2.1.0">下载常见问题修复工具(注：目前只支持对XP、Win7操作系统中的IE浏览器进行修复)</a></li>
                     </ul>
                 </div>
                 <div class="check-browser-chrome">
@@ -928,11 +928,11 @@
             </div>
             <div class="checkinfo-area-content">
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
-                    <li class="li_sp_setting"><a onclick="CommonSet(this,'jsset','允许Javascript')" href="#">允许Javascript</a></li>
+                    <li class="li_sp_setting"><a onclick="CommonSet(this,'jsset','允许Javascript');event.returnValue=false;" href="">允许Javascript</a></li>
                     <li class="li_sp_down"><a href="http://get.adobe.com/cn/flashplayer/" target="_blank">安装Macromedia Flash播放器</a></li>
                     <li class="li_sp_down"><a href="http://www.microsoft.com/getsilverlight/Get-Started/Install/" target="_blank">安装 Sliverlight</a></li>
-                    <li class="li_sp_setting"><a onclick="CommonSet(this,'cookieset','允许Cookies')" href="#">允许Cookies</a></li>
-                    <li class="li_sp_setting"><a onclick="CommonSet(this,'popupset','允许弹出窗口')" href="#">允许弹出窗口</a></li>
+                    <li class="li_sp_setting"><a onclick="CommonSet(this,'cookieset','允许Cookies');event.returnValue=false;" href="">允许Cookies</a></li>
+                    <li class="li_sp_setting"><a onclick="CommonSet(this,'popupset','允许弹出窗口');event.returnValue=false;" href="">允许弹出窗口</a></li>
                 </ul>
             </div>
         </div>
@@ -1078,7 +1078,7 @@
 
                 if (!isPassed && (ditem.helpMsg || ditem.helpUrl)) {
                     itemHelpHtml += " 如有疑问请 " + (ditem.helpMsg ? ditem.helpMsg : "") +
-                        (ditem.helpUrl ? " 访问<a href='" + ditem.helpUrl + "' target=_blank>帮助页面</a>" : "");
+                        (ditem.helpUrl ? " 访问<a href='" + ditem.helpUrl + "' target='_blank'>帮助页面</a>" : "");
                 }
                 itemHelpHtml += "</li>";
                 if (!isPassed) {
