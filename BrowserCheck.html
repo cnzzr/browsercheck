@@ -64,17 +64,19 @@
         
         function getPopupStatus(winUrl) {
             var status = StatusNG;
-            var str_feature = 'toolbar=no' + ',menubar=no' + ',scrollbars=no' + ',resizable=no' + ',status=no' + ',width=1' + ',height=1' + ',top=0' + ',left=0' + ',screenX=0' + ',screenY=0';
-            var popup_win = window.open(winUrl, "wb_check", str_feature);
-            if (popup_win) {
-                status = StatusOK;
-                Sys.popup = true; //浏览器允许弹窗
-                Sys.popupIE = Sys.ie ? true : undefined;
-            } else{
-                if (Sys.trusted && getIePopup(window.location.hostname) == 2) {
-                    Sys.popupIE = true;
+            try {
+                var str_feature = 'toolbar=no' + ',menubar=no' + ',scrollbars=no' + ',resizable=no' + ',status=no' + ',width=1' + ',height=1' + ',top=0' + ',left=0' + ',screenX=0' + ',screenY=0';
+                var popup_win = window.open(winUrl, "wb_check", str_feature);
+                if (popup_win) {
+                    status = StatusOK;
+                    Sys.popup = true; //浏览器允许弹窗
+                    Sys.popupIE = Sys.ie ? true : undefined;
+                } else{
+                    if (Sys.trusted && getIePopup(window.location.hostname) == 2) {
+                        Sys.popupIE = true;
+                    }
                 }
-            }
+            } catch (e) {} 
             return status;
         }
 
@@ -106,50 +108,54 @@
         }
 
         function getFlashStatus() {
-            var MinVer = parseInt(FLASHMINVER);
             var status = StatusNG;
-
-            var UNDEF = "undefined",
-                OBJECT = "object",
-                SHOCKWAVE_FLASH = "Shockwave Flash",
-                SHOCKWAVE_FLASH_AX = "ShockwaveFlash.ShockwaveFlash",
-                FLASH_MIME_TYPE = "application/x-shockwave-flash",
+            try {
+                var MinVer = parseInt(FLASHMINVER);
+                var UNDEF = "undefined",
+                    OBJECT = "object",
+                    SHOCKWAVE_FLASH = "Shockwave Flash",
+                    SHOCKWAVE_FLASH_AX = "ShockwaveFlash.ShockwaveFlash",
+                    FLASH_MIME_TYPE = "application/x-shockwave-flash",
 //                EXPRESS_INSTALL_ID = "SWFObjectExprInst",
 //                ON_READY_STATE_CHANGE = "onreadystatechange",doc = document,
-                win = window, nav = navigator, 
-                plugin = false, playerVersion = [0, 0, 0],d = null,
-                ie = !+"\v1" // feature detection based on Andrea Giammarchi's solution: http://webreflection.blogspot.com/2009/01/32-bytes-to-know-if-your-browser-is-ie.html
-            ;
+                    win = window,
+                    nav = navigator,
+                    plugin = false,
+                    playerVersion = [0, 0, 0],
+                    d = null,
+                    ie = !+"\v1" // feature detection based on Andrea Giammarchi's solution: http://webreflection.blogspot.com/2009/01/32-bytes-to-know-if-your-browser-is-ie.html
+                    ;
 
-            if (typeof nav.plugins != UNDEF && typeof nav.plugins[SHOCKWAVE_FLASH] == OBJECT) {
-                d = nav.plugins[SHOCKWAVE_FLASH].description;
-                if (d && !(typeof nav.mimeTypes != UNDEF && nav.mimeTypes[FLASH_MIME_TYPE] && !nav.mimeTypes[FLASH_MIME_TYPE].enabledPlugin)) { // navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin indicates whether plug-ins are enabled or disabled in Safari 3+
-                    plugin = true;
-                    ie = false; // cascaded feature detection for Internet Explorer
-                    d = d.replace(/^.*\s+(\S+\s+\S+$)/, "$1");
-                    playerVersion[0] = parseInt(d.replace(/^(.*)\..*$/, "$1"), 10);
-                    playerVersion[1] = parseInt(d.replace(/^.*\.(.*)\s.*$/, "$1"), 10);
-                    playerVersion[2] = /[a-zA-Z]/.test(d) ? parseInt(d.replace(/^.*[a-zA-Z]+(.*)$/, "$1"), 10) : 0;
-                }
-            }
-            else if (typeof win.ActiveXObject != UNDEF) {
-                try {
-                    var a = new ActiveXObject(SHOCKWAVE_FLASH_AX);
-                    if (a) { // a will return null when ActiveX is disabled
-                        d = a.GetVariable("$version");
-                        if (d) {
-                            ie = true; // cascaded feature detection for Internet Explorer
-                            d = d.split(" ")[1].split(",");
-                            playerVersion = [parseInt(d[0], 10), parseInt(d[1], 10), parseInt(d[2], 10)];
+                if (typeof nav.plugins != UNDEF && typeof nav.plugins[SHOCKWAVE_FLASH] == OBJECT) {
+                    d = nav.plugins[SHOCKWAVE_FLASH].description;
+                    if (d && !(typeof nav.mimeTypes != UNDEF && nav.mimeTypes[FLASH_MIME_TYPE] && !nav.mimeTypes[FLASH_MIME_TYPE].enabledPlugin)) { // navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin indicates whether plug-ins are enabled or disabled in Safari 3+
+                        plugin = true;
+                        ie = false; // cascaded feature detection for Internet Explorer
+                        d = d.replace(/^.*\s+(\S+\s+\S+$)/, "$1");
+                        playerVersion[0] = parseInt(d.replace(/^(.*)\..*$/, "$1"), 10);
+                        playerVersion[1] = parseInt(d.replace(/^.*\.(.*)\s.*$/, "$1"), 10);
+                        playerVersion[2] = /[a-zA-Z]/.test(d) ? parseInt(d.replace(/^.*[a-zA-Z]+(.*)$/, "$1"), 10) : 0;
+                    }
+                } else if (typeof win.ActiveXObject != UNDEF) {
+                    try {
+                        var a = new ActiveXObject(SHOCKWAVE_FLASH_AX);
+                        if (a) { // a will return null when ActiveX is disabled
+                            d = a.GetVariable("$version");
+                            if (d) {
+                                ie = true; // cascaded feature detection for Internet Explorer
+                                d = d.split(" ")[1].split(",");
+                                playerVersion = [parseInt(d[0], 10), parseInt(d[1], 10), parseInt(d[2], 10)];
+                            }
                         }
+                    } catch (e) {
                     }
                 }
-                catch (e) { }
-            }
-            if (playerVersion[0] > 0 && playerVersion[0]<MinVer) {
-                status = StatusNG;
-            }else if (playerVersion[0] > 0 && playerVersion[0]>=MinVer) {
-                status = StatusOK;
+                if (playerVersion[0] > 0 && playerVersion[0] < MinVer) {
+                    status = StatusNG;
+                } else if (playerVersion[0] > 0 && playerVersion[0] >= MinVer) {
+                    status = StatusOK;
+                }
+            } catch (e) {
             }
             return status;
         }
@@ -193,13 +199,6 @@
         }
         //检查选项 "允许由脚本初始化的窗口，没有大小和位置限制"
         function getAllowFullSizeWindowStatus() {
-//            try {
-//                if (Sys.trusted) {
-//                    var WSHSHELL = new ActiveXObject("WScript.Shell");
-//                    WSHSHELL.RegWrite("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\2\\2102", 0, "REG_DWORD"); // reg_dword时出现错误 无效的过程调用或参数
-//                }
-//            } catch (re) {
-//            }
             var status = StatusNG;
             try {
                 var WshShell = new ActiveXObject("WScript.Shell");
@@ -209,34 +208,22 @@
                     status = StatusOK;
                 }
             }
-            catch (e) {
-                status = StatusNG;
-            }
+            catch (e) {}
             return status;
         }
         //检查IE7中 把弹出窗口设置为"由Internet Exporer决定如何开打弹出窗口"
         function getDecidePopupByIEStatus() {
             var status = StatusNG;
             var regPath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\TabbedBrowsing\\PopupsUseNewWindow";
-            var WshShell = null;
             try {
-                WshShell = new ActiveXObject("WScript.Shell");
+                var WshShell = new ActiveXObject("WScript.Shell");
                 var userPopupUseNewWindow = WshShell.RegRead(regPath);
                 try {
                     if (userPopupUseNewWindow != "0") {
                         WshShell.RegWrite(regPath, "0", "REG_DWORD");
                         userPopupUseNewWindow = "0";
                     }
-                } catch (re) {
-                }
-//            } catch (e) {
-//                status = StatusNG;
-//                return status;
-//            }
-//            try {
-//                var userPopupUseNewWindow = WshShell.RegRead("HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\TabbedBrowsing\\PopupsUseNewWindow");
-//                //var machinePopupUseNewWindow=WshShell.RegRead("HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Internet Explorer\\TabbedBrowsing\\PopupsUseNewWindow");
-//                //alert(userPopupUseNewWindow+","+machinePopupUseNewWindow);
+                } catch (re) {}
                 if (userPopupUseNewWindow == "0") {
                     status = StatusOK;
                 }
@@ -609,7 +596,8 @@
             //Cookies检测
             CookieCheck("ie", "6");
 
-            var showIeTool = 0;//错误次数
+            var showIeTool = 0; //错误次数
+            var popup = false;  
             //可信站点检测
             showIeTool += TrustWebSiteCheck("ie", "3") ? 0 : 1;
             //允许由脚本初始化的窗口，没有大小和位置限制
@@ -617,12 +605,14 @@
             //由Internet Exporer决定如何开打弹出窗口
             showIeTool += DecidePopupByIECheck("ie", "5") ? 0 : 1;
             //弹框检测
-            showIeTool += PopupCheck("ie", "7") ? 0 : 1;
+            //弹出窗口的问题需要特殊处理，暂时排除
+            PopupCheck("ie", "7");
+            //showIeTool += PopupCheck("ie", "7") ? 0 : 1;
+
             //Flash播放器
             showIeTool += FlashCheck("ie", "8") ? 0 : 1;
             //Sliverlight银光
             showIeTool += SliverlightCheck("ie", "9") ? 0 : 1;
-
 
             //其他业务系统配置要求
             OtherSystemCheck("ie", "10");
@@ -633,6 +623,7 @@
             } else {
                 SetResultCookies(1);
             }
+
             //针对使用外壳浏览器的用户的情况进行特殊处理
             if (Sys.ie) {
                 //如果浏览器不允许弹窗，但是IE设置为允许弹窗则说明用户使用的是外壳浏览器
@@ -758,8 +749,8 @@
                 TipShow(obj, "firefox" + id, title);
             }
             else {
-
             }
+            return false;//防止页面滚动
         }
         
     </script>
