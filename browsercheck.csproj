@@ -76,7 +76,7 @@
     <Content Include="ky\othersite\BrowserCheckClose.html" />
     <Content Include="ky\othersite\check.html" />
     <Content Include="utils.js" />
-    <Content Include="检测集成接口说明.txt" />
+    <Content Include="ky\othersite\检测集成接口说明.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
