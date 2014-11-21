@@ -8,10 +8,11 @@
     <title>浏览器配置检测（主站点测试）</title>  
     
     <!-- 开发
-    <script src="Scripts/jquery-1.7.1.js" type="text/javascript"></script>
-    <script src="Scripts/jquery.cookie.js" type="text/javascript"></script>
-    <script src="Scripts/jquery.blockUI.js" type="text/javascript"></script>
-    <script src="Scripts/jquery.ua.js" type="text/javascript"></script>
+        <script src="Scripts/jquery-1.7.1.js" type="text/javascript"></script>
+        <script src="Scripts/jquery.cookie.js" type="text/javascript"></script>
+        <script src="Scripts/jquery.blockUI.js" type="text/javascript"></script>
+        <script src="Scripts/jquery.ua.js" type="text/javascript"></script>
+        <script src="Scripts/console.js" type="text/javascript"></script>
     //-->
     <!-- 正式部署  //-->
     <script type="text/javascript" src="http://mis.msdi.cn/share/js/jQuery/jquery.min.js?v=1.7.2"></script>
@@ -19,9 +20,10 @@
     <script type="text/javascript" src="http://mis.msdi.cn/share/js/jQuery/jquery.cookie.js?v=1.3.1"></script>
     <script type="text/javascript" src="http://mis.msdi.cn/share/js/jQuery/jquery.blockUI.js?v=2.66"></script>
     <script type="text/javascript" src="http://mis.msdi.cn/share/js/jQuery/plugins/jquery.ua.min.js?v=1.2"></script>
+    <script type="text/javascript" src="http://mis.msdi.cn/share/js/jQuery/plugins/console.js?v=0.1"></script>
     
-    
-    <script src="config.js" type="text/javascript"></script>
+    <script type="text/javascript" src="utils.js"></script>
+    <script type="text/javascript" src="config.js"></script>
     <script type="text/javascript">
         //常量
         var StatusNG = 0;
@@ -48,210 +50,6 @@
         var IdxDecidePopupByIE = 8;;
         var IdxSliverlight = 9; //附件上传
         var IdxOtherSystem = 10;    //其他域名的检测
-
-        function getCookieStatus() {
-            var status = StatusNG;
-            var cookieStr = "wb_check=kcehc_bw";
-            document.cookie = cookieStr;
-            if (document.cookie.indexOf(cookieStr) > -1) {
-                status = StatusOK;
-                var date = new Date();
-                date.setTime(date.getTime() - 1000);
-                document.cookie = cookieStr + "; expires=" + date.toGMTString();
-            }
-            return status;
-        }
-        
-        function getPopupStatus(winUrl) {
-            var status = StatusNG;
-            try {
-                var str_feature = 'toolbar=no' + ',menubar=no' + ',scrollbars=no' + ',resizable=no' + ',status=no' + ',width=1' + ',height=1' + ',top=0' + ',left=0' + ',screenX=0' + ',screenY=0';
-                var popup_win = window.open(winUrl, "wb_check", str_feature);
-                if (popup_win) {
-                    status = StatusOK;
-                    Sys.popup = true; //浏览器允许弹窗
-                    Sys.popupIE = Sys.ie ? true : undefined;
-                } else{
-                    if (Sys.trusted && getIePopup(window.location.hostname) == 2) {
-                        Sys.popupIE = true;
-                    }
-                }
-            } catch (e) {} 
-            return status;
-        }
-
-        function getIePopup(hostname) {
-            var status = StatusNG;
-            try {
-                var WshShell = new ActiveXObject("WScript.Shell");
-                Sys.trusted = true; //记录“信任站点”检测结果
-
-                var userPopup = WshShell.RegRead("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Internet Explorer\\New Windows\\PopupMgr");
-                if (userPopup == "1") { // 0关闭阻止、1打开
-                    if (hostname) {
-                        try {
-                            var hostPopup = WshShell.RegRead("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Internet Explorer\\New Windows\\Allow\\" + hostname);
-                            Sys.popupIE = true;//允许指定域名弹出窗口
-                            status = StatusOK;
-                        } catch (eAllow) {
-                        }
-                    }
-                } else {
-                    Sys.popupIE = true;//允许弹出
-                    status = StatusOK;   
-                }
-            }
-            catch (e) {
-                status = StatusNG;
-            }
-            return status;
-        }
-
-        function getFlashStatus() {
-            var status = StatusNG;
-            try {
-                var MinVer = parseInt(FLASHMINVER);
-                var UNDEF = "undefined",
-                    OBJECT = "object",
-                    SHOCKWAVE_FLASH = "Shockwave Flash",
-                    SHOCKWAVE_FLASH_AX = "ShockwaveFlash.ShockwaveFlash",
-                    FLASH_MIME_TYPE = "application/x-shockwave-flash",
-//                EXPRESS_INSTALL_ID = "SWFObjectExprInst",
-//                ON_READY_STATE_CHANGE = "onreadystatechange",doc = document,
-                    win = window,
-                    nav = navigator,
-                    plugin = false,
-                    playerVersion = [0, 0, 0],
-                    d = null,
-                    ie = !+"\v1" // feature detection based on Andrea Giammarchi's solution: http://webreflection.blogspot.com/2009/01/32-bytes-to-know-if-your-browser-is-ie.html
-                    ;
-
-                if (typeof nav.plugins != UNDEF && typeof nav.plugins[SHOCKWAVE_FLASH] == OBJECT) {
-                    d = nav.plugins[SHOCKWAVE_FLASH].description;
-                    if (d && !(typeof nav.mimeTypes != UNDEF && nav.mimeTypes[FLASH_MIME_TYPE] && !nav.mimeTypes[FLASH_MIME_TYPE].enabledPlugin)) { // navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin indicates whether plug-ins are enabled or disabled in Safari 3+
-                        plugin = true;
-                        ie = false; // cascaded feature detection for Internet Explorer
-                        d = d.replace(/^.*\s+(\S+\s+\S+$)/, "$1");
-                        playerVersion[0] = parseInt(d.replace(/^(.*)\..*$/, "$1"), 10);
-                        playerVersion[1] = parseInt(d.replace(/^.*\.(.*)\s.*$/, "$1"), 10);
-                        playerVersion[2] = /[a-zA-Z]/.test(d) ? parseInt(d.replace(/^.*[a-zA-Z]+(.*)$/, "$1"), 10) : 0;
-                    }
-                } else if (typeof win.ActiveXObject != UNDEF) {
-                    try {
-                        var a = new ActiveXObject(SHOCKWAVE_FLASH_AX);
-                        if (a) { // a will return null when ActiveX is disabled
-                            d = a.GetVariable("$version");
-                            if (d) {
-                                ie = true; // cascaded feature detection for Internet Explorer
-                                d = d.split(" ")[1].split(",");
-                                playerVersion = [parseInt(d[0], 10), parseInt(d[1], 10), parseInt(d[2], 10)];
-                            }
-                        }
-                    } catch (e) {
-                    }
-                }
-                if (playerVersion[0] > 0 && playerVersion[0] < MinVer) {
-                    status = StatusNG;
-                } else if (playerVersion[0] > 0 && playerVersion[0] >= MinVer) {
-                    status = StatusOK;
-                }
-            } catch (e) {
-            }
-            return status;
-        }
-        //需要在网页放置Applet（<applet codebase="../applet" name="JREDetect" id="JREDetect" width="0" height="0" code="JREDetect.class">）
-        function getJreStatus() {
-            var status = StatusNG;
-            try {
-                status = JREDetect.getStatus();
-            } catch (e) {
-                status = StatusNG;
-            }
-            return status;
-        }
-
-        //检查信任站点
-        function getTrustWebsiteStatus() {
-            var status = StatusNG;
-            try {
-                var WshShell = new ActiveXObject("WScript.Shell");
-                status = StatusOK;
-                Sys.trusted = true; //记录“信任站点”检测结果
-                try {
-                    //对于已经设置“受信站点”的环境，执行自动修复
-                    for (var ic = 0; ic < ZonesConfig.length; ic++) {
-                        var config = ZonesConfig[ic];
-                        var regPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings" +
-                            "\\" + config.key + "\\" + config.item;
-                        var value = WshShell.RegRead(regPath);
-                        if (value != config.value) {
-                            WshShell.RegWrite(regPath, config.value, "REG_DWORD");
-                        }
-                    }
-
-                } catch (re) {
-                }
-            }
-            catch (e) {
-                status = StatusNG;
-            }
-            return status;
-        }
-        //检查选项 "允许由脚本初始化的窗口，没有大小和位置限制"
-        function getAllowFullSizeWindowStatus() {
-            var status = StatusNG;
-            try {
-                var WshShell = new ActiveXObject("WScript.Shell");
-                var userMaxWin = WshShell.RegRead("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\2\\2102");
-                var machineMaxWin = WshShell.RegRead("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\2\\2102");
-                if (userMaxWin == "0" || machineMaxWin == "0") {
-                    status = StatusOK;
-                }
-            }
-            catch (e) {}
-            return status;
-        }
-        //检查IE7中 把弹出窗口设置为"由Internet Exporer决定如何开打弹出窗口"
-        function getDecidePopupByIEStatus() {
-            var status = StatusNG;
-            var regPath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\TabbedBrowsing\\PopupsUseNewWindow";
-            try {
-                var WshShell = new ActiveXObject("WScript.Shell");
-                var userPopupUseNewWindow = WshShell.RegRead(regPath);
-                try {
-                    if (userPopupUseNewWindow != "0") {
-                        WshShell.RegWrite(regPath, "0", "REG_DWORD");
-                        userPopupUseNewWindow = "0";
-                    }
-                } catch (re) {}
-                if (userPopupUseNewWindow == "0") {
-                    status = StatusOK;
-                }
-                else {
-                    status = StatusNG;
-                }
-            }
-            catch (e) {
-                status = StatusUP; //不是IE7不需检验
-            }
-            return status;
-        }
-
-        function getUrlDomain() {
-            var arydomain = new Array(".com.cn", ".net.cn", ".org.cn", ".gov.cn", ".com", ".cn", ".net", ".cc", ".org", ".info", ".biz", ".tv");
-            var domain = document.domain;
-            var tmpdomain = "";
-            for (var i = 0; i < arydomain.length; i++) {
-                tmpdomain = arydomain[i];
-                if (domain.indexOf(tmpdomain) != -1) {
-                    domain = domain.replace(tmpdomain, "");
-                    domain = domain.substring(domain.lastIndexOf(".") + 1, domain.length);
-                    domain = domain + tmpdomain;
-                    break;
-                }
-            }
-            return domain;
-        }
     </script>
 
     <script type="text/javascript">
@@ -528,6 +326,8 @@
 
         //IE下的检测
         function IeCheck() {
+            console.log("执行IE浏览器检测");
+            console.log("IE浏览器版本：" + Sys.ie);
             //初始化全局变量
             Sys.popup = false;
             Sys.popupIE = false;
@@ -616,9 +416,13 @@
 
             //其他业务系统配置要求
             OtherSystemCheck("ie", "10");
-            
+
             if (showIeTool) {
-                $("#ietools").parent().effect('shake', { times: 30 }, 500);
+                if (!Sys.trusted && confirm("您的浏览器未设置受信站点，是否下载“常见问题修复工具”帮您自动处理？")) {
+                    $("#ietools").click();
+                }
+
+                $("#ietools").parent().effect('shake', { times: 60 }, 500);
                 SetResultCookies(0);
             } else {
                 SetResultCookies(1);
@@ -774,9 +578,9 @@
         </div>
         <div class="checkinfo-area">
             <div class="checkinfo-area-title">
-                <div class="zxlm-f15">浏览器配置要求</div>
+                <div class="zxlm-f15">浏览器配置要求&nbsp;&nbsp;<a id="controlDisplay" value="none" controlId="checkinfoContent" href="#">显示配置要求</a></div>
             </div>
-            <div class="checkinfo-area-content">
+            <div class="checkinfo-area-content" id="checkinfoContent">
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
                     <li>为确保您可以正常使用公司的业务系统，您的浏览器需要满足以下条件：</li>
                     <li style="height:10px;"></li>
@@ -961,81 +765,6 @@
 </body>
 </html>
 <script>
-    if (!window.Silverlight) {
-        window.Silverlight = {};
-    }
-
-    //////////////////////////////////////////////////////////////////
-    // isInstalled, checks to see if the correct version is installed
-    //////////////////////////////////////////////////////////////////
-    Silverlight.isInstalled = function (version) {
-        var isVersionSupported = false;
-        var container = null;
-
-        try {
-            var control = null;
-
-            try {
-                control = new ActiveXObject('AgControl.AgControl');
-                if (version == null) {
-                    isVersionSupported = true;
-                }
-                else if (control.IsVersionSupported(version)) {
-                    isVersionSupported = true;
-                }
-                control = null;
-            }
-            catch (e) {
-                var plugin = navigator.plugins["Silverlight Plug-In"];
-                if (plugin) {
-                    if (version === null) {
-                        isVersionSupported = true;
-                    }
-                    else {
-                        var actualVer = plugin.description;
-                        if (actualVer === "1.0.30226.2")
-                            actualVer = "2.0.30226.2";
-                        var actualVerArray = actualVer.split(".");
-                        while (actualVerArray.length > 3) {
-                            actualVerArray.pop();
-                        }
-                        while (actualVerArray.length < 4) {
-                            actualVerArray.push(0);
-                        }
-                        var reqVerArray = version.split(".");
-                        while (reqVerArray.length > 4) {
-                            reqVerArray.pop();
-                        }
-
-                        var requiredVersionPart;
-                        var actualVersionPart;
-                        var index = 0;
-
-
-                        do {
-                            requiredVersionPart = parseInt(reqVerArray[index]);
-                            actualVersionPart = parseInt(actualVerArray[index]);
-                            index++;
-                        }
-                        while (index < reqVerArray.length && requiredVersionPart === actualVersionPart);
-
-                        if (requiredVersionPart <= actualVersionPart && !isNaN(requiredVersionPart)) {
-                            isVersionSupported = true;
-                        }
-                    }
-                }
-            }
-        }
-        catch (e) {
-            isVersionSupported = false;
-        }
-        if (container) {
-            document.body.removeChild(container);
-        }
-
-        return isVersionSupported;
-    };
-
 
     //其他业务系统检测
     function OtherSystemCheck(browser, index) {
@@ -1157,6 +886,22 @@
     }
 
     $(document).ready(function () {
+        $("#" + $("#controlDisplay").attr("controlId")).hide();
+        $("#controlDisplay").text("显示配置要求").val("none").click(function () {
+            var id = $(this).attr("controlId");
+            if ($(this).val() == "none") {
+                //隐藏
+                $(this).val("block");
+                $(this).text("隐藏");
+                $("#" + id).show();
+            } else {
+                $(this).val("none");
+                $(this).text("显示配置要求");
+                $("#" + id).hide();
+            }
+            return false;
+        });
+
         //自动修复工具的运行 .net运行时环境的支持
         $("#ietools").click(function () {
             if ($.ua().isIe && $.ua().ua.indexOf(".net clr") > 0) {
@@ -1193,7 +938,8 @@
             timeout: 4000
         });
         //需要通过回调进行特殊处理，否则屏蔽层的效果不明显
-        var callFunc = function() {
+        var callFunc = function () {
+            console.log("初始化成功");
             InitialInfo();
             setTimeout($.unblockUI, 500);
         };

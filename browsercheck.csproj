@@ -54,6 +54,7 @@
     <Content Include="CheckIE\firefoxcookieset.jpg" />
     <Content Include="CheckIE\firefoxjsset.jpg" />
     <Content Include="CheckIE\firefoxpopupset.jpg" />
+    <Content Include="CheckIE\ie32bit.jpg" />
     <Content Include="CheckIE\msdi_ietools.gif" />
     <Content Include="CheckIE\msdi_softdown.gif" />
     <Content Include="CheckIE\ieallowfullsizewin.jpg" />
@@ -74,10 +75,12 @@
     <Content Include="readme.txt" />
     <Content Include="ky\othersite\BrowserCheckClose.html" />
     <Content Include="ky\othersite\check.html" />
+    <Content Include="utils.js" />
     <Content Include="检测集成接口说明.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="applet\JREDetect.class" />
