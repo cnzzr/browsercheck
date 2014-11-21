@@ -1,0 +1,6 @@
+﻿
+其他业务系统执行检测的集成接口部署说明
+1、将目录 /ky/othersite 目录下的文件部署到 业务系统中（要求部署的目录用户可以直接访问）；
+	2、可选：修改 check.html 文件，调整需要检测的项目（检测的项目名称及结果需要与 config.js 中的 CheckItemLang 保持一致）；
+3、修改 config.js 文件，将业务系统的相关信息以JSON对象的方式push到 Domains 变量；
+4、通过Visual Studio发布到“正式服务器”；
