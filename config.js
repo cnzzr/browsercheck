@@ -1,5 +1,5 @@
 ﻿//检测过程中需要使用到的资源下载地址，如果IE8、自动修复工具等
-
+var IeToolDownload = "http://mis.msdi.cn/Portal/install/Download.aspx?Id=MSDI_IETool.exe";
 
 //检查项的中文名称
 var CheckItemLang = {};

@@ -75,12 +75,6 @@
         function InitialInfo() {
             var ua = navigator.userAgent.toLowerCase();
             var s;
-//            (s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] :
-//                (s = ua.match(/trident 7.0/)) ? Sys.ie = 11.0 :
-//                    (s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] :
-//                        (s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :
-//                            (s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] :
-//                                (s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
             Sys.ua = ua;
             if ($.ua().isIe) {//准确地处理IE兼容模式
                 Sys.ie = $.ua().ie;
@@ -129,7 +123,7 @@
                             (UA.indexOf('greenbrowser') > -1) ? '绿色浏览器' : //'绿色浏览器' :
                             (UA.indexOf('qqbrowser') > -1) ? 'QQ浏览器' : //'QQ浏览器' :
                             (UA.indexOf('baidu') > -1) ? '百度浏览器' : //'百度浏览器' :
-                    //(UA.indexOf('se') > -1) ? '搜狗浏览器' : //'搜狗浏览器' :
+                            //(UA.indexOf('se') > -1) ? '搜狗浏览器' : //'搜狗浏览器' :
                             ($.ua().is360ee && majorVer<32) ? "360极速浏览器" :
                             ($.ua().is360se && majorVer<32) ? "360安全浏览器" :
                             null //剩余的情况为“谷歌浏览器”;
@@ -768,7 +762,7 @@
     </div>
 </body>
 </html>
-<script>
+<script type="text/javascript">
 
     //其他业务系统检测
     function OtherSystemCheck(browser, index) {
@@ -894,7 +888,6 @@
         $("#controlDisplay").text("显示配置要求").val("none").click(function () {
             var id = $(this).attr("controlId");
             if ($(this).val() == "none") {
-                //隐藏
                 $(this).val("block");
                 $(this).text("隐藏");
                 $("#" + id).show();
@@ -917,17 +910,14 @@
                     window.open("http://download.microsoft.com/download/c/6/e/c6e88215-0178-4c6c-b5f3-158ff77b1f38/NetFx20SP2_x86.exe", "dotnet2"); //23.8 MB
                 }
             }
-            //window.open(ContextPath + "/Portal/install/MSDI_IETool.exe", "MSDI_IETool", "width=320,height=160");
-            //window.open("http://mis.msdi.cn/Portal/install/MSDI_IETool.exe", "MSDI_IETool", "width=320,height=160");
-            window.open("http://mis.msdi.cn/Portal/install/Download.aspx?Id=MSDI_IETool.exe", "MSDI_IETool", "width=320,height=160");
+
+            if (Sys.popup) {
+                window.open(IeToolDownload, "MSDI_IETool", "width=320,height=160");
+            } else {
+                window.location.href = IeToolDownload;
+            }
             return false;
         });
-
-//        if ($.ua().isIe && document.mimeType !== undefined
-//            && document.mimeType.indexOf("Chrome") == 0 //设置Chrome为默认浏览器后的现象
-//        ) {
-//            alert("您正在使用 360浏览器。");
-//        }
 
         $.blockUI({ css: {
             border: 'none',
