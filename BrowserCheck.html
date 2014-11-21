@@ -561,8 +561,7 @@
 
     <style type="text/css">
         body{} #main{width: 98%;padding:0px 1% 0px}
-        a{color:#003299;font-weight:bold;}.checkinfo-area{border:solid #aacbee 1px;font-size:14px;line-height:20px;background-color:#FFFFFF;margin:10px 4px;width:100%;}.checkinfo-area .checkinfo-area-title{overflow:hidden;border-bottom:solid #aacbee 1px;height:30px;line-height:30px;padding:0 8px;background-color:#f9fcff;background-image:linear-gradient(top,#f9fcff,#e8f1f9);
-                                                                                                                                                                         }.checkinfo-area .checkinfo-area-content{padding:6px;overflow:hidden;}.check-browser-ie{display:none;}.check-browser-safari{display:none;}.check-browser-chrome{display:none;}.check-browser-firefox{display:none;}.browserInfo{}.browserRet{margin-left:20px;font-weight:bold;}.browserSuggest{margin-left:20px;}.zxlm-f14{}.zxlm-f15{font-size:18px;font-weight:bold;}
+        a{color:#003299;font-weight:bold;}.checkinfo-area{border:solid #aacbee 1px;font-size:14px;line-height:20px;background-color:#FFFFFF;margin:10px 4px;width:100%;}.checkinfo-area .checkinfo-area-title{overflow:hidden;border-bottom:solid #aacbee 1px;height:30px;line-height:30px;padding:0 8px;background-color:#f9fcff;background-image:linear-gradient(top,#f9fcff,#e8f1f9);}.checkinfo-area .checkinfo-area-content{padding:6px;overflow:hidden;}.check-browser-ie{display:none;}.check-browser-safari{display:none;}.check-browser-chrome{display:none;}.check-browser-firefox{display:none;}.browserInfo{}.browserRet{margin-left:20px;font-weight:bold;}.browserSuggest{margin-left:20px;}.zxlm-f14{}.zxlm-f15{font-size:18px;font-weight:bold;}
         .checkinfo-area li{ margin: 1px;}
         .result_no{color: red;font-weight:bold;}
         .result_ok{color: Green;font-weight:bold;}
@@ -570,10 +569,16 @@
         .li_sp_down{float:left; margin-left:2px;background: url("CheckIE/msdi_softdown.gif") no-repeat scroll 0 0px;font-size: 14px;padding-left: 30px;padding-right: 8px;line-height: 24px;}
         .li_sp_setting{float:left; margin-left:12px;background: url("CheckIE/msdi_setting.gif") no-repeat scroll 0 0px;font-size: 14px;padding-left: 28px;padding-right: 8px;line-height: 24px;}
         .a_setting{margin-left:8px;background: url("CheckIE/msdi_setting.gif") no-repeat scroll 0 0px;padding-left: 24px;line-height: 24px;}
+        .noscript{ border:solid #aacbee 1px;background-color:#f9fcff;font-size:24px;line-heihht: 36px;margin:64px 4px;width:100%;}
     </style>
 </head>
 <body>
     <div id="main">
+        <noscript>
+            <div class="noscript">您的浏览器不支持 JavaScript脚本 无法进行检测。
+                <br/>请联系 运维人员（电话3214）&nbsp;&nbsp;
+            </div>
+        </noscript>
         <div id="set" style="display: none; position: absolute;">
         </div>
         <div class="checkinfo-area">
@@ -586,7 +591,7 @@
                     <li style="height:10px;"></li>
                     <li>1、要求使用 Microsoft Internet Explorer 7.0 或以上版本，如果您使用<a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>或<a target="_blank" href="http://firefox.com.cn/download/" target="_blank">Mozilla Firefox</a> 则大部分系统功能将无法使用。
                         <br/>&nbsp;&nbsp;&nbsp;&nbsp;如果您使用 <!--<b><i>360安全</i></b>浏览器、<i><b>360极速</b></i>浏览器--><b><i>360</i></b>浏览器、<i><b>QQ</b></i>浏览器或<i><b>搜狗</b></i>浏览器等其他浏览器请在访问中南院业务系统时切换到“<b>兼容模式</b>”。
-    </li>                    
+                    </li>                    
                     <li>2、<span style="color:#008000;"><b>推荐使用Microsoft Internet Explorer 8.0</b></span>
                         <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-8" target="_blank">微软官方下载</a>
                         <a href="http://mis.msdi.cn/portal/install/ie/IE8-WindowsXP-x86-CHS.exe" target="_blank">本地下载(适用于XP 32位)</a></li>
@@ -621,31 +626,31 @@
                             <a id="ieBrowserSuggest1_3" class="browserSuggest"></a>
                         </li>
                         <li>2、Javascript：<span id="ieBrowserInfo2" class="browserInfo"></span><span id="ieBrowserRet2"
-                            class="browserRet"></span><a id="ieBrowserSuggest2" class="browserSuggest"></a></li>
+                                                                                                    class="browserRet"></span><a id="ieBrowserSuggest2" class="browserSuggest"></a></li>
                         <li>3、可信任站点：<span id="ieBrowserInfo3" class="browserInfo"></span><span id="ieBrowserRet3"
-                            class="browserRet"></span><a id="ieBrowserSuggest3" class="browserSuggest"></a></li>
+                                                                                               class="browserRet"></span><a id="ieBrowserSuggest3" class="browserSuggest"></a></li>
                         <li>4、允许由脚本初始化的窗口，没有大小和位置限制：<span id="ieBrowserInfo4" class="browserInfo"></span><span
-                            id="ieBrowserRet4" class="browserRet"></span><a id="ieBrowserSuggest4" class="browserSuggest"></a></li>
+                                                                                                             id="ieBrowserRet4" class="browserRet"></span><a id="ieBrowserSuggest4" class="browserSuggest"></a></li>
                         <li>5、由Internet Exporer决定如何开打弹出窗口：<span id="ieBrowserInfo5" class="browserInfo"></span><span
-                            id="ieBrowserRet5" class="browserRet"></span><a id="ieBrowserSuggest5" class="browserSuggest"></a></li>
+                                                                                                                   id="ieBrowserRet5" class="browserRet"></span><a id="ieBrowserSuggest5" class="browserSuggest"></a></li>
                         <li>6、Cookies：<span id="ieBrowserInfo6" class="browserInfo"></span><span id="ieBrowserRet6"
-                            class="browserRet"></span><a id="ieBrowserSuggest6" class="browserSuggest"></a></li>
+                                                                                                 class="browserRet"></span><a id="ieBrowserSuggest6" class="browserSuggest"></a></li>
                         <li>7、弹出窗口：<span id="ieBrowserInfo7" class="browserInfo"></span><span id="ieBrowserRet7"
-                            class="browserRet"></span><a id="ieBrowserSuggest7" class="browserSuggest"></a></li>
+                                                                                              class="browserRet"></span><a id="ieBrowserSuggest7" class="browserSuggest"></a></li>
                         <li>8、Flash播放器：<span id="ieBrowserInfo8" class="browserInfo"></span><span id="ieBrowserRet8"
-                            class="browserRet"></span><a id="ieBrowserSuggest8" class="browserSuggest"></a></li>
+                                                                                                  class="browserRet"></span><a id="ieBrowserSuggest8" class="browserSuggest"></a></li>
                         
                         <li>9、Silverlight插件：<span id="ieBrowserInfo9" class="browserInfo"></span><span id="ieBrowserRet9"
-                            class="browserRet"></span><a id="ieBrowserSuggest9" class="browserSuggest"></a></li>
+                                                                                                       class="browserRet"></span><a id="ieBrowserSuggest9" class="browserSuggest"></a></li>
                         <li>10、其他业务系统要求：<span id="ieBrowserInfo10" class="browserInfo"></span><span id="ieBrowserRet10"
-                            class="browserRet"></span><span id="ieBrowserSuggest10" class="browserSuggest">检测中...</span></li>
+                                                                                                    class="browserRet"></span><span id="ieBrowserSuggest10" class="browserSuggest">检测中...</span></li>
 
                         <li style="height:10px;"></li>
                         <li><img src="CheckIE/msdi_ietools.gif" width="32px"/><a id="ietools" href="" title="v2.1.0">下载常见问题修复工具(注：目前只支持对XP、Win7操作系统中的IE浏览器进行修复)</a></li>
                     </ul>
                 </div>
                 <div class="check-browser-chrome">
-                <ul style="padding: 0px; margin: 0px; list-style: none;">
+                    <ul style="padding: 0px; margin: 0px; list-style: none;">
                         <li>我们正在检查您的浏览器以确定是否满足以上的要求。如果看到任何一项失败！，请按照提示操作。 </li>
                         <li style="height:10px;"></li>
                         <li>1、浏览器：
@@ -673,7 +678,7 @@
                             <span id="chromeBrowserRet5" class="browserRet"></span>
                             <a id="chromeBrowserSuggest5" class="browserSuggest"></a>
                         </li>
-                  </ul>
+                    </ul>
                 </div>
                 <div class="check-browser-firefox">
                     <ul style="padding: 0px; margin: 0px; list-style: none;">
@@ -711,15 +716,15 @@
                         <li>我们正在检查您的浏览器以确定是否满足以上的要求。如果看到任何一项失败！，请按照提示操作。 </li>
                         <li style="height:10px;"></li>
                         <li>1、浏览器：<span id="safariBrowserInfo1" class="browserInfo"></span><span id="safariBrowserRet1" class="browserRet"></span><a
-                            id="safariBrowserSuggest1" class="browserSuggest"></a></li>
+                                                                                                                                                      id="safariBrowserSuggest1" class="browserSuggest"></a></li>
                         <li>2、Javascript：<span id="safariBrowserInfo2" class="browserInfo"></span><span id="safariBrowserRet2" class="browserRet"></span><a
-                            id="safariBrowserSuggest2" class="browserSuggest"></a></li>
+                                                                                                                                                             id="safariBrowserSuggest2" class="browserSuggest"></a></li>
                         <li>3、Cookies：<span id="safariBrowserInfo3" class="browserInfo"></span><span id="safariBrowserRet3" class="browserRet"></span><a
-                            id="safariBrowserSuggest3" class="browserSuggest"></a></li>
+                                                                                                                                                          id="safariBrowserSuggest3" class="browserSuggest"></a></li>
                         <li>4、弹出窗口：<span id="safariBrowserInfo4" class="browserInfo"></span><span id="safariBrowserRet4" class="browserRet"></span><a
-                            id="safariBrowserSuggest4" class="browserSuggest"></a></li>
+                                                                                                                                                       id="safariBrowserSuggest4" class="browserSuggest"></a></li>
                         <li>5、Flash播放器：<span id="safariBrowserInfo5" class="browserInfo"></span><span id="safariBrowserRet5" class="browserRet"></span><a
-                            id="safariBrowserSuggest5" class="browserSuggest"></a></li>
+                                                                                                                                                           id="safariBrowserSuggest5" class="browserSuggest"></a></li>
                     </ul>
                 </div>
             </div>
@@ -741,10 +746,10 @@
             </div>
         </div>
         <div id="browserOcx" class="checkinfo-area">
-           <div class="checkinfo-area-title">
+            <div class="checkinfo-area-title">
                 <div class="zxlm-f14">
                     系统常用插件</div>
-          </div>
+            </div>
             <div class="checkinfo-area-content">
                 <ul style="padding: 0px; margin: 0px; list-style: none;">
                     <!--1.2 简化安装组件-->
