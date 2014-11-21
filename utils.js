@@ -261,9 +261,9 @@ function getAllowFullSizeWindowStatus() {
     return status;
 }
 
-//检查IE7中 把弹出窗口设置为"由Internet Exporer决定如何开打弹出窗口"
+//检查IE7中 把弹出窗口设置为"由Internet Exporer决定如何打开弹出窗口"
 function getDecidePopupByIEStatus() {
-    console.log("检查IE7中 把弹出窗口设置为 由Internet Exporer决定如何开打弹出窗口");
+    console.log("检查IE7中 把弹出窗口设置为 由Internet Exporer决定如何打开弹出窗口");
     var status = StatusNG;
     var regPath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\TabbedBrowsing\\PopupsUseNewWindow";
     try {
